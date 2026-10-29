@@ -37,3 +37,7 @@ Sous ce bac à sable Windows, `tsx` et la fermeture de l'arbre des processus Pla
 L'accueil a été reconstruit à partir de la référence fournie : hero architectural photographique, Poppins auto-hébergée dans tout le site, galerie photographique, palette ivoire/brun et boutons en pilule. Les fiches suivent la même direction. Provenance, licence de police et prompts : [design.md](design.md).
 
 Le lint, le typecheck, les 14 tests unitaires et la compilation de production ont été relancés avec succès. La suite navigateur couvre désormais 6 parcours ordinateur/mobile : recherche et fiche, état vide, favoris persistants après rechargement et menu mobile. Elle vérifie aussi la cohérence de la police entre titre et corps, l'absence de débordement et le chargement effectif des visuels de la galerie. Les favoris sont locaux à l'appareil, sans compte ni synchronisation serveur.
+
+## Identité bleu nuit et or
+
+Palette de la planche de marque appliquée au site, logo vectoriel adapté sur fonds clair/sombre et favicon ajoutés. Après cette modification : lint, typecheck, 14 tests unitaires, compilation et 6 parcours Playwright réussis. Capture ordinateur inspectée. Contrastes calculés des couleurs retenues : bleu nuit sur or 7,61:1 ; blanc sur bleu nuit 15,59:1 ; texte secondaire du bloc sombre 11,91:1. Ces mesures concernent ces paires de couleurs, pas une certification globale d'accessibilité. Voir [brand.md](brand.md).

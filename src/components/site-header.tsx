@@ -1,7 +1,8 @@
 "use client";
 import { useState } from "react";
 import Link from "next/link";
-import { ArrowUpRight, House, Menu, X } from "lucide-react";
+import { ArrowUpRight, Menu, X } from "lucide-react";
+import { BrandLogo } from "@/components/brand-logo";
 import { Button } from "@/components/ui/button";
 const links = [
   { href: "/", label: "Accueil" },
@@ -15,10 +16,7 @@ export function SiteHeader() {
     <>
       <header className="site-header shell">
         <Link href="/" className="brand" aria-label="BARKA SARL, accueil">
-          <House size={31} strokeWidth={1.55} />
-          <span>
-            BARKA<small>SARL</small>
-          </span>
+          <BrandLogo />
         </Link>
         <nav className="desktop-nav" aria-label="Navigation principale">
           {links.map((link) => (

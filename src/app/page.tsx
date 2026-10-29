@@ -11,6 +11,7 @@ import {
 import { SiteHeader } from "@/components/site-header";
 import { Catalog } from "@/components/catalog";
 import { Button } from "@/components/ui/button";
+import { BrandLogo } from "@/components/brand-logo";
 
 export default function Home() {
   return (
@@ -135,8 +136,12 @@ export default function Home() {
         </section>
       </main>
       <footer className="site-footer shell">
-        <Link href="/" className="footer-brand">
-          BARKA<span>SARL</span>
+        <Link
+          href="/"
+          className="footer-brand"
+          aria-label="BARKA SARL, accueil"
+        >
+          <BrandLogo light />
         </Link>
         <p>Un lieu pour chaque nouveau départ.</p>
         <span>© {new Date().getUTCFullYear()} BARKA SARL · Démonstration</span>

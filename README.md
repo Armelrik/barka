@@ -50,7 +50,7 @@ Tests unitaires : limites RBAC (société, pays, hiérarchie, pairs, auto-modifi
 
 ## Livré et limites
 
-- Accueil français responsive inspiré de la référence fournie : hero photographique, Poppins auto-hébergée, palette ivoire/brun, galerie de quatre exemples avec visuels d’ambiance générés par IA, recherche combinée et fiches.
+- Accueil français responsive inspiré de la référence fournie : hero photographique, Poppins auto-hébergée, palette bleu nuit/or, galerie de quatre exemples avec visuels d’ambiance générés par IA, recherche combinée et fiches.
 - Favoris de démonstration conservés dans ce navigateur, filtre des favoris et menu mobile accessible. Les favoris associés à un compte restent à intégrer avec l'authentification.
 - Schéma Prisma initial, migration et seed avec hiérarchie, localités de démonstration, tarifs et paramètres. Numérotation annuelle atomique des démarcheurs.
 - Politique RBAC pure testée ; aucun endpoint privé n'est exposé.

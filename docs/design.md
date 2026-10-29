@@ -1,5 +1,7 @@
 # Refonte de l'accueil BARKA
 
+Mise à jour de l'identité : la palette ivoire/brun initiale est remplacée par le bleu nuit et l'or de la planche de marque fournie ensuite par l'utilisateur. Voir [brand.md](brand.md). Les visuels architecturaux, Poppins et la structure de l'accueil sont conservés.
+
 Direction : référence visuelle fournie par l'utilisateur, hero architectural photographique pleine largeur, fond blanc/ivoire, accents brun chaud, boutons en pilule, navigation épurée et cartes de tailles variées. Contenu français, montants XOF et contexte Burkina Faso conservés.
 
 Poppins 400/500/600 est auto-hébergée via `next/font/local` et appliquée dans le layout racine : titres, textes, navigation, boutons et formulaires. Fichiers `src/assets/fonts/Poppins-*.ttf`, issus du [dépôt officiel Google Fonts](https://github.com/google/fonts/tree/main/ofl/poppins), avec licence OFL fournie dans `src/assets/fonts/OFL.txt`. Aucune requête Google Fonts côté navigateur.
