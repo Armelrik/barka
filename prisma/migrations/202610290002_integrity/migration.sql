@@ -1,0 +1,26 @@
+-- Prisma cannot express CHECK constraints: keep these in reviewed migrations.
+ALTER TABLE "Role" ADD CONSTRAINT "Role_level_check" CHECK ("level" BETWEEN 0 AND 6);
+ALTER TABLE "UserHierarchy" ADD CONSTRAINT "UserHierarchy_not_self" CHECK ("childId" <> "parentId");
+ALTER TABLE "Location" ADD CONSTRAINT "Location_not_self" CHECK ("parentId" IS NULL OR "parentId" <> "id");
+ALTER TABLE "AnnualSequence" ADD CONSTRAINT "AnnualSequence_range" CHECK ("year" BETWEEN 2000 AND 9999 AND "value" BETWEEN 0 AND 99999);
+ALTER TABLE "Property" ADD CONSTRAINT "Property_surface_positive" CHECK ("surfaceM2" > 0);
+ALTER TABLE "Property" ADD CONSTRAINT "Property_coordinates" CHECK (("latitude" IS NULL OR "latitude" BETWEEN -90 AND 90) AND ("longitude" IS NULL OR "longitude" BETWEEN -180 AND 180));
+ALTER TABLE "Property" ADD CONSTRAINT "Property_counts_nonnegative" CHECK ("bedrooms" >= 0 AND "livingRooms" >= 0 AND "bathrooms" >= 0 AND "toilets" >= 0 AND "floors" >= 0 AND "garageSpaces" >= 0 AND ("householdCount" IS NULL OR "householdCount" >= 0));
+ALTER TABLE "Property" ADD CONSTRAINT "Property_amount_distances_nonnegative" CHECK (("estimatedValueXof" IS NULL OR "estimatedValueXof" >= 0) AND ("roadDistanceM" IS NULL OR "roadDistanceM" >= 0) AND ("schoolDistanceM" IS NULL OR "schoolDistanceM" >= 0) AND ("policeDistanceM" IS NULL OR "policeDistanceM" >= 0) AND ("cspsDistanceM" IS NULL OR "cspsDistanceM" >= 0));
+ALTER TABLE "PropertyUnit" ADD CONSTRAINT "PropertyUnit_surface_positive" CHECK ("surfaceM2" IS NULL OR "surfaceM2" > 0);
+ALTER TABLE "PropertyOwnership" ADD CONSTRAINT "PropertyOwnership_share_range" CHECK ("shareBps" IS NULL OR "shareBps" BETWEEN 1 AND 10000);
+ALTER TABLE "MediaAsset" ADD CONSTRAINT "MediaAsset_size_nonnegative" CHECK ("sizeBytes" >= 0);
+ALTER TABLE "MediaAsset" ADD CONSTRAINT "MediaAsset_dimensions_positive" CHECK (("width" IS NULL OR "width" > 0) AND ("height" IS NULL OR "height" > 0));
+ALTER TABLE "Listing" ADD CONSTRAINT "Listing_amounts_nonnegative" CHECK ("priceXof" >= 0 AND ("depositXof" IS NULL OR "depositXof" >= 0) AND ("advanceXof" IS NULL OR "advanceXof" >= 0));
+ALTER TABLE "SubscriptionPlan" ADD CONSTRAINT "SubscriptionPlan_values" CHECK ("priceXof" >= 0 AND "durationDays" > 0);
+ALTER TABLE "Subscription" ADD CONSTRAINT "Subscription_values" CHECK ("priceXof" >= 0 AND ("startsAt" IS NULL OR "expiresAt" IS NULL OR "expiresAt" > "startsAt"));
+ALTER TABLE "Booking" ADD CONSTRAINT "Booking_dates" CHECK ("startAt" IS NULL OR "endAt" IS NULL OR "endAt" > "startAt");
+ALTER TABLE "Payment" ADD CONSTRAINT "Payment_amount_positive" CHECK ("amountXof" > 0);
+ALTER TABLE "PaymentTransaction" ADD CONSTRAINT "PaymentTransaction_amount_positive" CHECK ("amountXof" > 0);
+ALTER TABLE "Commission" ADD CONSTRAINT "Commission_values" CHECK ("rateBps" BETWEEN 0 AND 10000 AND "amountXof" >= 0);
+ALTER TABLE "Receipt" ADD CONSTRAINT "Receipt_amount_positive" CHECK ("amountXof" > 0);
+ALTER TABLE "Advertisement" ADD CONSTRAINT "Advertisement_dates" CHECK ("endsAt" > "startsAt");
+ALTER TABLE "Notification" ADD CONSTRAINT "Notification_attempts" CHECK ("attempts" >= 0);
+ALTER TABLE "OutboxJob" ADD CONSTRAINT "OutboxJob_attempts" CHECK ("attempts" >= 0);
+ALTER TABLE "TourHotspot" ADD CONSTRAINT "TourHotspot_angles" CHECK ("pitch" BETWEEN -90 AND 90 AND "yaw" BETWEEN -180 AND 180);
+ALTER TABLE "TourScene" ADD CONSTRAINT "TourScene_angles" CHECK ("initialPitch" BETWEEN -90 AND 90 AND "initialYaw" BETWEEN -180 AND 180);

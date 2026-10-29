@@ -1,0 +1,835 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum RoleCode {
+  SUPER_ADMIN
+  ADMIN
+  SUPERVISOR
+  MANAGER
+  COMMERCIAL
+  DEFAULT_COMMERCIAL
+  CLIENT
+  VISITOR
+}
+
+enum ProfessionalStatus {
+  OWNER
+  AGENT
+  AGENCY
+}
+
+enum UserStatus {
+  ACTIVE
+  SUSPENDED
+  CLOSED
+}
+
+enum VerificationStatus {
+  UNVERIFIED
+  PENDING
+  VERIFIED
+  REJECTED
+}
+
+enum LocationKind {
+  REGION
+  PROVINCE
+  COMMUNE
+  CITY
+  DISTRICT
+  SECTION
+  LOT
+  PARCEL
+}
+
+enum PropertyType {
+  BARE_PARCEL
+  DEMARCATED_PARCEL
+  WALLED_PARCEL
+  LAND
+  HOUSE
+  VILLA
+  RENTAL_VILLA
+  DUPLEX
+  BUILDING
+  OFFICE
+  COMMERCIAL_SPACE
+}
+
+enum ListingStatus {
+  DRAFT
+  SUBMITTED
+  VERIFYING
+  APPROVED
+  PUBLISHED
+  SUSPENDED
+  EXPIRED
+  ARCHIVED
+}
+
+enum OfferType {
+  SALE
+  RENT
+}
+
+enum AssetStatus {
+  UPLOADING
+  QUARANTINED
+  READY
+  REJECTED
+  DELETED
+}
+
+enum MediaKind {
+  PHOTO
+  VIDEO
+  PANORAMA
+  MODEL_3D
+  FLOOR_PLAN
+  IDENTITY
+  LEGAL_DOCUMENT
+}
+
+enum TourKind {
+  PANORAMA
+  MODEL_3D
+  MATTERPORT
+}
+
+enum BookingStatus {
+  REQUESTED
+  CONFIRMED
+  REJECTED
+  CANCELLED
+  COMPLETED
+}
+
+enum RequestKind {
+  VISIT
+  RENT
+  PURCHASE
+}
+
+enum PaymentStatus {
+  PENDING
+  SUCCESS
+  FAILED
+  REFUNDED
+}
+
+enum SubscriptionStatus {
+  PENDING
+  ACTIVE
+  EXPIRED
+  CANCELLED
+}
+
+enum LegalAction {
+  SALE
+  PURCHASE
+  LOAN
+  PLEDGE
+  LEASE
+  MORTGAGE
+  BEQUEST
+}
+
+enum Channel {
+  EMAIL
+  SMS
+  WHATSAPP
+  CALL
+}
+
+enum JobStatus {
+  PENDING
+  PROCESSING
+  SENT
+  FAILED
+}
+
+model Country {
+  id        String     @id @default(cuid())
+  code      String     @unique @db.Char(2)
+  name      String
+  currency  String     @default("XOF") @db.Char(3)
+  companies Company[]
+  locations Location[]
+}
+
+model Company {
+  id                  String             @id @default(cuid())
+  code                String             @unique
+  name                String
+  countryId           String
+  country             Country            @relation(fields: [countryId], references: [id])
+  users               User[]             @relation("CompanyUsers")
+  defaultCommercialId String?            @unique
+  defaultCommercial   User?              @relation("DefaultCommercial", fields: [defaultCommercialId], references: [id])
+  agencies            Agency[]
+  properties          Property[]
+  plans               SubscriptionPlan[]
+  settings            Setting[]
+  ads                 Advertisement[]
+  createdAt           DateTime           @default(now())
+  updatedAt           DateTime           @updatedAt
+
+  @@index([countryId])
+}
+
+model Agency {
+  id        String         @id @default(cuid())
+  code      String         @unique
+  name      String
+  companyId String
+  company   Company        @relation(fields: [companyId], references: [id])
+  agents    AgentProfile[]
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
+
+  @@index([companyId])
+}
+
+model Role {
+  id          String           @id @default(cuid())
+  code        RoleCode         @unique
+  level       Int
+  users       User[]
+  permissions RolePermission[]
+}
+
+model Permission {
+  id    String           @id @default(cuid())
+  code  String           @unique
+  roles RolePermission[]
+}
+
+model RolePermission {
+  roleId       String
+  permissionId String
+  role         Role       @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  permission   Permission @relation(fields: [permissionId], references: [id], onDelete: Cascade)
+
+  @@id([roleId, permissionId])
+  @@index([permissionId])
+}
+
+model User {
+  id                   String               @id @default(cuid())
+  firstName            String
+  lastName             String
+  phone                String               @unique
+  email                String?              @unique
+  passwordHash         String
+  status               UserStatus           @default(ACTIVE)
+  professionalStatuses ProfessionalStatus[] @default([])
+  companyId            String
+  company              Company              @relation("CompanyUsers", fields: [companyId], references: [id])
+  defaultForCompany    Company?             @relation("DefaultCommercial")
+  roleId               String
+  role                 Role                 @relation(fields: [roleId], references: [id])
+  parentLink           UserHierarchy?       @relation("HierarchyChild")
+  children             UserHierarchy[]      @relation("HierarchyParent")
+  agentProfile         AgentProfile?
+  clientProfile        ClientProfile?
+  consents             Consent[]
+  ownerships           PropertyOwnership[]
+  assignedProperties   Property[]           @relation("PropertyAgent")
+  media                MediaAsset[]
+  listings             Listing[]
+  validations          ListingValidation[]
+  favorites            Favorite[]
+  bookings             Booking[]
+  visits               VisitRequest[]
+  subscriptions        Subscription[]
+  payments             Payment[]
+  contactAccess        ContactAccess[]
+  commissions          Commission[]
+  notifications        Notification[]
+  audits               AuditLog[]
+  createdAt            DateTime             @default(now())
+  updatedAt            DateTime             @updatedAt
+
+  @@index([companyId, roleId, status])
+}
+
+model UserHierarchy {
+  childId   String   @id
+  parentId  String
+  child     User     @relation("HierarchyChild", fields: [childId], references: [id])
+  parent    User     @relation("HierarchyParent", fields: [parentId], references: [id])
+  createdAt DateTime @default(now())
+
+  @@index([parentId])
+}
+
+model AgentProfile {
+  id                  String             @id @default(cuid())
+  userId              String             @unique
+  user                User               @relation(fields: [userId], references: [id])
+  identifier          String             @unique
+  agencyId            String?
+  agency              Agency?            @relation(fields: [agencyId], references: [id])
+  verification        VerificationStatus @default(UNVERIFIED)
+  identityAssetId     String?            @unique
+  identityAsset       MediaAsset?        @relation("AgentIdentity", fields: [identityAssetId], references: [id])
+  identityDeleteAfter DateTime?
+  verifiedAt          DateTime?
+  createdAt           DateTime           @default(now())
+  updatedAt           DateTime           @updatedAt
+
+  @@index([agencyId, verification])
+}
+
+model AnnualSequence {
+  year  Int @id
+  value Int @default(0)
+}
+
+model ClientProfile {
+  id        String   @id @default(cuid())
+  userId    String   @unique
+  user      User     @relation(fields: [userId], references: [id])
+  createdAt DateTime @default(now())
+}
+
+model Consent {
+  id        String    @id @default(cuid())
+  userId    String
+  user      User      @relation(fields: [userId], references: [id])
+  purpose   String
+  version   String
+  grantedAt DateTime  @default(now())
+  revokedAt DateTime?
+
+  @@unique([userId, purpose, version])
+}
+
+model Location {
+  id         String       @id @default(cuid())
+  code       String       @unique
+  name       String
+  kind       LocationKind
+  countryId  String
+  country    Country      @relation(fields: [countryId], references: [id])
+  parentId   String?
+  parent     Location?    @relation("LocationTree", fields: [parentId], references: [id])
+  children   Location[]   @relation("LocationTree")
+  properties Property[]
+
+  @@index([countryId, kind, parentId])
+}
+
+model Property {
+  id                   String              @id @default(cuid())
+  reference            String              @unique
+  title                String
+  description          String
+  type                 PropertyType
+  companyId            String
+  company              Company             @relation(fields: [companyId], references: [id])
+  locationId           String
+  location             Location            @relation(fields: [locationId], references: [id])
+  agentId              String?
+  agent                User?               @relation("PropertyAgent", fields: [agentId], references: [id])
+  surfaceM2            Decimal             @db.Decimal(12, 2)
+  latitude             Decimal?            @db.Decimal(9, 6)
+  longitude            Decimal?            @db.Decimal(9, 6)
+  legalStatus          String?
+  acquisitionMode      String?
+  constructionState    String?
+  occupancyState       String?
+  estimatedValueXof    Int?
+  bedrooms             Int                 @default(0)
+  livingRooms          Int                 @default(0)
+  bathrooms            Int                 @default(0)
+  toilets              Int                 @default(0)
+  floors               Int                 @default(0)
+  garageSpaces         Int                 @default(0)
+  tiled                Boolean?
+  waterMeter           Boolean?
+  electricityMeter     Boolean?
+  communalCourtyard    Boolean?
+  householdCount       Int?
+  subdivided           Boolean?
+  demarcated           Boolean?
+  cutCorner            Boolean?
+  propertyTitleType    String?
+  roadDistanceM        Int?
+  schoolDistanceM      Int?
+  policeDistanceM      Int?
+  cspsDistanceM        Int?
+  waterAvailable       Boolean?
+  electricityAvailable Boolean?
+  details              Json                @default("{}")
+  owners               PropertyOwnership[]
+  units                PropertyUnit[]
+  features             PropertyFeature[]
+  documents            PropertyDocument[]
+  media                PropertyMedia[]
+  tours                VirtualTour[]
+  floorPlans           FloorPlan[]
+  listings             Listing[]
+  legalCases           LegalCase[]
+  createdAt            DateTime            @default(now())
+  updatedAt            DateTime            @updatedAt
+
+  @@index([companyId, type, locationId])
+  @@index([agentId])
+  @@index([locationId, surfaceM2, bedrooms])
+}
+
+model PropertyOwnership {
+  propertyId String
+  ownerId    String
+  property   Property @relation(fields: [propertyId], references: [id])
+  owner      User     @relation(fields: [ownerId], references: [id])
+  shareBps   Int?
+
+  @@id([propertyId, ownerId])
+  @@index([ownerId])
+}
+
+model PropertyUnit {
+  id         String      @id @default(cuid())
+  propertyId String
+  property   Property    @relation(fields: [propertyId], references: [id])
+  label      String
+  kind       String
+  floor      Int         @default(0)
+  surfaceM2  Decimal?    @db.Decimal(10, 2)
+  details    Json        @default("{}")
+  scenes     TourScene[]
+
+  @@index([propertyId, kind])
+}
+
+model PropertyFeature {
+  id         String   @id @default(cuid())
+  propertyId String
+  property   Property @relation(fields: [propertyId], references: [id])
+  code       String
+  value      String
+  unit       String?
+
+  @@unique([propertyId, code])
+}
+
+model MediaAsset {
+  id              String             @id @default(cuid())
+  ownerId         String
+  owner           User               @relation(fields: [ownerId], references: [id])
+  objectKey       String             @unique
+  kind            MediaKind
+  mimeType        String
+  sizeBytes       BigInt
+  status          AssetStatus        @default(QUARANTINED)
+  width           Int?
+  height          Int?
+  checksum        String?
+  identityProfile AgentProfile?      @relation("AgentIdentity")
+  propertyMedia   PropertyMedia[]
+  documents       PropertyDocument[]
+  scenes          TourScene[]
+  floorPlans      FloorPlan[]
+  modelTours      VirtualTour[]
+  createdAt       DateTime           @default(now())
+  updatedAt       DateTime           @updatedAt
+
+  @@index([ownerId, kind, status])
+}
+
+model PropertyDocument {
+  id          String     @id @default(cuid())
+  propertyId  String
+  property    Property   @relation(fields: [propertyId], references: [id])
+  assetId     String
+  asset       MediaAsset @relation(fields: [assetId], references: [id])
+  kind        String
+  deleteAfter DateTime?
+  createdAt   DateTime   @default(now())
+
+  @@unique([propertyId, assetId])
+  @@index([assetId])
+}
+
+model PropertyMedia {
+  id         String     @id @default(cuid())
+  propertyId String
+  property   Property   @relation(fields: [propertyId], references: [id])
+  assetId    String
+  asset      MediaAsset @relation(fields: [assetId], references: [id])
+  position   Int        @default(0)
+  alt        String
+
+  @@unique([propertyId, assetId])
+  @@index([propertyId, position])
+  @@index([assetId])
+}
+
+model VirtualTour {
+  id           String      @id @default(cuid())
+  propertyId   String
+  property     Property    @relation(fields: [propertyId], references: [id])
+  title        String
+  kind         TourKind    @default(PANORAMA)
+  externalUrl  String?
+  modelAssetId String?
+  modelAsset   MediaAsset? @relation(fields: [modelAssetId], references: [id])
+  published    Boolean     @default(false)
+  scenes       TourScene[]
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+
+  @@index([propertyId, published])
+}
+
+model TourScene {
+  id           String        @id @default(cuid())
+  tourId       String
+  tour         VirtualTour   @relation(fields: [tourId], references: [id])
+  unitId       String?
+  unit         PropertyUnit? @relation(fields: [unitId], references: [id])
+  assetId      String
+  asset        MediaAsset    @relation(fields: [assetId], references: [id])
+  title        String
+  position     Int           @default(0)
+  initialYaw   Float         @default(0)
+  initialPitch Float         @default(0)
+  hotspots     TourHotspot[] @relation("HotspotSource")
+  incoming     TourHotspot[] @relation("HotspotTarget")
+
+  @@index([tourId, position])
+  @@index([assetId])
+  @@index([unitId])
+}
+
+model TourHotspot {
+  id            String     @id @default(cuid())
+  sceneId       String
+  scene         TourScene  @relation("HotspotSource", fields: [sceneId], references: [id])
+  targetSceneId String?
+  targetScene   TourScene? @relation("HotspotTarget", fields: [targetSceneId], references: [id])
+  label         String
+  yaw           Float
+  pitch         Float
+
+  @@index([sceneId])
+  @@index([targetSceneId])
+}
+
+model FloorPlan {
+  id         String     @id @default(cuid())
+  propertyId String
+  property   Property   @relation(fields: [propertyId], references: [id])
+  assetId    String
+  asset      MediaAsset @relation(fields: [assetId], references: [id])
+  floor      Int        @default(0)
+
+  @@unique([propertyId, floor])
+}
+
+model LegalCase {
+  id         String      @id @default(cuid())
+  reference  String      @unique
+  propertyId String
+  property   Property    @relation(fields: [propertyId], references: [id])
+  action     LegalAction
+  status     String      @default("TO_REVIEW")
+  notes      String?
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+
+  @@index([propertyId, status])
+}
+
+model Listing {
+  id            String              @id @default(cuid())
+  slug          String              @unique
+  propertyId    String
+  property      Property            @relation(fields: [propertyId], references: [id])
+  authorId      String
+  author        User                @relation(fields: [authorId], references: [id])
+  offer         OfferType
+  status        ListingStatus       @default(DRAFT)
+  priceXof      Int
+  depositXof    Int?
+  advanceXof    Int?
+  paymentPeriod String?
+  conditions    String?
+  availableAt   DateTime?
+  publishedAt   DateTime?
+  expiresAt     DateTime?
+  confirmedAt   DateTime?
+  validations   ListingValidation[]
+  favorites     Favorite[]
+  bookings      Booking[]
+  visits        VisitRequest[]
+  access        ContactAccess[]
+  createdAt     DateTime            @default(now())
+  updatedAt     DateTime            @updatedAt
+
+  @@index([status, offer, priceXof])
+  @@index([propertyId])
+  @@index([authorId, status])
+  @@index([status, expiresAt])
+}
+
+model ListingValidation {
+  id        String   @id @default(cuid())
+  listingId String
+  listing   Listing  @relation(fields: [listingId], references: [id])
+  actorId   String
+  actor     User     @relation(fields: [actorId], references: [id])
+  action    String
+  reason    String?
+  createdAt DateTime @default(now())
+
+  @@index([listingId, createdAt])
+}
+
+model Favorite {
+  userId    String
+  listingId String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  listing   Listing  @relation(fields: [listingId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@id([userId, listingId])
+  @@index([listingId])
+}
+
+model Booking {
+  id        String         @id @default(cuid())
+  listingId String
+  listing   Listing        @relation(fields: [listingId], references: [id])
+  userId    String
+  user      User           @relation(fields: [userId], references: [id])
+  kind      RequestKind
+  status    BookingStatus  @default(REQUESTED)
+  startAt   DateTime?
+  endAt     DateTime?
+  events    BookingEvent[]
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
+
+  @@index([listingId, status, startAt])
+  @@index([userId, createdAt])
+}
+
+model BookingEvent {
+  id        String        @id @default(cuid())
+  bookingId String
+  booking   Booking       @relation(fields: [bookingId], references: [id])
+  status    BookingStatus
+  note      String?
+  createdAt DateTime      @default(now())
+
+  @@index([bookingId, createdAt])
+}
+
+model VisitRequest {
+  id        String        @id @default(cuid())
+  listingId String
+  listing   Listing       @relation(fields: [listingId], references: [id])
+  userId    String
+  user      User          @relation(fields: [userId], references: [id])
+  desiredAt DateTime
+  status    BookingStatus @default(REQUESTED)
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+
+  @@index([listingId, status])
+  @@index([userId, desiredAt])
+}
+
+model SubscriptionPlan {
+  id            String         @id @default(cuid())
+  companyId     String
+  company       Company        @relation(fields: [companyId], references: [id])
+  code          String
+  label         String
+  priceXof      Int
+  durationDays  Int
+  channel       Channel?
+  active        Boolean        @default(true)
+  subscriptions Subscription[]
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+
+  @@unique([companyId, code])
+}
+
+model Subscription {
+  id        String             @id @default(cuid())
+  userId    String
+  user      User               @relation(fields: [userId], references: [id])
+  planId    String
+  plan      SubscriptionPlan   @relation(fields: [planId], references: [id])
+  priceXof  Int
+  status    SubscriptionStatus @default(PENDING)
+  startsAt  DateTime?
+  expiresAt DateTime?
+  payments  Payment[]
+  createdAt DateTime           @default(now())
+  updatedAt DateTime           @updatedAt
+
+  @@index([userId, status, expiresAt])
+}
+
+model Payment {
+  id             String               @id @default(cuid())
+  userId         String
+  user           User                 @relation(fields: [userId], references: [id])
+  subscriptionId String?
+  subscription   Subscription?        @relation(fields: [subscriptionId], references: [id])
+  provider       String
+  externalId     String?
+  idempotencyKey String               @unique
+  amountXof      Int
+  currency       String               @default("XOF") @db.Char(3)
+  status         PaymentStatus        @default(PENDING)
+  purpose        String
+  verifiedAt     DateTime?
+  transactions   PaymentTransaction[]
+  commissions    Commission[]
+  receipt        Receipt?
+  contactAccess  ContactAccess[]
+  createdAt      DateTime             @default(now())
+  updatedAt      DateTime             @updatedAt
+
+  @@unique([provider, externalId])
+  @@index([userId, status, createdAt])
+}
+
+model PaymentTransaction {
+  id          String        @id @default(cuid())
+  paymentId   String
+  payment     Payment       @relation(fields: [paymentId], references: [id])
+  provider    String
+  eventId     String
+  status      PaymentStatus
+  amountXof   Int
+  payloadHash String
+  createdAt   DateTime      @default(now())
+
+  @@unique([provider, eventId])
+  @@index([paymentId, createdAt])
+}
+
+model ContactAccess {
+  id        String    @id @default(cuid())
+  userId    String
+  user      User      @relation(fields: [userId], references: [id])
+  listingId String
+  listing   Listing   @relation(fields: [listingId], references: [id])
+  paymentId String
+  payment   Payment   @relation(fields: [paymentId], references: [id])
+  expiresAt DateTime?
+  createdAt DateTime  @default(now())
+
+  @@unique([paymentId, listingId])
+  @@index([userId, listingId])
+}
+
+model Receipt {
+  id        String   @id @default(cuid())
+  number    String   @unique
+  paymentId String   @unique
+  payment   Payment  @relation(fields: [paymentId], references: [id])
+  amountXof Int
+  issuedAt  DateTime @default(now())
+}
+
+model Commission {
+  id            String   @id @default(cuid())
+  paymentId     String
+  payment       Payment  @relation(fields: [paymentId], references: [id])
+  beneficiaryId String
+  beneficiary   User     @relation(fields: [beneficiaryId], references: [id])
+  rateBps       Int
+  amountXof     Int
+  createdAt     DateTime @default(now())
+
+  @@unique([paymentId, beneficiaryId])
+  @@index([beneficiaryId, createdAt])
+}
+
+model Notification {
+  id        String    @id @default(cuid())
+  userId    String
+  user      User      @relation(fields: [userId], references: [id])
+  channel   Channel
+  template  String
+  status    JobStatus @default(PENDING)
+  attempts  Int       @default(0)
+  nextRunAt DateTime  @default(now())
+  sentAt    DateTime?
+  createdAt DateTime  @default(now())
+
+  @@index([status, nextRunAt])
+  @@index([userId, createdAt])
+}
+
+model Advertisement {
+  id        String   @id @default(cuid())
+  companyId String
+  company   Company  @relation(fields: [companyId], references: [id])
+  title     String
+  placement String
+  targetUrl String?
+  startsAt  DateTime
+  endsAt    DateTime
+  active    Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([companyId, active, startsAt, endsAt])
+}
+
+model AuditLog {
+  id         String   @id @default(cuid())
+  actorId    String?
+  actor      User?    @relation(fields: [actorId], references: [id])
+  companyId  String?
+  action     String
+  targetType String
+  targetId   String
+  metadata   Json     @default("{}")
+  createdAt  DateTime @default(now())
+
+  @@index([companyId, createdAt])
+  @@index([targetType, targetId])
+}
+
+model Setting {
+  id        String   @id @default(cuid())
+  companyId String
+  company   Company  @relation(fields: [companyId], references: [id])
+  key       String
+  value     Json
+  updatedAt DateTime @updatedAt
+
+  @@unique([companyId, key])
+}
+
+model OutboxJob {
+  id             String    @id @default(cuid())
+  idempotencyKey String    @unique
+  kind           String
+  payload        Json
+  status         JobStatus @default(PENDING)
+  attempts       Int       @default(0)
+  nextRunAt      DateTime  @default(now())
+  lockedAt       DateTime?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  @@index([status, nextRunAt])
+}
