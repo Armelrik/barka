@@ -5,7 +5,7 @@
 Prérequis : Git et Node.js 24 avec npm. `.nvmrc` fixe la version majeure 24 ; avec nvm déjà installé, utiliser `nvm install` puis `nvm use` dans le dossier du projet.
 
 ```sh
-git clone <URL_DU_DEPOT_GITHUB> barka
+git clone https://github.com/Armelrik/barka.git barka
 cd barka
 npm ci
 cp .env.example .env
