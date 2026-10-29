@@ -6,6 +6,11 @@ import { fileURLToPath } from "node:url";
 import { promisify } from "node:util";
 import { PrismaClient } from "../src/generated/prisma/client";
 import { PrismaPg } from "@prisma/adapter-pg";
+import { roleLevels } from "../src/modules/identity/policy";
+import { demoProperties } from "../src/modules/catalog/demo";
+const demoEmails = Object.keys(roleLevels)
+  .filter((role) => role !== "VISITOR")
+  .map((role) => `${role.toLowerCase()}@barka.example`);
 
 // Explicit, local test database only. Apply migrations before running this check.
 const url = process.env.TEST_DATABASE_URL;
@@ -46,7 +51,7 @@ async function snapshot() {
   return {
     defaultCommercialId: company.defaultCommercialId,
     users: await db.user.findMany({
-      where: { companyId: company.id },
+      where: { companyId: company.id, email: { in: demoEmails } },
       orderBy: { email: "asc" },
       select: {
         id: true,
@@ -55,21 +60,35 @@ async function snapshot() {
         agentProfile: { select: { identifier: true } },
       },
     }),
-    properties: await db.property.count({ where: { companyId: company.id } }),
+    properties: await db.property.count({
+      where: {
+        companyId: company.id,
+        reference: { in: demoProperties.map((property) => property.reference) },
+      },
+    }),
     listings: await db.listing.findMany({
-      where: { property: { companyId: company.id } },
+      where: {
+        property: { companyId: company.id },
+        slug: { in: demoProperties.map((property) => property.slug) },
+      },
       orderBy: { slug: "asc" },
       select: { id: true, status: true, priceXof: true },
     }),
     hierarchy: await db.userHierarchy.count({
-      where: { child: { companyId: company.id } },
+      where: { child: { companyId: company.id, email: { in: demoEmails } } },
     }),
     plans: await db.subscriptionPlan.findMany({
-      where: { companyId: company.id },
+      where: {
+        companyId: company.id,
+        code: { in: ["MANAGER_YEAR", "AGENT_YEAR", "CLIENT_DAY"] },
+      },
       orderBy: { code: "asc" },
     }),
     settings: await db.setting.findMany({
-      where: { companyId: company.id },
+      where: {
+        companyId: company.id,
+        key: { in: ["listing.revalidationDays", "pricing.contactRevealXof"] },
+      },
       orderBy: { key: "asc" },
     }),
     sequence: await db.annualSequence.findUnique({

@@ -9,6 +9,7 @@ const links = [
   { href: "/#catalogue", label: "Nos biens" },
   { href: "/#approche", label: "Notre approche" },
   { href: "/#projet", label: "Le projet" },
+  { href: "/espace", label: "Mon espace" },
 ];
 export function SiteHeader() {
   const [open, setOpen] = useState(false);
@@ -26,8 +27,8 @@ export function SiteHeader() {
           ))}
         </nav>
         <Button asChild size="sm" className="header-cta">
-          <Link href="/#catalogue">
-            Explorer les biens <ArrowUpRight size={15} />
+          <Link href="/inscription">
+            Créer un compte <ArrowUpRight size={15} />
           </Link>
         </Button>
         <button

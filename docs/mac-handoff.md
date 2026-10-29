@@ -8,7 +8,7 @@ Prérequis : Git et Node.js 24 avec npm. `.nvmrc` fixe la version majeure 24 ; a
 git clone https://github.com/Armelrik/barka.git barka
 cd barka
 npm ci
-cp .env.example .env
+npm run setup:local
 npm run dev
 ```
 
@@ -48,8 +48,8 @@ Les E2E démarrent un serveur de production sur le port 3001 ; ce port doit êtr
 
 ## État et suite
 
-Livré : cadrage phase 1, schéma et migrations, seed idempotent, RBAC préparatoire, accueil refondu selon la première référence, Poppins locale, recherche et favoris de démonstration.
+Livré : cadrage phase 1, schéma et migrations, seed idempotent, accueil refondu, Poppins locale, recherche et favoris de démonstration ; inscription CLIENT, connexion téléphone/email, sessions révocables, espace personnel et annuaire d'équipe protégé en lecture seule. Voir [authentication.md](authentication.md) pour la configuration locale et les tests.
 
 Nouvelle direction de visualisation : [property-viewer.md](property-viewer.md) décrit la seconde référence fournie par l'utilisateur (vue immersive, hotspots violets, pièces à droite, vignettes et mini-plan). Sa réalisation reste à développer avec les médias adaptés. Préserver cette direction graphique pendant la suite.
 
-Ordre de travail du socle : authentification maintenue et RBAC réellement intégrés, puis CRUD/modération/stockage objet et catalogue connecté. La visionneuse peut être préparée en parallèle au niveau présentation, sans annoncer une vraie 360° à partir des photos d'ambiance. Réservations et paiements suivent la validation du socle. Voir [roadmap.md](roadmap.md) et [verification.md](verification.md).
+Ordre de travail du socle : compléter les opérations administratives sur les utilisateurs et rattachements, puis CRUD/modération/stockage objet et catalogue connecté. La visionneuse peut être préparée au niveau présentation, sans annoncer une vraie 360° à partir des photos d'ambiance. Réservations et paiements suivent la validation du socle. Les comptes fictifs se connectent avec DEMO_PASSWORD de votre .env ; pour actualiser leur mot de passe local existant, utiliser `npm run db:demo-password`. Voir [roadmap.md](roadmap.md) et [verification.md](verification.md).

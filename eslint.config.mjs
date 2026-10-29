@@ -9,6 +9,8 @@ export default defineConfig([
     "src/generated/**",
     "playwright-report/**",
     "test-results/**",
+    "auth-test-results/**",
+    ".tmp/**",
     "next-env.d.ts",
   ]),
 ]);

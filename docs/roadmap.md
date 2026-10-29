@@ -1,5 +1,9 @@
 # Feuille de route et acceptation
 
+## Avancement actuel
+
+Première étape du MVP réalisée : inscription CLIENT, connexion téléphone/email, déconnexion, sessions révocables, limitation persistante, audits et espace protégé. Annuaire d'équipe en lecture seule avec filtrage/pagination serveur. Voir [authentication.md](authentication.md). Prochaine étape : mutations d'utilisateurs et rattachements avec prévention transactionnelle des cycles, puis CRUD immobilier et modération. La vérification SMS/email, la récupération de mot de passe, les médias et les paiements restent à intégrer.
+
 ## Phase 1 — fondations (présente livraison)
 
 Documentation, schéma/migration, seed idempotent, UI d'accueil et catalogue de démonstration, tests des filtres et limites RBAC, lint/typecheck/build. Acceptation : page française responsive, filtres utilisables, exemples signalés, aucune fausse connexion ni paiement ; schéma validé et génération du client. Migration/seed doivent être exécutés deux fois sur PostgreSQL de test avant validation de la base.

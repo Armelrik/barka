@@ -1,5 +1,19 @@
 # Vérification de la phase 1 — 29 octobre 2026
 
+## Ajout du premier espace authentifié
+
+Inscription CLIENT, connexion téléphone/email, déconnexion, sessions scellées et révocables, premier tableau de bord et annuaire d'équipe en lecture seule. Les routes privées relisent le statut, le rôle et les permissions en base. Détails : [authentication.md](authentication.md).
+
+Contrôles relancés : lint et TypeScript sans erreur, compilation Next.js réussie, 29 tests unitaires réussis, 6 parcours publics réussis et 10 scénarios d'authentification/API réussis (8 sécurité/API, 2 parcours client ordinateur/mobile). La migration `202610290003_auth` a été appliquée et le seed rejoué deux fois sans modification de ses comptes, mots de passe ou paramètres existants. Le script de vérification distingue désormais les fixtures du seed des nouveaux comptes clients. Les comptes de démo ont aussi été rendus utilisables via `db:demo-password`, sans affichage du secret local.
+
+Deux parcours supplémentaires ont ensuite réussi sur le même build : tableau de bord manager et annuaire de ses deux descendants sur ordinateur et mobile, sans débordement horizontal de la page. La suite d'authentification comprend désormais 12 scénarios. Capture de l'annuaire ordinateur inspectée. La résolution du verrou `npm ci --dry-run --ignore-scripts --offline` réussit ; une installation complète sur Mac n'est pas revendiquée.
+
+Cas de sécurité exécutés : refus anonyme, rôle CLIENT et rattachement imposés, email facultatif, unicité, cookie falsifié, cookie révoqué, expiration, suspension, relecture du rôle, équipe descendante, société étrangère, CSRF, type JSON et limites persistantes malgré un en-tête IP modifié. Les captures des formulaires et de l'espace client ont été inspectées sur ordinateur et mobile.
+
+Limite d'environnement : les tests d'authentification utilisent Prisma/PGlite avec un pool de taille 1 et un seul worker ; son pont PostgreSQL a présenté des erreurs de protocole en connexions concurrentes. La validation de charge/concurrence sur PostgreSQL natif reste à exécuter avant ouverture publique. Docker est toujours absent sur ce poste. Les textes juridiques sont des documents de travail et l'inscription en production est fermée par défaut.
+
+Les sections suivantes conservent l'historique des fondations et de la refonte.
+
 Environnement : Windows, Node 24.21.0, npm 11.19.0. Next.js 16.4.3, Prisma CLI/client/adaptateur PostgreSQL 7.10.1, TypeScript strict 5.9.3. Versions résolues consignées dans `package-lock.json`.
 
 | Contrôle exécuté                                  | Résultat                                                                                                  |

@@ -24,4 +24,4 @@ L'autorisation est l'intersection permission × société/pays × arbre hiérarc
 7. Documents d'identité : permission dédiée et finalité, URL signée courte, journal d'accès. Modération et support n'impliquent pas automatiquement lecture d'identité.
 8. Audit des rôles, rattachements, publications, documents et finances. Transaction commune pour écriture et audit ; pas de secrets dans le diff.
 
-Le helper de phase 1 teste seulement la gestion hiérarchique et l'attribution des rôles. Les autres règles sont des critères d'acceptation des services futurs ; aucune route privée n'est exposée.
+Le helper de phase 1 est désormais utilisé par les lectures privées. Les routes `/api/v1/users` et `/api/v1/users/:id` et l'annuaire `/espace/equipe` relisent permissions et périmètre depuis la base, avec filtrage avant pagination. Les opérations de modification de rôles/rattachements, de publication, de documents et de finances restent à implémenter et à tester dans leurs futurs services. Voir [authentication.md](authentication.md).

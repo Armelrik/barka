@@ -21,9 +21,9 @@ flowchart LR
 
 `src/app` : routes et présentation ; `src/components/ui` : composants ; `src/modules/catalog` : données de démonstration et filtres ; `src/modules/identity` : politique pure RBAC ; `src/lib/server` : connexion Prisma, attribution de numéro ; `prisma` : schéma, migrations et seed ; `tests` : règles métier et E2E. Futures frontières : listings, bookings, billing, media, tours, notifications, administration. API future `/api/v1`, DTO Zod séparés des modèles Prisma, pagination par curseur, erreurs stables sans secrets.
 
-## Identité prévue au MVP
+## Identité — première étape du MVP
 
-Auth.js ou bibliothèque maintenue sera sélectionnée et configurée avec sessions révocables, mots de passe hachés, cookies HttpOnly/Secure/SameSite, CSRF et limitation distribuée des tentatives. La phase 1 n'expose aucun endpoint de connexion. Le seed hache les mots de passe avec bcrypt (coût 12). Les rôles ne seront jamais acceptés depuis les données client ; le serveur recharge acteur, permissions et périmètre pour chaque mutation et lecture privée. Les fonctions RBAC pures préparées ne remplacent pas cette intégration.
+Sessions scellées avec iron-session et tokens opaques hachés en base, révocables et expirant après huit heures. Inscription CLIENT, connexion téléphone/email, bcrypt coût 12, contrôle d'origine, limites atomiques persistantes, audits et pages privées sont intégrés. Le serveur recharge acteur, permissions et périmètre à chaque accès privé ; les données client ne peuvent attribuer ni rôle ni société. L'annuaire d'équipe est en lecture seule. Voir [authentication.md](authentication.md) pour les limites, routes, commandes et prérequis d'ouverture publique.
 
 ## Hiérarchie
 

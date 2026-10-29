@@ -1,5 +1,9 @@
 # Sécurité — fondations et contrôles à intégrer
 
+## État actuel : premier espace authentifié
+
+Inscription CLIENT, connexion téléphone/email, sessions scellées et révocables en base, vérification d'origine, limitation persistante, audits et lectures privées filtrées sont désormais intégrés. Les détails, limites et contrôles réellement exécutés figurent dans [authentication.md](authentication.md) et [verification.md](verification.md). Les textes légaux restent des documents de travail, et l'inscription de production exige une activation explicite après leur validation. Les éléments de phase 1 ci-dessous décrivent l'état historique avant cette intégration ; uploads et paiements restent fermés.
+
 ## État de phase 1
 
 Pas de collecte, route de connexion, upload ou paiement. Le catalogue utilise exclusivement des constantes fictives et ne contacte pas la base. En-têtes anti-sniffing, anti-framing et politique de référent fournis par Next.js. Le RBAC préparatoire est pur et testé ; il ne constitue pas une authentification. Aucun secret inclus dans le code ou le navigateur.
