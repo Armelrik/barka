@@ -44,7 +44,7 @@ npx playwright install chromium
 npm run test:e2e
 ```
 
-Les E2E démarrent un serveur de production sur le port 3001 ; ce port doit être libre. Les vérifications précédentes ont réussi sous Windows : 14 tests unitaires, 6 parcours navigateur, compilation, lint et typecheck. Les migrations et seeds ont été vérifiés avec Prisma/PGlite local ; il reste à confirmer l'exécution sur PostgreSQL natif, notamment avec le Compose fourni.
+Les E2E démarrent un serveur de production sur le port 3001 ; ce port doit être libre. Les vérifications ont également réussi sur Mac le 29 octobre 2026 : installation des dépendances, validation du schéma, 14 tests unitaires, 6 parcours navigateur, compilation, lint et typecheck. Voir [verification.md](verification.md). Les migrations et seeds ont été vérifiés initialement avec Prisma/PGlite local ; il reste à confirmer l'exécution sur PostgreSQL natif, notamment avec le Compose fourni.
 
 ## État et suite
 
