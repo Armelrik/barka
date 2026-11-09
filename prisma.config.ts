@@ -5,7 +5,8 @@ export default defineConfig({
   migrations: { path: "prisma/migrations", seed: "tsx prisma/seed.ts" },
   datasource: {
     url:
-      process.env.DATABASE_URL ??
+      process.env.DIRECT_URL ||
+      process.env.DATABASE_URL ||
       "postgresql://barka:barka_local_only@localhost:5432/barka?schema=public",
   },
 });

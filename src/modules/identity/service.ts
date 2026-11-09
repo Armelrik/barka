@@ -1,4 +1,5 @@
 import "server-only";
+import { lockIdentity } from "@/lib/server/identity-lock";
 import { compare, hash } from "bcryptjs";
 import { Prisma } from "@/generated/prisma/client";
 import { registrationSchema, loginSchema, consentVersions } from "./validation";
@@ -33,6 +34,7 @@ export async function registerClient(input: unknown) {
   const passwordHash = await hash(data.password, 12);
   try {
     return await getDb().$transaction(async (tx) => {
+      await lockIdentity(tx);
       const company = await tx.company.findUnique({
         where: { code },
         include: { defaultCommercial: { include: { role: true } } },
@@ -117,6 +119,7 @@ export async function authenticate(input: unknown) {
       "Identifiant ou mot de passe incorrect.",
     );
   return getDb().$transaction(async (tx) => {
+    await lockIdentity(tx);
     // Recheck after password verification, inside the transaction creating the session.
     const active = await tx.user.findUnique({
       where: { id: user.id },

@@ -1,10 +1,10 @@
 # Référence de visualisation des biens
 
-L'utilisateur a fourni une seconde référence visuelle pour la future visionneuse : intérieur en plein écran, points interactifs violets, vignettes de pièces à droite, pellicule horizontale en bas et mini-plan à gauche. Cette référence guide la prochaine étape de visualisation ; la visionneuse n'est pas encore implémentée.
+L'utilisateur a fourni une seconde référence visuelle pour la future visionneuse : intérieur en plein écran, points interactifs violets, vignettes de pièces à droite, pellicule horizontale en bas et mini-plan à gauche. Cette référence guide la prochaine étape de visualisation ; la visionneuse est désormais intégrée : voir [property-management.md](property-management.md).
 
 ## Composition à reproduire
 
-- Grande vue immersive aux angles arrondis, avec l'intérieur comme zone principale. Interface BARKA en français et police Poppins.
+- Grande vue immersive aux angles arrondis, avec l'intérieur comme zone principale. Interface BARKA en français et police Inter (charte Afriloc actuelle).
 - Hotspots circulaires violet/bleu, centre plein et halo clair, permettant de changer de pièce ou d'afficher une information.
 - Colonne flottante à droite : vignettes, nom de pièce et contour violet de la scène sélectionnée. Exemples de libellés : Salon, Cuisine, Chambre, Salle de bain.
 - Flèches précédent/suivant sur les côtés de la vue.
@@ -20,7 +20,7 @@ Vue prioritaire, panneau de pièces repliable, vignettes horizontales tactiles e
 
 ## Données et rendu réels
 
-Utiliser VirtualTour, TourScene, TourHotspot, MediaAsset et FloorPlan du schéma Prisma. Chaque scène panoramique doit disposer d'un média equirectangulaire autorisé ; rendu Pannellum ou Marzipano chargé à la demande. Les positions d'un panorama utilisent yaw/pitch. Un simple affichage de photo avec des points superposés ne doit pas être présenté comme une vraie visite 360°.
+Utiliser VirtualTour, TourScene, TourHotspot, MediaAsset et FloorPlan du schéma Prisma. Chaque scène panoramique doit disposer d'un média equirectangulaire autorisé ; rendu Three.js chargé à la demande, partagé avec le lecteur GLB. Les positions d'un panorama utilisent yaw/pitch. Un simple affichage de photo avec des points superposés ne doit pas être présenté comme une vraie visite 360°.
 
 Les photographies d'ambiance actuelles du site ne sont pas des panoramas et ne permettent pas de produire automatiquement une vraie 3D. Une première maquette interactive sur ces images devra être explicitement nommée « aperçu photo ». Les médias des biens réels utiliseront le stockage objet prévu, avec contrôles d'accès et URLs signées ; aucun vrai document privé dans Git.
 

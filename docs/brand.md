@@ -1,5 +1,7 @@
 # Identité visuelle BARKA SARL
 
+> Direction actuelle depuis le 9 novembre 2026 : interface Afriloc validée par le client, Inter, orange et turquoise. Voir [la référence complète](reference-afriloc/README.md). Les notes ci-dessous décrivent la direction précédente, conservée pour historique.
+
 La planche fournie par l'utilisateur définit une identité bleu nuit et or, avec variantes du logo sur fonds clair et sombre, pictogramme et version horizontale. La police Poppins et la composition de l'accueil restent en place.
 
 | Couleur retenue d'après la référence | Code      | Usage                                                                  |

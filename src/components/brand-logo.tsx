@@ -1,65 +1,28 @@
-// Vector adaptation of the supplied brand board; replace with the master artwork when available.
+/** Pictogramme et bloc de marque du dépôt Afriloc validé. */
 export function BrandLogo({ light = false }: { light?: boolean }) {
   return (
     <span
       className={`brand-logo${light ? " brand-logo-light" : ""}`}
       aria-hidden="true"
     >
-      <svg
-        viewBox="0 0 168 126"
-        className="brand-mark"
-        fill="none"
-        focusable="false"
-      >
-        <path
-          d="M19 105V49L39 33"
-          stroke="var(--brand-gold)"
-          strokeWidth="13"
-        />
-        <path
-          d="M19 108H48V22M65 91V12L86 29V72M46 108L115 48L154 83H141V108"
+      <span className="brand-icon">
+        <svg
+          width="24"
+          height="24"
+          fill="none"
           stroke="currentColor"
-          strokeWidth="13"
-          strokeLinejoin="miter"
-        />
-        <rect
-          x="86"
-          y="87"
-          width="13"
-          height="13"
-          rx="1.5"
-          fill="currentColor"
-        />
-        <rect
-          x="105"
-          y="87"
-          width="13"
-          height="13"
-          rx="1.5"
-          fill="var(--brand-gold)"
-        />
-        <rect
-          x="86"
-          y="106"
-          width="13"
-          height="13"
-          rx="1.5"
-          fill="currentColor"
-        />
-        <rect
-          x="105"
-          y="106"
-          width="13"
-          height="13"
-          rx="1.5"
-          fill="var(--brand-gold)"
-        />
-      </svg>
-      <span className="brand-wordmark">
-        <span className="brand-name">BARKA</span>
-        <span className="brand-sarl">SARL</span>
-        <span className="brand-tagline">L’immobilier en toute confiance</span>
+          viewBox="0 0 24 24"
+          focusable="false"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth="2"
+            d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
+          />
+        </svg>
       </span>
+      <span className="brand-name">BARKA</span>
     </span>
   );
 }

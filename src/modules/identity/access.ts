@@ -52,10 +52,42 @@ export const managedUserSelect = {
   email: true,
   status: true,
   createdAt: true,
+  updatedAt: true,
+  parentLink: {
+    select: {
+      parent: { select: { id: true, firstName: true, lastName: true } },
+    },
+  },
   role: { select: { code: true } },
 } satisfies Prisma.UserSelect;
-export async function listManagedUsers(user: AuthenticatedUser, page = 1) {
-  const where = await managedUserWhere(user);
+export async function listManagedUsers(
+  user: AuthenticatedUser,
+  page = 1,
+  filters: {
+    q?: string;
+    role?: RoleCode | "";
+    status?: "ACTIVE" | "SUSPENDED" | "CLOSED" | "";
+  } = {},
+) {
+  const where: Prisma.UserWhereInput = {
+    AND: [
+      await managedUserWhere(user),
+      {
+        ...(filters.q
+          ? {
+              OR: [
+                { firstName: { contains: filters.q, mode: "insensitive" } },
+                { lastName: { contains: filters.q, mode: "insensitive" } },
+                { phone: { contains: filters.q } },
+                { email: { contains: filters.q, mode: "insensitive" } },
+              ],
+            }
+          : {}),
+        ...(filters.role ? { role: { code: filters.role } } : {}),
+        ...(filters.status ? { status: filters.status } : {}),
+      },
+    ],
+  };
   const [items, total] = await Promise.all([
     getDb().user.findMany({
       where,

@@ -1,26 +1,14 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
+import "leaflet/dist/leaflet.css";
 import "./globals.css";
+import "./properties.css";
+import "./immersive.css";
 import "./account.css";
-const poppins = localFont({
-  src: [
-    {
-      path: "../assets/fonts/Poppins-Regular.ttf",
-      weight: "400",
-      style: "normal",
-    },
-    {
-      path: "../assets/fonts/Poppins-Medium.ttf",
-      weight: "500",
-      style: "normal",
-    },
-    {
-      path: "../assets/fonts/Poppins-SemiBold.ttf",
-      weight: "600",
-      style: "normal",
-    },
-  ],
-  variable: "--font-poppins",
+const inter = localFont({
+  src: "../assets/fonts/InterVariable.woff2",
+  weight: "100 900",
+  variable: "--font-inter",
   display: "swap",
 });
 export const metadata: Metadata = {
@@ -33,7 +21,7 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="fr" className={poppins.variable}>
+    <html lang="fr" className={inter.variable}>
       <body>
         <a href="#contenu" className="skip-link">
           Aller au contenu

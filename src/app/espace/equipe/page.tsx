@@ -1,22 +1,31 @@
 import Link from "next/link";
-import { z } from "zod";
-import { ChevronLeft, ChevronRight, UsersRound } from "lucide-react";
+import { teamQuerySchema, statusLabels } from "@/modules/identity/validation";
+import { roleLevels, type RoleCode } from "@/modules/identity/policy";
+import {
+  ChevronLeft,
+  ChevronRight,
+  UsersRound,
+  UserPlus,
+  Pencil,
+} from "lucide-react";
 import { requirePageUser } from "@/lib/server/page-auth";
 import { listManagedUsers } from "@/modules/identity/access";
 import { roleLabels } from "@/modules/identity/validation";
 export default async function TeamPage({
   searchParams,
 }: {
-  searchParams: Promise<{ page?: string }>;
+  searchParams: Promise<Record<string, string | undefined>>;
 }) {
   const user = await requirePageUser("users.manage");
-  const parsed = z.coerce
-    .number()
-    .int()
-    .min(1)
-    .max(1000)
-    .safeParse((await searchParams).page ?? 1);
-  const result = await listManagedUsers(user, parsed.success ? parsed.data : 1);
+  const parsed = teamQuerySchema.safeParse(await searchParams);
+  const query = parsed.success ? parsed.data : teamQuerySchema.parse({});
+  const result = await listManagedUsers(user, query.page, query);
+  const roles = (Object.keys(roleLevels) as RoleCode[]).filter(
+    (role) =>
+      roleLevels[role] < roleLevels[user.role.code] && role !== "VISITOR",
+  );
+  const pageLink = (page: number) =>
+    `/espace/equipe?${new URLSearchParams({ page: String(page), q: query.q, role: query.role, status: query.status })}`;
   return (
     <>
       <div className="workspace-heading">
@@ -25,6 +34,51 @@ export default async function TeamPage({
         <p>
           Les utilisateurs ci-dessous appartiennent à votre périmètre autorisé.
         </p>
+      </div>
+      <div className="team-toolbar">
+        <form method="get" className="team-filters">
+          <label>
+            Rechercher
+            <input
+              name="q"
+              defaultValue={query.q}
+              maxLength={100}
+              placeholder="Nom, téléphone ou email"
+            />
+          </label>
+          <label>
+            Rôle
+            <select name="role" defaultValue={query.role}>
+              <option value="">Tous les rôles</option>
+              {roles.map((role) => (
+                <option key={role} value={role}>
+                  {roleLabels[role]}
+                </option>
+              ))}
+            </select>
+          </label>
+          <label>
+            Statut
+            <select name="status" defaultValue={query.status}>
+              <option value="">Tous les statuts</option>
+              {Object.entries(statusLabels).map(([value, label]) => (
+                <option key={value} value={value}>
+                  {label}
+                </option>
+              ))}
+            </select>
+          </label>
+          <button className="team-secondary-button" type="submit">
+            Filtrer
+          </button>
+          <Link href="/espace/equipe" className="team-reset">
+            Effacer les filtres
+          </Link>
+        </form>
+        <Link className="team-primary-button" href="/espace/equipe/nouveau">
+          <UserPlus size={18} />
+          Créer un compte
+        </Link>
       </div>
       <section className="team-panel">
         <div className="panel-title">
@@ -45,6 +99,8 @@ export default async function TeamPage({
                   <th>Rôle</th>
                   <th>Téléphone</th>
                   <th>Statut</th>
+                  <th>Responsable</th>
+                  <th>Actions</th>
                 </tr>
               </thead>
               <tbody>
@@ -69,6 +125,21 @@ export default async function TeamPage({
                             : "Fermé"}
                       </span>
                     </td>
+                    <td>
+                      {member.parentLink?.parent
+                        ? `${member.parentLink.parent.firstName} ${member.parentLink.parent.lastName}`
+                        : "Non rattaché"}
+                    </td>
+                    <td>
+                      <Link
+                        className="team-edit-link"
+                        href={`/espace/equipe/${member.id}`}
+                        aria-label={`Gérer le compte de ${member.firstName} ${member.lastName}`}
+                      >
+                        <Pencil size={16} />
+                        Gérer
+                      </Link>
+                    </td>
                   </tr>
                 ))}
               </tbody>
@@ -83,7 +154,7 @@ export default async function TeamPage({
         )}
         <nav className="team-pagination" aria-label="Pagination de l’équipe">
           {result.page > 1 && (
-            <Link href={`/espace/equipe?page=${result.page - 1}`}>
+            <Link href={pageLink(result.page - 1)}>
               <ChevronLeft size={17} />
               Précédente
             </Link>
@@ -93,7 +164,7 @@ export default async function TeamPage({
             {Math.max(1, Math.ceil(result.total / result.pageSize))}
           </span>
           {result.page * result.pageSize < result.total && (
-            <Link href={`/espace/equipe?page=${result.page + 1}`}>
+            <Link href={pageLink(result.page + 1)}>
               Suivante
               <ChevronRight size={17} />
             </Link>

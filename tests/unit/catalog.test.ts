@@ -22,9 +22,13 @@ describe("Catalogue d'exemples", () => {
       expect(() => filterProperties(demoProperties, input)).toThrow();
   });
   it("laisse le budget vide sans plafond implicite", () =>
-    expect(filterProperties(demoProperties, { maxPrice: "" })).toHaveLength(4));
+    expect(filterProperties(demoProperties, { maxPrice: "" })).toHaveLength(
+      demoProperties.length,
+    ));
   it("ignore casse, espaces et accents de localisation", () =>
     expect(
       filterProperties(demoProperties, { location: "  OUAGADOUGÓU " }),
-    ).toHaveLength(4));
+    ).toHaveLength(
+      demoProperties.filter((p) => p.city === "Ouagadougou").length,
+    ));
 });

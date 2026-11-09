@@ -755,3 +755,596 @@
     animation: none;
   }
 }
+/* Adaptation de la charte publique et AdminLTE du dépôt Afriloc. */
+.auth-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  min-height: 100svh;
+  background: #f9fafb;
+  padding: 32px 16px;
+}
+.auth-content {
+  display: block;
+  background: white;
+  padding: 32px;
+  width: 100%;
+  max-width: 512px;
+  border-radius: 8px;
+  box-shadow: 0 20px 25px -5px #0001;
+}
+.auth-content h1 {
+  font-size: 24px;
+  line-height: 1.25;
+  font-weight: 700;
+  letter-spacing: 0;
+  margin: 0 0 24px;
+}
+.auth-intro {
+  font-size: 14px;
+  line-height: 1.6;
+  margin-bottom: 24px;
+  color: #4b5563;
+}
+.auth-field > label {
+  font-size: 14px;
+  color: #374151;
+}
+.auth-field input {
+  background: white;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  height: 42px;
+  padding: 8px 12px;
+  font-size: 14px;
+  color: #111827;
+  box-shadow: 0 1px 2px #0001;
+}
+.auth-field input:focus {
+  border-color: #f97316;
+  box-shadow: 0 0 0 3px #f9731620;
+}
+.auth-form {
+  gap: 24px;
+}
+.auth-submit {
+  border-radius: 6px;
+  height: 42px;
+  font-size: 14px;
+}
+.auth-switch,
+.consent-label {
+  font-size: 14px;
+  color: #4b5563;
+}
+.auth-switch a,
+.consent-label a {
+  color: #ea580c;
+}
+.field-hint {
+  font-size: 12px;
+}
+.field-error {
+  font-size: 12px;
+}
+.auth-dialog .auth-form {
+  font-size: 14px;
+}
+.auth-dialog .auth-fields-grid {
+  gap: 12px;
+}
+.auth-dialog .consent-label {
+  font-size: 12px;
+}
+.auth-dialog .auth-switch {
+  font-size: 14px;
+}
+.workspace {
+  grid-template-columns: 250px minmax(0, 1fr);
+  background: #f4f6f9;
+}
+.workspace-sidebar {
+  background: linear-gradient(180deg, #2c3e50, #1a252f);
+  box-shadow: 2px 0 10px #0001;
+  padding: 16px;
+  color: white;
+}
+.workspace-brand {
+  display: block;
+  padding: 0 0 16px;
+  border-bottom: 1px solid #ffffff1a;
+}
+.workspace-identity {
+  padding: 20px 0;
+  border-bottom: 1px solid #ffffff1a;
+  margin-bottom: 16px;
+}
+.workspace-identity strong {
+  font-size: 14px;
+  font-weight: 600;
+}
+.workspace-identity small {
+  font-size: 12px;
+  color: #ffffffb3;
+}
+.workspace-avatar {
+  background: #3498db;
+  color: white;
+}
+.workspace-sidebar nav > a {
+  border-radius: 8px;
+  padding: 12px 16px;
+  font-size: 14px;
+  color: #ffffffcc;
+  transition: 0.3s;
+}
+.workspace-sidebar nav > a:hover {
+  background: #ffffff1a;
+  transform: translateX(5px);
+  color: white;
+}
+.workspace-sidebar nav > a:first-child {
+  background: linear-gradient(90deg, #3498db, #5dade2);
+  box-shadow: 0 4px 12px #3498db66;
+  color: white;
+}
+.workspace-header {
+  min-height: 57px;
+  padding: 16px 24px;
+  border-bottom: 2px solid #e3e6e8;
+  box-shadow: 0 2px 8px #0001;
+  font-size: 14px;
+}
+.workspace-main {
+  padding: 24px;
+  max-width: 1440px;
+}
+.workspace-heading h1 {
+  font-size: 30px;
+  font-weight: 600;
+  letter-spacing: 0;
+  margin: 0 0 10px;
+}
+.workspace-heading > p {
+  font-size: 14px;
+}
+.workspace-heading .eyebrow {
+  display: none;
+}
+.metric-card,
+.account-panel,
+.team-panel {
+  border: none;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px #0001;
+}
+.metric-card > span {
+  background: #3498db1a;
+  color: #3498db;
+  border-radius: 8px;
+}
+.metric-card > strong {
+  font-size: 40px;
+  font-weight: 700;
+  color: #2c3e50;
+}
+.metric-card h2 {
+  font-size: 14px;
+  font-weight: 600;
+}
+.panel-title h2 {
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 0;
+  color: #2c3e50;
+}
+.panel-title > svg {
+  color: #3498db;
+}
+.account-panel dt {
+  font-size: 13px;
+}
+.account-panel dd {
+  font-size: 14px;
+}
+.workspace-invitation {
+  background: linear-gradient(135deg, #3498db, #5dade2);
+  border-radius: 12px;
+  box-shadow: 0 4px 12px #0002;
+}
+.workspace-invitation .eyebrow,
+.workspace-team-link {
+  color: white;
+}
+.workspace-invitation h2 {
+  font-weight: 700;
+}
+.workspace-invitation p {
+  font-size: 14px;
+  color: white;
+}
+.workspace-invitation .text-link {
+  color: white;
+}
+.account-note {
+  font-size: 12px;
+}
+.team-panel th {
+  background: linear-gradient(135deg, #2c3e50, #34495e);
+  color: white;
+  font-size: 12px;
+  text-transform: uppercase;
+  font-weight: 700;
+  padding: 16px;
+}
+.team-panel td {
+  font-size: 14px;
+  padding: 16px;
+}
+.team-panel td strong {
+  font-size: 14px;
+}
+.team-panel td small {
+  font-size: 12px;
+}
+.logout-button {
+  font-size: 14px;
+}
+.workspace-signature {
+  font-size: 10px;
+  color: #ffffffb3;
+}
+.workspace-header a {
+  color: #3498db;
+}
+.workspace .brand-name {
+  font-size: 22px;
+}
+.workspace .brand-icon {
+  background: #3498db;
+}
+@media (max-width: 850px) {
+  .workspace {
+    grid-template-columns: 1fr;
+  }
+  .workspace-sidebar {
+    padding: 16px;
+  }
+  .workspace-sidebar nav > a {
+    font-size: 12px;
+    padding: 10px;
+  }
+  .workspace-header {
+    font-size: 12px;
+  }
+  .auth-content {
+    padding: 24px;
+  }
+  .workspace-main {
+    padding: 24px 16px;
+  }
+}
+
+.workspace {
+  font-family: var(--font-source-sans), sans-serif;
+}
+
+@media (max-width: 639px) {
+  .auth-field input {
+    font-size: 16px;
+  }
+}
+.workspace-admin .metric-card {
+  color: white;
+  background: linear-gradient(135deg, #3498db, #5dade2);
+  overflow: hidden;
+}
+.workspace-admin .metric-card:nth-child(2) {
+  background: linear-gradient(135deg, #27ae60, #2ecc71);
+}
+.workspace-admin .metric-card:nth-child(3) {
+  background: linear-gradient(135deg, #f39c12, #f8c471);
+}
+.workspace-admin .metric-card > span {
+  position: absolute;
+  right: 20px;
+  top: 20px;
+  margin: 0;
+  background: none;
+  color: white;
+  opacity: 0.2;
+  width: 70px;
+  height: 70px;
+}
+.workspace-admin .metric-card > span > svg {
+  width: 60px;
+  height: 60px;
+}
+.workspace-admin .metric-card > strong,
+.workspace-admin .metric-card h2 {
+  color: white;
+}
+.client-workspace {
+  padding-block: 96px 48px;
+  min-height: 75svh;
+  background: #f9fafb;
+}
+.client-workspace-nav {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  flex-wrap: wrap;
+  padding-bottom: 24px;
+  color: #4b5563;
+  border-bottom: 1px solid #e5e7eb;
+}
+.client-workspace-nav a {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.client-workspace-nav .logout-button {
+  margin-left: auto;
+  color: #ea580c;
+}
+.client-workspace .workspace-main {
+  padding: 32px 0;
+}
+.client-workspace .metric-card {
+  border-radius: 8px;
+  box-shadow: 0 10px 15px -3px #0001;
+}
+.client-workspace .metric-card > strong {
+  color: #f97316;
+  font-size: 30px;
+}
+.client-workspace .metric-card > span {
+  color: #f97316;
+  background: #fff7ed;
+}
+.client-workspace .workspace-invitation {
+  background: linear-gradient(90deg, #f97316, #14b8a6);
+}
+.client-workspace .workspace-heading h1 {
+  font-size: 30px;
+  font-weight: 700;
+  letter-spacing: 0;
+}
+.client-workspace .account-panel {
+  border-radius: 8px;
+}
+.client-workspace .workspace-team-link {
+  color: white;
+}
+/* Gestion d’équipe — composants de la charte administration Afriloc. */
+.team-toolbar {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 20px;
+  margin-top: 28px;
+}
+.team-filters {
+  display: flex;
+  align-items: end;
+  gap: 12px;
+  flex-wrap: wrap;
+  flex: 1;
+}
+.team-filters label {
+  display: grid;
+  gap: 8px;
+  font-size: 13px;
+  color: #526779;
+  min-width: 150px;
+}
+.team-filters input,
+.team-filters select,
+.member-form select,
+.parent-picker input {
+  height: 44px;
+  background: white;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  padding: 8px 12px;
+  max-width: 100%;
+  width: 100%;
+  color: #2c3e50;
+  font-size: 14px;
+}
+.team-primary-button,
+.team-secondary-button {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  border-radius: 8px;
+  padding: 10px 16px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.team-primary-button {
+  background: linear-gradient(135deg, #3498db, #5dade2);
+  color: white;
+  box-shadow: 0 2px 8px #0001;
+}
+.team-secondary-button {
+  background: white;
+  color: #2c3e50;
+  border: 1px solid #cbd5e1;
+}
+.team-primary-button:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+.team-reset {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  font-size: 13px;
+  color: #3498db;
+}
+.team-edit-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  color: #2874a6;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.member-form {
+  max-width: 860px;
+}
+.member-form fieldset {
+  border: 0;
+  padding: 0;
+  margin: 0;
+  min-width: 0;
+  display: grid;
+  gap: 24px;
+}
+.member-form legend {
+  font-size: 18px;
+  font-weight: 700;
+  color: #2c3e50;
+  padding: 0;
+  margin-bottom: 24px;
+}
+.member-form .auth-field input {
+  font-size: 16px;
+  min-height: 44px;
+}
+.member-form .auth-field > label,
+.parent-picker > label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #374151;
+}
+.parent-picker {
+  display: grid;
+  gap: 8px;
+  min-width: 0;
+}
+.parent-picker input {
+  margin-bottom: 12px;
+}
+.parent-picker small {
+  font-size: 12px;
+  color: #63788a;
+  line-height: 1.6;
+}
+.member-form-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 16px;
+  border-top: 1px solid #e5e7eb;
+  padding-top: 24px;
+}
+.member-form .account-note {
+  margin: 0;
+  padding-top: 0;
+  border: 0;
+}
+.member-form .auth-message {
+  display: grid;
+  gap: 12px;
+}
+.member-form .text-link {
+  color: #2874a6;
+}
+.team-info {
+  font-size: 13px;
+  color: #526779;
+  line-height: 1.8;
+}
+.team-identifier {
+  margin-top: 16px;
+  font-size: 14px;
+  color: #526779;
+}
+.team-success {
+  padding: 16px 20px;
+  margin-top: 24px;
+  border-radius: 8px;
+  background: #e8f3ec;
+  color: #23623b;
+  font-size: 14px;
+}
+.audit-list {
+  display: grid;
+  gap: 0;
+  margin-top: 24px;
+  list-style: none;
+  padding: 0;
+}
+.audit-list > li {
+  padding: 20px 0;
+  border-top: 1px solid #e5e7eb;
+}
+.audit-list > li > div {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 14px;
+}
+.audit-list time {
+  color: #63788a;
+  font-size: 12px;
+}
+.audit-list ul {
+  list-style: disc;
+  padding-left: 20px;
+  margin-top: 12px;
+  color: #526779;
+  font-size: 14px;
+  line-height: 1.9;
+}
+.member-form select:disabled {
+  background: #f3f4f6;
+  color: #6b7280;
+}
+.member-form .team-info {
+  padding: 12px 16px;
+  background: #edf5fb;
+  border-radius: 8px;
+}
+@media (max-width: 639px) {
+  .team-filters {
+    display: grid;
+    grid-template-columns: 1fr;
+    width: 100%;
+  }
+  .team-toolbar {
+    align-items: stretch;
+  }
+  .team-toolbar > .team-primary-button {
+    width: 100%;
+  }
+  .team-filters label {
+    min-width: 0;
+  }
+  .member-form-actions {
+    flex-direction: column;
+  }
+  .member-form-actions > a,
+  .member-form-actions > button {
+    width: 100%;
+  }
+  .member-form .auth-fields-grid {
+    grid-template-columns: 1fr;
+  }
+  .member-form select {
+    font-size: 16px;
+  }
+  .team-panel th:last-child {
+    min-width: 90px;
+  }
+}

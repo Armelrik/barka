@@ -4,7 +4,7 @@
 
 `iron-session` gère le scellement du cookie. Les services BARKA gèrent la validation des identifiants, le hash bcrypt, les sessions PostgreSQL, le rattachement et les autorisations métier. La solution conserve le modèle User existant et son email facultatif, sans créer un second annuaire d'utilisateurs.
 
-Livré : inscription gratuite CLIENT, connexion téléphone/email, déconnexion, page de compte et indicateurs réels issus de la base ; annuaire d'équipe en lecture seule, filtré et paginé côté serveur. Les mutations de rôles, rattachements et statuts ne sont pas exposées dans cette livraison. Les tests modifient certains statuts directement dans leur base locale dédiée pour vérifier la révocation des droits.
+Livré : inscription gratuite CLIENT, connexion téléphone/email, déconnexion, page de compte et indicateurs réels issus de la base ; gestion d’équipe filtrée et paginée côté serveur, avec création et modification des comptes subordonnés, rattachements, statuts et historique. Voir [team-management.md](team-management.md). Les tests modifient certains statuts directement dans leur base locale dédiée pour vérifier la révocation des droits.
 
 ## Parcours
 
@@ -78,6 +78,6 @@ Planifier le nettoyage des AuthSession expirées et des AuthRateLimit dont la fe
 
 ## Reste avant ouverture publique
 
-Valider la configuration proxy et les charges sur PostgreSQL natif ; finaliser les textes légaux et la conservation ; choisir puis intégrer récupération de mot de passe, vérification téléphone/email et notifications. Créer le bootstrap de la société et des administrateurs de production sans comptes de démonstration. Développer les mutations d'utilisateurs avec contrôle transactionnel des cycles et des élévations, puis CRUD/modération/stockage des biens. Aucune livraison de ces fonctions n'est impliquée par les modèles ou les compteurs.
+Valider la configuration proxy et les charges sur PostgreSQL natif ; finaliser les textes légaux et la conservation ; choisir puis intégrer récupération de mot de passe, vérification téléphone/email et notifications. Créer le bootstrap de la société et des administrateurs de production sans comptes de démonstration. Poursuivre avec les CRUD/modération/stockage des biens. Aucune livraison de ces fonctions n'est impliquée par les modèles ou les compteurs.
 
 Références : [Next.js — authentification](https://nextjs.org/docs/app/guides/authentication), [iron-session](https://github.com/vvo/iron-session), [cookies App Router](https://nextjs.org/docs/app/api-reference/functions/cookies).

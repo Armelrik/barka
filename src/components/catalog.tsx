@@ -1,9 +1,11 @@
 "use client";
 import { useState, useSyncExternalStore } from "react";
-import Image from "next/image";
+import { PropertyCarousel } from "@/components/property-carousel";
 import Link from "next/link";
 import {
   ArrowUpRight,
+  BedDouble,
+  Bath,
   Heart,
   MapPin,
   Search,
@@ -12,7 +14,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { demoProperties } from "@/modules/catalog/demo";
-import { propertyVisuals } from "@/modules/catalog/visuals";
+import { demoPhotos } from "@/modules/catalog/visuals";
 import {
   filterProperties,
   catalogFiltersSchema,
@@ -57,7 +59,7 @@ function parseFavorites(raw: string): string[] {
   }
 }
 
-export function Catalog() {
+export function Catalog({ listingPage = false }: { listingPage?: boolean }) {
   const [draft, setDraft] = useState<CatalogFilters>(defaults);
   const [filters, setFilters] = useState<CatalogFilters>(defaults);
   const [error, setError] = useState("");
@@ -112,135 +114,153 @@ export function Catalog() {
       <div className="section-heading">
         <div>
           <span className="eyebrow">LA SÉLECTION BARKA</span>
-          <h2>Une adresse. Un coup de cœur.</h2>
+          {listingPage ? (
+            <h1>Toutes les Propriétés</h1>
+          ) : (
+            <h2>Propriétés en Vedette</h2>
+          )}
         </div>
-        <p>Imaginez la suite, on vous aide à chercher.</p>
-      </div>
-      <div className="catalog-controls">
-        <div className="offer-tabs" role="group" aria-label="Type de projet">
-          {(
-            [
-              { value: "ALL", label: "Tous les biens" },
-              { value: "SALE", label: "Acheter" },
-              { value: "RENT", label: "Louer" },
-            ] as const
-          ).map((tab) => (
-            <button
-              type="button"
-              key={tab.value}
-              aria-pressed={filters.offer === tab.value}
-              onClick={() => {
-                setFilters({ ...filters, offer: tab.value });
-                setDraft({ ...draft, offer: tab.value });
-              }}
-            >
-              {tab.label}
-            </button>
-          ))}
-        </div>
-        <button
-          className="favorites-filter"
-          type="button"
-          aria-pressed={favoritesOnly}
-          onClick={() => setFavoritesOnly(!favoritesOnly)}
-        >
-          <Heart size={16} fill={favoritesOnly ? "currentColor" : "none"} /> Mes
-          favoris <span>{favorites.length}</span>
-        </button>
-      </div>
-      <form
-        onSubmit={(event) => {
-          event.preventDefault();
-          search(new FormData(event.currentTarget));
-        }}
-        className="search-panel"
-      >
-        <label>
-          Votre projet
-          <select
-            name="offer"
-            value={draft.offer}
-            onChange={(e) =>
-              setDraft({
-                ...draft,
-                offer: e.target.value as CatalogFilters["offer"],
-              })
-            }
-          >
-            <option value="ALL">Acheter ou louer</option>
-            <option value="SALE">Acheter</option>
-            <option value="RENT">Louer</option>
-          </select>
-        </label>
-        <label>
-          Localisation
-          <span className="input-icon">
-            <MapPin size={16} />
-            <input
-              name="location"
-              placeholder="Ville ou quartier"
-              maxLength={100}
-              value={draft.location}
-              onChange={(e) => setDraft({ ...draft, location: e.target.value })}
-            />
-          </span>
-        </label>
-        <label>
-          Type de bien
-          <select
-            name="category"
-            value={draft.category}
-            onChange={(e) =>
-              setDraft({
-                ...draft,
-                category: e.target.value as CatalogFilters["category"],
-              })
-            }
-          >
-            <option value="all">Tous les types</option>
-            <option value="villa">Villas & maisons</option>
-            <option value="parcelle">Parcelles</option>
-            <option value="bureau">Bureaux</option>
-          </select>
-        </label>
-        <label>
-          Budget maximum
-          <input
-            name="maxPrice"
-            type="number"
-            min="0"
-            max="2147483647"
-            step="1"
-            placeholder="En FCFA"
-            value={draft.maxPrice}
-            onChange={(e) =>
-              setDraft({
-                ...draft,
-                maxPrice: e.target.value === "" ? "" : Number(e.target.value),
-              })
-            }
-          />
-        </label>
-        <Button type="submit">
-          <Search size={17} /> Rechercher
-        </Button>
-        {error && (
-          <p role="alert" className="search-error">
-            {error}
-          </p>
-        )}
-      </form>
-      <div className="catalog-toolbar">
-        <p aria-live="polite">
-          <strong>
-            {results.length} bien{results.length > 1 ? "s" : ""}
-          </strong>{" "}
-          à découvrir <span>· Exemples fictifs</span>
+        <p>
+          Découvrez les meilleures propriétés à louer et à vendre au Burkina
+          Faso
         </p>
-        <button type="button" onClick={reset} className="reset-filters">
-          <SlidersHorizontal size={14} /> Réinitialiser
-        </button>
       </div>
+      {listingPage && (
+        <>
+          <div className="catalog-controls">
+            <div
+              className="offer-tabs"
+              role="group"
+              aria-label="Type de projet"
+            >
+              {(
+                [
+                  { value: "ALL", label: "Tous les biens" },
+                  { value: "SALE", label: "Acheter" },
+                  { value: "RENT", label: "Louer" },
+                ] as const
+              ).map((tab) => (
+                <button
+                  type="button"
+                  key={tab.value}
+                  aria-pressed={filters.offer === tab.value}
+                  onClick={() => {
+                    setFilters({ ...filters, offer: tab.value });
+                    setDraft({ ...draft, offer: tab.value });
+                  }}
+                >
+                  {tab.label}
+                </button>
+              ))}
+            </div>
+            <button
+              className="favorites-filter"
+              type="button"
+              aria-pressed={favoritesOnly}
+              onClick={() => setFavoritesOnly(!favoritesOnly)}
+            >
+              <Heart size={16} fill={favoritesOnly ? "currentColor" : "none"} />{" "}
+              Mes favoris <span>{favorites.length}</span>
+            </button>
+          </div>
+          <form
+            onSubmit={(event) => {
+              event.preventDefault();
+              search(new FormData(event.currentTarget));
+            }}
+            className="search-panel"
+          >
+            <label>
+              Votre projet
+              <select
+                name="offer"
+                value={draft.offer}
+                onChange={(e) =>
+                  setDraft({
+                    ...draft,
+                    offer: e.target.value as CatalogFilters["offer"],
+                  })
+                }
+              >
+                <option value="ALL">Acheter ou louer</option>
+                <option value="SALE">Acheter</option>
+                <option value="RENT">Louer</option>
+              </select>
+            </label>
+            <label>
+              Localisation
+              <span className="input-icon">
+                <MapPin size={16} />
+                <input
+                  name="location"
+                  placeholder="Ville ou quartier"
+                  maxLength={100}
+                  value={draft.location}
+                  onChange={(e) =>
+                    setDraft({ ...draft, location: e.target.value })
+                  }
+                />
+              </span>
+            </label>
+            <label>
+              Type de bien
+              <select
+                name="category"
+                value={draft.category}
+                onChange={(e) =>
+                  setDraft({
+                    ...draft,
+                    category: e.target.value as CatalogFilters["category"],
+                  })
+                }
+              >
+                <option value="all">Tous les types</option>
+                <option value="villa">Villas & maisons</option>
+                <option value="parcelle">Parcelles</option>
+                <option value="bureau">Bureaux</option>
+              </select>
+            </label>
+            <label>
+              Budget maximum
+              <input
+                name="maxPrice"
+                type="number"
+                min="0"
+                max="2147483647"
+                step="1"
+                placeholder="En FCFA"
+                value={draft.maxPrice}
+                onChange={(e) =>
+                  setDraft({
+                    ...draft,
+                    maxPrice:
+                      e.target.value === "" ? "" : Number(e.target.value),
+                  })
+                }
+              />
+            </label>
+            <Button type="submit">
+              <Search size={17} /> Rechercher
+            </Button>
+            {error && (
+              <p role="alert" className="search-error">
+                {error}
+              </p>
+            )}
+          </form>
+          <div className="catalog-toolbar">
+            <p aria-live="polite">
+              <strong>
+                {results.length} bien{results.length > 1 ? "s" : ""}
+              </strong>{" "}
+              à découvrir <span>· Exemples fictifs</span>
+            </p>
+            <button type="button" onClick={reset} className="reset-filters">
+              <SlidersHorizontal size={14} /> Réinitialiser
+            </button>
+          </div>
+        </>
+      )}
       <p role="status" className="sr-only">
         {notice}
       </p>
@@ -265,28 +285,23 @@ export function Catalog() {
         </div>
       ) : (
         <div className="property-grid">
-          {results.map((p) => (
+          {(listingPage ? results : results.slice(0, 3)).map((p) => (
             <article
               key={p.reference}
               className={`property-card property-card-${p.illustration}`}
             >
-              <Link
+              <PropertyCarousel
+                photos={demoPhotos(p)}
+                title={p.title}
                 href={`/biens/${p.slug}`}
-                className="card-visual"
-                aria-label={`Découvrir : ${p.title}`}
-              >
-                <Image
-                  src={propertyVisuals[p.illustration]}
-                  fill
-                  sizes="(max-width: 600px) 92vw, (max-width: 1000px) 46vw, 23vw"
-                  alt={`Visuel d’ambiance généré pour cet exemple : ${p.title}`}
-                />
-                <span className="card-gradient" />
-              </Link>
+              />
               <div className="card-top">
-                <span className="price-pill">
-                  {formatXof(p.priceXof)}
-                  {p.offer === "RENT" && <small> / mois</small>}
+                <span className="type-badge">
+                  {p.category === "parcelle"
+                    ? "Terrain"
+                    : p.category === "bureau"
+                      ? "Bureau"
+                      : "Maison"}
                 </span>
                 <button
                   className="favorite-button"
@@ -313,22 +328,52 @@ export function Catalog() {
                 </h3>
                 <p className="card-location">
                   <MapPin size={14} /> {p.district}, {p.city}
-                  <ArrowUpRight size={17} className="card-arrow" />
                 </p>
+                <p className="property-description">{p.description}</p>
+                <div className="card-features">
+                  {p.bedrooms > 0 && (
+                    <span>
+                      <BedDouble size={18} />
+                      {p.bedrooms} ch.
+                    </span>
+                  )}
+                  {p.bathrooms > 0 && (
+                    <span>
+                      <Bath size={18} />
+                      {p.bathrooms} sdb.
+                    </span>
+                  )}
+                  <span>{p.surfaceM2} m²</span>
+                </div>
+                <div className="card-price">
+                  <strong>
+                    {formatXof(p.priceXof)}
+                    {p.offer === "RENT" && <small> / mois</small>}
+                  </strong>
+                  <span>Exemple</span>
+                </div>
               </div>
             </article>
           ))}
         </div>
       )}
+      {!listingPage && (
+        <div className="text-center mt-10">
+          <Link className="legacy-button" href="/biens">
+            Voir Toutes les Propriétés <ArrowUpRight size={18} />
+          </Link>
+        </div>
+      )}
       <div className="catalog-disclaimer">
         <span className="small-dot" />
         <p>
-          <strong>Version de démonstration.</strong> Biens fictifs et visuels
-          d’ambiance générés par IA. Aucune réservation ni paiement.
+          <strong>Version de démonstration.</strong> Biens fictifs et
+          illustrations reprises du projet Afriloc. Aucune réservation ni
+          paiement.
         </p>
-        <a href="#projet">
+        <Link href="/#projet">
           Le projet <ArrowUpRight size={13} />
-        </a>
+        </Link>
       </div>
     </section>
   );

@@ -2,7 +2,11 @@
 
 ## Avancement actuel
 
-Première étape du MVP réalisée : inscription CLIENT, connexion téléphone/email, déconnexion, sessions révocables, limitation persistante, audits et espace protégé. Annuaire d'équipe en lecture seule avec filtrage/pagination serveur. Voir [authentication.md](authentication.md). Prochaine étape : mutations d'utilisateurs et rattachements avec prévention transactionnelle des cycles, puis CRUD immobilier et modération. La vérification SMS/email, la récupération de mot de passe, les médias et les paiements restent à intégrer.
+Authentification, sessions révocables, espace protégé et gestion d’équipe : liste filtrée/paginée, création de comptes subordonnés, modification du profil/rôle/statut, rattachements, révocation des sessions et historique. Les droits sont relus au serveur dans la transaction d’écriture ; les cycles, transferts hors périmètre et modifications obsolètes sont refusés. Voir [gestion des équipes](team-management.md).
+
+Gestion immobilière intégrée : dossiers et offres, médias privés local/S3, vérification des démarcheurs, modération, catalogue connecté en mode database, visites 360°/GLB et carte. Voir [property-management.md](property-management.md). Demandes de visite intégrées : proposition d’horaire, suivi privé, confirmation/refus par l’équipe et conflits de créneaux. Voir [visits.md](visits.md). Prochaine étape fonctionnelle : favoris associés au compte, agenda de disponibilités, notifications et réservations, puis abonnements avant les paiements. La vérification SMS/email, la récupération de mot de passe, les notifications et les paiements restent à intégrer. Les vérifications effectivement exécutées sont consignées dans [verification.md](verification.md).
+
+Préparation Vercel/Neon : migration de références RBAC et initialisation séparée des deux comptes de production, sans seed de démonstration. Connexion du projet Neon existant et configuration privée nécessaires avant migration distante. Voir [vercel-neon.md](vercel-neon.md).
 
 ## Phase 1 — fondations (présente livraison)
 

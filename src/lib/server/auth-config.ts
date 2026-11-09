@@ -11,7 +11,12 @@ export function getAuthConfig() {
     );
   let url: URL;
   try {
-    url = new URL(process.env.AUTH_URL ?? "http://localhost:3000");
+    url = new URL(
+      process.env.AUTH_URL ||
+        (process.env.VERCEL === "1" && process.env.VERCEL_URL
+          ? `https://${process.env.VERCEL_URL}`
+          : "http://localhost:3000"),
+    );
   } catch {
     throw new AppError(
       503,

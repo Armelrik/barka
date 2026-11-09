@@ -7,7 +7,7 @@ test("inscription, espace client et reconnexion sur ordinateur et mobile", async
   accounts.trackPhone(data.phone);
   await page.goto("/inscription");
   await expect(
-    page.getByRole("heading", { name: "Faisons connaissance." }),
+    page.getByRole("heading", { name: "Inscription" }),
   ).toBeVisible();
   await page.getByLabel("Prénom", { exact: true }).fill(data.firstName);
   await page.getByLabel("Nom", { exact: true }).fill(data.lastName);
@@ -18,6 +18,7 @@ test("inscription, espace client et reconnexion sur ordinateur et mobile", async
   await page.screenshot({
     path: testInfo.outputPath("inscription.png"),
     fullPage: true,
+    scale: "css",
   });
   await page.getByRole("button", { name: "Créer mon compte gratuit" }).click();
   await expect(page).toHaveURL(/\/espace$/);
@@ -37,6 +38,7 @@ test("inscription, espace client et reconnexion sur ordinateur et mobile", async
   await page.screenshot({
     path: testInfo.outputPath("espace-client.png"),
     fullPage: true,
+    scale: "css",
   });
   await page.getByRole("button", { name: "Me déconnecter" }).click();
   await expect(page).toHaveURL(/\/connexion$/);
@@ -87,5 +89,6 @@ test("espace et annuaire d'équipe réservés au manager autorisé", async ({
   await page.screenshot({
     path: testInfo.outputPath("equipe.png"),
     fullPage: true,
+    scale: "css",
   });
 });

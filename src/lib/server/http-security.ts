@@ -28,7 +28,10 @@ export function assertSameOrigin(request: Request) {
       "Cette demande n’est pas autorisée.",
     );
 }
-export async function readJsonBody(request: Request): Promise<unknown> {
+export async function readJsonBody(
+  request: Request,
+  maximumBytes = 8192,
+): Promise<unknown> {
   if (
     request.headers.get("content-type")?.split(";")[0].trim() !==
     "application/json"
@@ -47,7 +50,7 @@ export async function readJsonBody(request: Request): Promise<unknown> {
       const { done, value } = await reader.read();
       if (done) break;
       length += value.byteLength;
-      if (length > 8192) {
+      if (length > Math.min(maximumBytes, 262144)) {
         await reader.cancel();
         throw new AppError(
           413,

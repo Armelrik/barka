@@ -18,7 +18,7 @@ export default async function WorkspacePage() {
   const db = getDb();
   const staff = principalFor(user).permissions.includes("users.manage");
   const [bookings, subscriptions, payments] = await Promise.all([
-    db.booking.count({ where: { userId: user.id } }),
+    db.visitRequest.count({ where: { userId: user.id } }),
     db.subscription.count({
       where: {
         userId: user.id,

@@ -4,7 +4,7 @@ test("accueil français, recherche et fiche, sans débordement mobile", async ({
 }, testInfo) => {
   await page.goto("/");
   await expect(page.getByRole("heading", { level: 1 })).toContainText(
-    "Trouvez le bien",
+    "Trouvez la Maison de Vos Rêves à Ouagadougou",
   );
   await page.evaluate(() => document.fonts.ready);
   const fonts = await page.evaluate(() => ({
@@ -14,7 +14,7 @@ test("accueil français, recherche et fiche, sans débordement mobile", async ({
   expect(fonts.heading).toBe(fonts.body);
   expect(fonts.body.toLowerCase()).not.toContain("arial");
   await expect(
-    page.getByText("Version de démonstration", { exact: false }),
+    page.getByText("Version de démonstration.", { exact: true }),
   ).toBeVisible();
   expect(
     await page.evaluate(
@@ -32,7 +32,9 @@ test("accueil français, recherche et fiche, sans débordement mobile", async ({
   await page.screenshot({
     path: testInfo.outputPath("accueil.png"),
     fullPage: true,
+    scale: "css",
   });
+  await page.goto("/biens");
   await page.getByLabel("Votre projet").selectOption("RENT");
   await page.getByLabel("Localisation").fill("Zone du Bois");
   await page.getByRole("button", { name: "Rechercher" }).click();
@@ -57,7 +59,7 @@ test("favoris persistants et navigation accessible", async ({
   page,
   isMobile,
 }) => {
-  await page.goto("/");
+  await page.goto("/biens");
   if (isMobile) {
     await page.getByRole("button", { name: "Ouvrir le menu" }).click();
     await expect(
@@ -65,7 +67,7 @@ test("favoris persistants et navigation accessible", async ({
     ).toBeVisible();
     await page
       .getByRole("navigation", { name: "Navigation mobile" })
-      .getByRole("link", { name: "Nos biens" })
+      .getByRole("link", { name: "Propriétés" })
       .click();
     await expect(
       page.getByRole("button", { name: "Ouvrir le menu" }),
@@ -93,10 +95,10 @@ test("favoris persistants et navigation accessible", async ({
   await page
     .getByRole("button", { name: "Afficher tous les exemples" })
     .click();
-  await expect(page.locator("article")).toHaveCount(4);
+  await expect(page.locator("article")).toHaveCount(8);
 });
 test("recherche sans résultat puis retour aux exemples", async ({ page }) => {
-  await page.goto("/");
+  await page.goto("/biens");
   await page.getByLabel("Budget maximum").fill("1");
   await page.getByRole("button", { name: "Rechercher" }).click();
   await expect(
@@ -105,6 +107,6 @@ test("recherche sans résultat puis retour aux exemples", async ({ page }) => {
   await page
     .getByRole("button", { name: "Afficher tous les exemples" })
     .click();
-  await expect(page.locator("article")).toHaveCount(4);
+  await expect(page.locator("article")).toHaveCount(8);
   await expect(page.getByLabel("Budget maximum")).toHaveValue("");
 });

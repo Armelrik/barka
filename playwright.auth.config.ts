@@ -16,17 +16,23 @@ export default defineConfig({
   workers: 1,
   outputDir: "auth-test-results",
   timeout: 45000,
-  use: { baseURL: "http://127.0.0.1:3002", trace: "retain-on-failure" },
+  use: {
+    baseURL: "http://127.0.0.1:3002",
+    trace: "retain-on-failure",
+    launchOptions: {
+      args: ["--use-angle=swiftshader", "--enable-unsafe-swiftshader"],
+    },
+  },
   projects: [
-    { name: "security", testMatch: "**/auth.api.spec.ts" },
+    { name: "security", testMatch: "**/*.api.spec.ts" },
     {
       name: "desktop",
-      testMatch: "**/auth.ui.spec.ts",
+      testMatch: "**/*.ui.spec.ts",
       use: { ...devices["Desktop Chrome"] },
     },
     {
       name: "mobile",
-      testMatch: "**/auth.ui.spec.ts",
+      testMatch: "**/*.ui.spec.ts",
       use: { ...devices["iPhone 13"], defaultBrowserType: "chromium" },
     },
   ],
@@ -45,6 +51,10 @@ export default defineConfig({
       REGISTRATION_ENABLED: "true",
       LEGAL_DOCUMENTS_APPROVED: "true",
       AUTH_TRUST_PROXY_HEADERS: "false",
+      CATALOG_MODE: "database",
+      MEDIA_DRIVER: "local",
+      MEDIA_LOCAL_PREVIEW: "true",
+      MEDIA_LOCAL_DIR: ".tmp/property-test-media",
     },
   },
 });

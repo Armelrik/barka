@@ -504,6 +504,8 @@ model TourScene {
   position     Int           @default(0)
   initialYaw   Float         @default(0)
   initialPitch Float         @default(0)
+  planX        Float?
+  planY        Float?
   hotspots     TourHotspot[] @relation("HotspotSource")
   incoming     TourHotspot[] @relation("HotspotTarget")
 
@@ -642,12 +644,15 @@ model VisitRequest {
   listing   Listing       @relation(fields: [listingId], references: [id])
   userId    String
   user      User          @relation(fields: [userId], references: [id])
+  message   String?
+  reply     String?
   desiredAt DateTime
   status    BookingStatus @default(REQUESTED)
   createdAt DateTime      @default(now())
   updatedAt DateTime      @updatedAt
 
   @@index([listingId, status])
+  @@index([status, desiredAt])
   @@index([userId, desiredAt])
 }
 

@@ -1,11 +1,19 @@
+import {
+  databaseCatalogEnabled,
+  publicListing,
+} from "@/modules/listings/service";
+import { PublicProperty } from "@/components/public-property";
+export const dynamic = "force-dynamic";
 import type { Metadata } from "next";
+import { VisitRequestForm } from "@/components/visits/request-form";
 import Link from "next/link";
-import Image from "next/image";
+import { PropertyCarousel } from "@/components/property-carousel";
 import { notFound } from "next/navigation";
 import { ArrowLeft, Bath, BedDouble, MapPin, Square } from "lucide-react";
 import { demoProperties } from "@/modules/catalog/demo";
 import { SiteHeader } from "@/components/site-header";
-import { propertyVisuals } from "@/modules/catalog/visuals";
+import { SiteFooter } from "@/components/site-footer";
+import { demoPhotos } from "@/modules/catalog/visuals";
 import { formatXof } from "@/lib/utils";
 export function generateStaticParams() {
   return demoProperties.map((p) => ({ slug: p.slug }));
@@ -16,6 +24,14 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
+  if (databaseCatalogEnabled()) {
+    const listing = await publicListing(slug);
+    return {
+      title: listing
+        ? `${listing.title} | BARKA SARL`
+        : "Bien introuvable | BARKA SARL",
+    };
+  }
   const p = demoProperties.find((p) => p.slug === slug);
   return {
     title: p
@@ -29,76 +45,84 @@ export default async function PropertyPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
+  if (databaseCatalogEnabled()) {
+    const listing = await publicListing(slug);
+    if (!listing) notFound();
+    return <PublicProperty listing={listing} />;
+  }
   const p = demoProperties.find((p) => p.slug === slug);
   if (!p) notFound();
   return (
     <>
       <SiteHeader />
-      <main id="contenu" className="shell detail-page">
-        <Link href="/#catalogue" className="text-link">
+      <main id="contenu" className="detail-page shell">
+        <Link href="/biens" className="text-link detail-back">
           <ArrowLeft size={16} />
           Retour aux exemples
         </Link>
-        <div className="detail-heading">
-          <div>
-            <span className="eyebrow">EXEMPLE FICTIF · {p.reference}</span>
+        <div className="detail-grid">
+          <section>
+            <PropertyCarousel photos={demoPhotos(p)} title={p.title} detail />
             <h1>{p.title}</h1>
             <p className="card-location">
-              <MapPin size={16} />
-              {p.district}, {p.city}
+              <MapPin size={18} />
+              {p.city}, {p.district}
+              <span className="type-badge">
+                {p.offer === "SALE" ? "À vendre" : "À louer"}
+              </span>
             </p>
-          </div>
-          <strong>
-            {formatXof(p.priceXof)}
-            {p.offer === "RENT" && <small> / mois</small>}
-          </strong>
-        </div>
-        <div className="detail-visual">
-          <div className="detail-photo">
-            <Image
-              src={propertyVisuals[p.illustration]}
-              fill
-              preload
-              sizes="94vw"
-              alt={`Visuel d’ambiance généré : ${p.title}`}
-            />
-          </div>
-          <span>
-            Visuel d’ambiance généré par IA — bien fictif de démonstration
-          </span>
-        </div>
-        <div className="detail-description">
-          <section>
-            <h2>Le bien en quelques mots</h2>
+            <h2>Description</h2>
             <p>{p.description}</p>
-            <div className="card-features">
-              <span>
-                <Square size={18} />
-                {p.surfaceM2} m²
-              </span>
-              <span>
-                <BedDouble size={18} />
-                {p.bedrooms} chambres
-              </span>
-              <span>
-                <Bath size={18} />
-                {p.bathrooms} salles d’eau
-              </span>
-            </div>
+            <section className="detail-feature-box">
+              <h2>Caractéristiques</h2>
+              <div className="card-features">
+                <span>
+                  <BedDouble size={24} />
+                  {p.bedrooms} Chambres
+                </span>
+                <span>
+                  <Bath size={24} />
+                  {p.bathrooms} Salles de Bain
+                </span>
+                <span>
+                  <Square size={24} />
+                  {p.surfaceM2} m²
+                </span>
+              </div>
+            </section>
+            <p className="detail-demo">
+              EXEMPLE FICTIF · {p.reference} · Illustration reprise du projet
+              Afriloc.
+            </p>
           </section>
-          <aside>
+          <aside className="detail-panel">
+            <strong>{formatXof(p.priceXof)}</strong>
+            <small>
+              {p.offer === "RENT" ? "par mois" : "Prix de vente illustratif"}
+            </small>
+            <Link href="/contact" className="legacy-button gradient w-full">
+              Nous Contacter
+            </Link>
+            <Link
+              className="legacy-button gradient w-full mb-4"
+              href="/visites/demo"
+            >
+              Découvrir la démonstration 360° et 3D
+            </Link>
+            <VisitRequestForm slug={p.slug} demo />
             <h2>À propos de cet exemple</h2>
             <p>
               Ce bien fictif sert à présenter BARKA. Il ne peut pas être
               réservé. Aucun contact, titre foncier, disponibilité ni visite
               360° n’est fourni.
             </p>
-            <Link href="/#projet" className="text-link">
+            <Link className="text-link mt-4" href="/#projet">
               Découvrir le projet
             </Link>
           </aside>
         </div>
       </main>
+      <SiteFooter />
     </>
   );
 }

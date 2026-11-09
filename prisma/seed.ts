@@ -53,6 +53,7 @@ async function main() {
       });
       const permissions = [
         "users.manage",
+        "identity.review",
         "properties.manage",
         "listings.moderate",
         "finance.read",
@@ -73,6 +74,7 @@ async function main() {
         });
         roles.set(code as RoleCode, role.id);
         const grants = permissions.filter((p) => {
+          if (p === "identity.review") return level >= 5;
           if (p === "settings.manage") return level >= 5;
           if (p === "listings.moderate") return level >= 4;
           if (p === "finance.read") return level >= 2;

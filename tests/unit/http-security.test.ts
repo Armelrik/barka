@@ -10,6 +10,29 @@ beforeEach(() => {
 });
 afterEach(() => vi.unstubAllEnvs());
 describe("Protection des opérations d'authentification", () => {
+  it("utilise l’origine du déploiement Vercel sans accepter un Host fourni par le navigateur", () => {
+    vi.stubEnv("AUTH_URL", "");
+    vi.stubEnv("VERCEL", "1");
+    vi.stubEnv("VERCEL_URL", "barka-preview.vercel.app");
+    expect(getSessionOptions().cookieName).toBe("__Host-barka.session");
+    expect(() =>
+      assertSameOrigin(
+        new Request("https://barka-preview.vercel.app/api", {
+          headers: { origin: "https://barka-preview.vercel.app" },
+        }),
+      ),
+    ).not.toThrow();
+    expect(() =>
+      assertSameOrigin(
+        new Request("https://barka-preview.vercel.app/api", {
+          headers: {
+            origin: "https://foreign.example",
+            host: "foreign.example",
+          },
+        }),
+      ),
+    ).toThrow();
+  });
   it("accepte uniquement les alias loopback de même protocole et port en local", () => {
     vi.stubEnv("AUTH_URL", "http://localhost:3000");
     expect(() =>

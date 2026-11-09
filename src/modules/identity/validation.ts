@@ -99,3 +99,58 @@ export const roleLabels = {
   CLIENT: "Client",
   VISITOR: "Visiteur",
 } as const;
+
+// Separate, strict schemas for privileged forms: public registration stays CLIENT-only.
+export const managedRoleSchema = z.enum([
+  "ADMIN",
+  "SUPERVISOR",
+  "MANAGER",
+  "COMMERCIAL",
+  "DEFAULT_COMMERCIAL",
+  "CLIENT",
+]);
+export const userStatusSchema = z.enum(["ACTIVE", "SUSPENDED", "CLOSED"]);
+const accountFields = registrationSchema.pick({
+  firstName: true,
+  lastName: true,
+  phone: true,
+  email: true,
+});
+export const createManagedUserSchema = accountFields
+  .extend({
+    password: registrationSchema.shape.password,
+    role: managedRoleSchema.exclude(["DEFAULT_COMMERCIAL"]),
+    parentId: z.string().min(1).max(80).nullable(),
+    companyId: z.string().min(1).max(80).optional(),
+  })
+  .strict();
+export const updateManagedUserSchema = accountFields
+  .partial()
+  .extend({
+    role: managedRoleSchema.optional(),
+    status: userStatusSchema.optional(),
+    parentId: z.string().min(1).max(80).nullable().optional(),
+    expectedUpdatedAt: z.iso.datetime({ offset: true }),
+  })
+  .strict()
+  .refine(
+    (value) => Object.keys(value).some((key) => key !== "expectedUpdatedAt"),
+    "Indiquez une modification.",
+  );
+export const teamQuerySchema = z.object({
+  page: z.coerce.number().int().min(1).max(1000).default(1),
+  q: z.string().trim().max(100).default(""),
+  role: z.union([managedRoleSchema, z.literal("")]).default(""),
+  status: z.union([userStatusSchema, z.literal("")]).default(""),
+});
+export const parentQuerySchema = z.object({
+  companyId: z.string().min(1).max(80).optional(),
+  role: managedRoleSchema,
+  targetId: z.string().min(1).max(80).optional(),
+  q: z.string().trim().max(100).default(""),
+});
+export const statusLabels = {
+  ACTIVE: "Actif",
+  SUSPENDED: "Suspendu",
+  CLOSED: "Fermé",
+} as const;

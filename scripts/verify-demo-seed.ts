@@ -102,8 +102,8 @@ async function main() {
   await seed(); // A DIFFERENT password must not reset the existing hashes.
   assert.deepEqual(await snapshot(), first);
   assert.equal(first.users.length, 7);
-  assert.equal(first.properties, 4);
-  assert.equal(first.listings.length, 4);
+  assert.equal(first.properties, demoProperties.length);
+  assert.equal(first.listings.length, demoProperties.length);
   assert.equal(first.hierarchy, 6);
   assert.equal(first.plans.length, 3);
   assert.ok(first.defaultCommercialId);
@@ -115,7 +115,7 @@ async function main() {
   assert.equal(new Set(identifiers).size, 2);
   assert.ok(identifiers.every((id) => /^BARKA-D\d{9}$/.test(id)));
   console.info(
-    "Base vérifiée : seed exécuté deux fois, comptes/hash/tarifs/paramètres/numéros inchangés, 7 comptes, 4 biens en brouillon, 6 rattachements.",
+    `Base vérifiée : seed exécuté deux fois, comptes/hash/tarifs/paramètres/numéros inchangés, 7 comptes, ${demoProperties.length} biens en brouillon, 6 rattachements.`,
   );
 }
 main()

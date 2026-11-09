@@ -1,4 +1,6 @@
 import "dotenv/config";
+import { unlink } from "node:fs/promises";
+import { resolve } from "node:path";
 import { test as base, expect } from "@playwright/test";
 import { randomBytes, randomInt } from "node:crypto";
 import { hash } from "bcryptjs";
@@ -41,6 +43,7 @@ type Fixture = {
     password: string;
   }>;
   trackPhone: (phone: string) => void;
+  trackId: (id: string) => void;
   createCompany: () => Promise<string>;
 };
 export const test = base.extend<{ accounts: Fixture }>({
@@ -82,6 +85,7 @@ export const test = base.extend<{ accounts: Fixture }>({
         };
       },
       trackPhone: (phone) => phones.push(phone),
+      trackId: (id) => ids.push(id),
       createCompany: async () => {
         const country = await db.country.findUniqueOrThrow({
           where: { code: "BF" },
@@ -110,9 +114,98 @@ export const test = base.extend<{ accounts: Fixture }>({
         })
       : [];
     const testIds = [...ids, ...registered.map((user) => user.id)];
+    const ownedAssets = testIds.length
+      ? await db.mediaAsset.findMany({
+          where: { ownerId: { in: testIds } },
+          select: { id: true, objectKey: true },
+        })
+      : [];
     if (testIds.length)
       await db.$transaction(async (tx) => {
-        await tx.auditLog.deleteMany({ where: { actorId: { in: testIds } } });
+        await tx.auditLog.deleteMany({
+          where: {
+            OR: [
+              { actorId: { in: testIds } },
+              { targetType: "User", targetId: { in: testIds } },
+            ],
+          },
+        });
+        await tx.company.updateMany({
+          where: { defaultCommercialId: { in: testIds } },
+          data: { defaultCommercialId: null },
+        });
+        const properties = await tx.property.findMany({
+          where: {
+            OR: [
+              { agentId: { in: testIds } },
+              { listings: { some: { authorId: { in: testIds } } } },
+            ],
+          },
+          select: { id: true },
+        });
+        const propertyIds = properties.map((p) => p.id);
+        const listingIds = (
+          await tx.listing.findMany({
+            where: { propertyId: { in: propertyIds } },
+            select: { id: true },
+          })
+        ).map((l) => l.id);
+        await tx.tourHotspot.deleteMany({
+          where: { scene: { tour: { propertyId: { in: propertyIds } } } },
+        });
+        await tx.tourScene.deleteMany({
+          where: { tour: { propertyId: { in: propertyIds } } },
+        });
+        await tx.virtualTour.deleteMany({
+          where: { propertyId: { in: propertyIds } },
+        });
+        await tx.floorPlan.deleteMany({
+          where: { propertyId: { in: propertyIds } },
+        });
+        await tx.propertyMedia.deleteMany({
+          where: { propertyId: { in: propertyIds } },
+        });
+        await tx.propertyDocument.deleteMany({
+          where: { propertyId: { in: propertyIds } },
+        });
+        await tx.propertyFeature.deleteMany({
+          where: { propertyId: { in: propertyIds } },
+        });
+        await tx.propertyUnit.deleteMany({
+          where: { propertyId: { in: propertyIds } },
+        });
+        await tx.propertyOwnership.deleteMany({
+          where: { propertyId: { in: propertyIds } },
+        });
+        await tx.visitRequest.deleteMany({
+          where: {
+            OR: [
+              { listingId: { in: listingIds } },
+              { userId: { in: testIds } },
+            ],
+          },
+        });
+        await tx.favorite.deleteMany({
+          where: {
+            OR: [
+              { listingId: { in: listingIds } },
+              { userId: { in: testIds } },
+            ],
+          },
+        });
+        await tx.listingValidation.deleteMany({
+          where: {
+            OR: [
+              { listingId: { in: listingIds } },
+              { actorId: { in: testIds } },
+            ],
+          },
+        });
+        await tx.listing.deleteMany({ where: { id: { in: listingIds } } });
+        await tx.property.deleteMany({ where: { id: { in: propertyIds } } });
+        await tx.agentProfile.deleteMany({
+          where: { userId: { in: testIds } },
+        });
         await tx.authSession.deleteMany({ where: { userId: { in: testIds } } });
         await tx.consent.deleteMany({ where: { userId: { in: testIds } } });
         await tx.clientProfile.deleteMany({
@@ -123,8 +216,27 @@ export const test = base.extend<{ accounts: Fixture }>({
             OR: [{ childId: { in: testIds } }, { parentId: { in: testIds } }],
           },
         });
+        await tx.outboxJob.deleteMany({
+          where: {
+            idempotencyKey: {
+              in: ownedAssets.map((a) => `media-delete:${a.id}`),
+            },
+          },
+        });
+        await tx.mediaAsset.deleteMany({
+          where: { id: { in: ownedAssets.map((a) => a.id) } },
+        });
         await tx.user.deleteMany({ where: { id: { in: testIds } } });
       });
+    for (const asset of ownedAssets)
+      if (/^local\/[a-f0-9-]+\.(jpg|glb)$/.test(asset.objectKey))
+        await unlink(
+          resolve(
+            process.cwd(),
+            ".tmp/property-test-media",
+            asset.objectKey.slice(6),
+          ),
+        ).catch(() => {});
     if (companies.length)
       await db.company.deleteMany({ where: { id: { in: companies } } });
   },

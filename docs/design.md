@@ -1,5 +1,7 @@
 # Refonte de l'accueil BARKA
 
+> Direction actuelle depuis le 9 novembre 2026 : interface Afriloc validée par le client, Inter, orange et turquoise. Voir [la référence complète](reference-afriloc/README.md). Les notes ci-dessous décrivent la direction précédente, conservée pour historique.
+
 Mise à jour de l'identité : la palette ivoire/brun initiale est remplacée par le bleu nuit et l'or de la planche de marque fournie ensuite par l'utilisateur. Voir [brand.md](brand.md). Les visuels architecturaux, Poppins et la structure de l'accueil sont conservés.
 
 Direction : référence visuelle fournie par l'utilisateur, hero architectural photographique pleine largeur, fond blanc/ivoire, accents brun chaud, boutons en pilule, navigation épurée et cartes de tailles variées. Contenu français, montants XOF et contexte Burkina Faso conservés.

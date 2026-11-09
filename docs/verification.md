@@ -55,3 +55,138 @@ Le lint, le typecheck, les 14 tests unitaires et la compilation de production on
 ## Identité bleu nuit et or
 
 Palette de la planche de marque appliquée au site, logo vectoriel adapté sur fonds clair/sombre et favicon ajoutés. Après cette modification : lint, typecheck, 14 tests unitaires, compilation et 6 parcours Playwright réussis. Capture ordinateur inspectée. Contrastes calculés des couleurs retenues : bleu nuit sur or 7,61:1 ; blanc sur bleu nuit 15,59:1 ; texte secondaire du bloc sombre 11,91:1. Ces mesures concernent ces paires de couleurs, pas une certification globale d'accessibilité. Voir [brand.md](brand.md).
+
+## Reprise de la charte Afriloc — 9 novembre 2026
+
+Référence : dépôt `Armelrik/afriloc`, commit `dc651bef074e824af63237b4f00e5771f6b2a1d7`. Gabarits et feuilles de style extraits dans [reference-afriloc](reference-afriloc/README.md). Les 11 images de `public/afriloc` ont été comparées par SHA-256 aux fichiers sources : copies identiques.
+
+Contrôles exécutés après adaptation : lint, TypeScript, compilation de production et 29 tests unitaires réussis. Les 10 parcours Playwright ordinateur/mobile vérifient accueil, chargement des images, recherche combinée, fiche, état vide, favoris persistants, menu mobile, palette orange/turquoise, header fixe, ouverture/fermeture de la connexion modale, absence de débordement sur catalogue/contact/inscription et absence de chevauchement entre boutons du hero et statistiques. Captures d'accueil, catalogue, contact et inscription produites ; accueil, catalogue et inscription inspectés visuellement.
+
+Les pages et fenêtres de connexion gardent les formulaires et endpoints existants. Aucun schéma, paiement ou droit métier n'a été modifié. Les styles des espaces client et équipes sont adaptés, mais la suite d'authentification avec écritures en base n'a pas été relancée : `TEST_DATABASE_URL` n'est pas configurée et le serveur local de `DATABASE_URL` refuse la connexion. Aucun compte ni mot de passe n'a été changé.
+
+La reprise reproduit les sources graphiques sur les écrans présents dans Barka ; elle ne constitue pas une comparaison pixel à pixel avec une instance Laravel exécutée. Les différences liées aux fonctions encore absentes et aux données fictives sont répertoriées dans la référence. La version anglaise, la newsletter et l'envoi du formulaire de contact restent inactifs.
+
+## Gestion des utilisateurs et équipes — 9 novembre 2026
+
+Création de comptes subordonnés, modification du profil/rôle/statut, rattachements, filtres et historique intégrés à l’interface Afriloc. Les mutations relisent l’acteur dans une transaction protégée par un verrou partagé avec l’inscription et la création des sessions. Contrôle de version `expectedUpdatedAt`, validation des ancêtres/enfants, protection du commercial par défaut, audit atomique et révocation des sessions. Détails et limites : [team-management.md](team-management.md).
+
+Vérifications regroupées après l’implémentation, à la demande de l’utilisateur :
+
+| Contrôle                             | Résultat                                                                             |
+| ------------------------------------ | ------------------------------------------------------------------------------------ |
+| Lint                                 | Réussite                                                                             |
+| TypeScript                           | Réussite                                                                             |
+| Tests unitaires                      | 36 réussis                                                                           |
+| Compilation de production            | Réussite, nouvelles pages et API d’équipe incluses                                   |
+| Parcours publics de non-régression   | 10 réussis, ordinateur/mobile                                                        |
+| Authentification et gestion d’équipe | 26 scénarios vérifiés : 20 API/sécurité, 6 parcours ordinateur/mobile                |
+| Migrations et seed sur base isolée   | 3 migrations appliquées, seed fictif exécuté                                         |
+| Inspection graphique                 | Capture de gestion de compte mobile inspectée ; captures ordinateur/mobile produites |
+
+Les deux nouveaux tests d’interface ont été corrigés pour attendre la fin effective de la connexion avant de naviguer vers l’annuaire. Les 24 autres scénarios ont réussi au premier passage ; seuls ces deux parcours ont ensuite été relancés et ont réussi. Les assertions couvrent création professionnelle et identifiant, rôles interdits, autres sociétés/équipes, auto-modification, CSRF, suspension et cookie révoqué, réactivation, doublon et rollback, formulaire obsolète, cycle et rétrogradation, transfert d’équipe, révocation du sous-arbre, parents proposés, commercial par défaut, filtres et historique sans coordonnées privées.
+
+Un test de deux rattachements concurrents vérifie qu’une seule opération réussit et qu’aucun cycle n’est créé. Environnement : base **Prisma/PGlite isolée**, nom `barka-team-tests-20261109`, pool de taille 1, un worker. Cette exécution ne valide pas les charges concurrentes sur PostgreSQL natif. Le pont a émis un avertissement de dépréciation `pg` sur l’exécution de requêtes ; aucune erreur finale des scénarios vérifiés. Les données des fixtures ont été nettoyées ; le seed de test reste dans cette base isolée. La configuration `.env` et la base de travail n’ont pas été modifiées.
+
+L’instance de prévisualisation publique a été redémarrée sur le port 3010 après compilation. La remise en route de la base de travail et la validation PostgreSQL native restent nécessaires pour utiliser et valider ces fonctions sur cet environnement hors tests.
+
+## Visites immersives, carte et présentation du catalogue — 9 novembre 2026
+
+Ajout des dossiers immobiliers, médias privés, validation des identités, modération et catalogue publié. Le lecteur affiche des panoramas équirectangulaires par pièce, des points de navigation, un plan facultatif et des modèles GLB autonomes. La carte publique utilise uniquement les coordonnées autorisées et arrondies. Les fichiers de démonstration sont des scènes géométriques fictives, sans données client.
+
+Le catalogue de présentation comprend huit biens fictifs personnalisés à Ouagadougou et Bobo-Dioulasso. Les photos d’illustration proviennent du dépôt Afriloc fourni et sont réutilisées entre exemples ; elles ne constituent pas un reportage réel de ces biens. Un carrousel commun aux cartes et fiches propose flèches, sélection directe, compteur, clavier et défilement tactile, sans lecture automatique. Il fonctionne aussi pour les photos publiées de la base.
+
+Les vérifications utilisent uniquement la base isolée `barka-property-tests-20261109` et des fichiers de test locaux. Aucune migration sur la base de travail ni modification du fichier `.env`. Le stockage S3 et PostgreSQL natif en charge restent à vérifier avant une ouverture commerciale. Configuration et limites : [property-management.md](property-management.md).
+
+Résultats finaux de cette étape :
+
+| Contrôle                                                     | Résultat                                                                                                                                    |
+| ------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| ESLint et compilation de production avec contrôle TypeScript | Réussite                                                                                                                                    |
+| Tests unitaires                                              | 45 réussis                                                                                                                                  |
+| Parcours publics ordinateur et mobile                        | 16 scénarios validés : 15 au passage final, puis le seul test tactile rejoué avec succès après correction de son événement simulé           |
+| Dossiers immobiliers                                         | 11 réussis : 9 API et 2 interfaces ordinateur/mobile                                                                                        |
+| Base isolée                                                  | 4 migrations appliquées, seed fictif ; serveur de test arrêté après vérifications                                                           |
+| Traitement des suppressions                                  | Commande exécutée sur la base isolée, aucune tâche en attente ; suppression physique S3 non testée                                          |
+| Inspection visuelle                                          | Catalogue ordinateur, dossier privé et galerie mobile inspectés                                                                             |
+| Prévisualisation publique                                    | Serveur 3010 actualisé ; `/biens`, `/carte`, `/visites/demo` répondent 200 sur le tunnel public, huit carrousels présents dans le catalogue |
+
+Les tests de confidentialité utilisent les endpoints publics de fiche et de visite pour vérifier les statuts HTTP 404. Les pages Next.js peuvent rendre leur écran introuvable avec un statut 200 lorsque le streaming a déjà commencé, conformément à la documentation locale. Les captures utilisent une échelle CSS ; l’accueil présente trois biens en vedette et renvoie au catalogue complet. Le test tactile doit fournir un identifiant de contact à Playwright.
+
+Après inspection de la galerie mobile, l’espacement et le retour à la ligne des boutons de la fiche ont été corrigés. Compilation réussie, puis les deux parcours carrousel ordinateur/mobile ont été rejoués avec succès, avec une assertion explicite sur l’absence de chevauchement des boutons. Le serveur public a été actualisé avec cette dernière compilation.
+
+## Demandes et suivi des visites — 9 novembre 2026
+
+Ajout des formulaires de proposition d’horaire, de `/espace/visites`, des listes personnelles/équipe, filtres/pagination, décisions et annulation. Règles et limites dans [visits.md](visits.md). Les réponses ne contiennent pas de téléphone/email, document ni détail d’un rendez-vous concurrent. Les décisions sont auditées, soumises à contrôle de version et relisent les droits dans la transaction.
+
+| Contrôle                                                        | Résultat                                                                                                                             |
+| --------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| Lint, compilation de production et TypeScript                   | Réussite                                                                                                                             |
+| Tests unitaires                                                 | 51 réussis, dont 6 sur dates, états et validation des demandes                                                                       |
+| Parcours publics ordinateur/mobile                              | 18 réussis, dont 2 simulations de demande sans écriture                                                                              |
+| Demandes de visite sur base isolée                              | 8 réussis : 6 API et 2 parcours client/équipe ordinateur/mobile                                                                      |
+| Régression du formulaire après correction d’un horaire invalide | 2 parcours ciblés ordinateur/mobile réussis sur la compilation finale                                                                |
+| Migration                                                       | Cinquième migration `202611090005_visits` appliquée à la base isolée existante, sans modification de `.env` ni de la base de travail |
+| Inspection                                                      | Captures de suivi d’équipe ordinateur et mobile inspectées, sans débordement horizontal                                              |
+| Prévisualisation                                                | Serveur du port 3010 actualisé ; fiche accessible en HTTP 200 sur le tunnel public, formulaire et mention de simulation présents     |
+
+Les scénarios API couvrent session et origine, dates hors limites, annonce non publiée, propre bien, doublon actif, accès privé, autre demandeur, autre société, version obsolète, motifs de refus, compte/annonce suspendus, annulation, nouvelle proposition et clôture après la fin du créneau. Deux confirmations incompatibles sont lancées en parallèle : une seule est acceptée et auditée, sans divulguer le demandeur de l’autre visite.
+
+Environnement de concurrence : Prisma/PGlite isolé `barka-property-tests-20261109`, pool de taille 1. Ce contrôle ne valide pas une charge concurrente PostgreSQL native ; celle-ci reste à réaliser avant exploitation commerciale. Les fixtures ont été nettoyées et le serveur de base de test arrêté après exécution. L’hébergement de présentation reste en mode demo : aucune demande réelle n’est enregistrée depuis les exemples fictifs, et aucun SMS/email n’est envoyé.
+
+## Préparation comptes et migrations pour Vercel/Neon — 9 novembre 2026
+
+Ajout d’une sixième migration de références RBAC, d’une initialisation production distincte du seed fictif, de `DIRECT_URL` pour les migrations et de scripts d’inspection/validation. `vercel.json` utilise `build:vercel` ; l’installation conserve explicitement Prisma/tsx nécessaires au build. Le bootstrap et le seed ne s’exécutent jamais automatiquement au build. Une Preview refuse les migrations automatiques. Les secrets restent hors Git et hors envoi CLI Vercel via les règles d’exclusion ; `.env.bootstrap` est privé et ignoré.
+
+| Contrôle                              | Résultat                                                                                                                                                                                     |
+| ------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Lint, TypeScript et compilation       | Réussite                                                                                                                                                                                     |
+| Tests unitaires                       | 60 réussis                                                                                                                                                                                   |
+| Parcours publics ordinateur/mobile    | 18 réussis                                                                                                                                                                                   |
+| Migrations sur base vierge            | Six migrations appliquées sur deux bases locales de test isolées, sans seed préalable                                                                                                        |
+| Initialisation production             | Deux comptes, droits, rattachement et identifiant du commercial par défaut validés ; relance sans doublon ni changement de mot de passe ; collision annulée atomiquement                     |
+| Authentification des comptes initiaux | Connexion serveur du superadministrateur et session persistée ; inscriptions fermées par défaut, puis inscription CLIENT rattachée au compte d’accueil avec session vérifiée sur base isolée |
+| Seed de démonstration séparé          | Deux exécutions réussies, 7 comptes et 8 brouillons, hash/prix/paramètres/numéros conservés ; assertion du nombre de biens mise à jour                                                       |
+| Limites des médias Vercel             | 4 Mio côté formulaire/serveur ; tests du corps sans Content-Length, fichier trop grand dans multipart et résultat de traitement trop grand, tous refusés avant stockage                      |
+| Origines Preview                      | Variable Vercel contrôlée acceptée, faux Host/origine refusés ; cookie HTTPS conservé                                                                                                        |
+| Garde de migration                    | `RUN_DATABASE_MIGRATIONS=true` sur Preview rejeté avant toute connexion de migration                                                                                                         |
+| Inspection                            | Script exécuté sur base isolée : connexion, historique de six migrations et nombres de comptes, sans URL ni donnée d’identification                                                          |
+
+Les bases `barka-production-tests-20261109` et `barka-production-auth-tests-20261109` utilisent Prisma/PGlite local. Cela ne valide pas Neon en conditions réelles, S3, le build exécuté sur Vercel ni la charge PostgreSQL native. Aucune migration distante, initialisation de comptes réels, modification du `.env` de travail ou publication Vercel n’a été effectuée : le seul accès configuré reste local et la connexion du projet Neon Barka est nécessaire. Guide d’application : [vercel-neon.md](vercel-neon.md).
+
+Sur Vercel, les gros panoramas/GLB sont limités à 4 Mio pour rester sous la limite des fonctions ; la chaîne de dépôt direct avec validation et distribution adaptée reste à développer pour les fichiers plus lourds. Le stockage privé S3 et les variables d’hébergement doivent être configurés avant la mise en ligne fonctionnelle.
+
+## Connexion effective et migrations sur Neon Barka — 9 novembre 2026
+
+Connexion distante fournie par l’utilisateur, stockée uniquement dans `.env` privé (permissions 600), avec `DATABASE_URL` mutualisée et `DIRECT_URL` directe. Les trois migrations déjà appliquées ont été comparées par SHA-256 aux fichiers du dépôt : historique conforme. Aucun doublon actif de demande de visite avant ajout de l’index unique.
+
+Les migrations `202611090004_immersive`, `202611090005_visits` et `202611090006_production_roles` ont été appliquées avec `prisma migrate deploy`. Vérification distante réussie : six migrations terminées, champs message/réponse des visites présents et six permissions du rôle SUPER_ADMIN. Les comptages avant/après sont identiques : 7 utilisateurs, 1 société, 4 biens, 4 annonces, 0 demande de visite et 0 paiement. Ce contrôle des comptages ne remplace pas une sauvegarde ou une comparaison intégrale des contenus.
+
+Les sept comptes de seed préexistants sont toujours actifs ; aucun compte réel n’a encore été créé faute de noms et téléphones renseignés dans `.env.bootstrap`. Le secret de session local a été généré sans affichage et la société cible d’inscription configurée sur BARKA. Aucun seed n’a été relancé sur Neon, aucun compte n’a été supprimé ou promu, aucune publication Vercel n’a été effectuée. Le mot de passe de connexion communiqué dans le chat doit être renouvelé dans Neon et reporté dans les configurations privées.
+
+## Création effective des comptes initiaux sur Neon Barka — 9 novembre 2026
+
+Après correction et validation du fichier privé `.env.bootstrap`, `npm run db:bootstrap` a créé les deux comptes de la société BARKA sur Neon : SUPER_ADMIN et DEFAULT_COMMERCIAL, actifs. Le hachage du mot de passe administrateur, le parent du compte d’accueil, son profil et son affectation comme commercial par défaut ont été vérifiés sans afficher les identifiants. Les sept comptes de démonstration préexistants restent inchangés ; leur désactivation avant mise en production reste à traiter.
+
+Vérification HTTP sur le serveur local `127.0.0.1:3010` : connexion du nouvel administrateur 200, accès à l’API de gestion des utilisateurs 200, puis déconnexion de la session de contrôle 200. Le contrôle automatique a refusé le test de connexion via le tunnel Cloudflare public afin d’éviter d’y transmettre le mot de passe réel ; cette requête n’a pas été exécutée. L’alternative locale a permis le contrôle sans transmission du mot de passe à Cloudflare. Les fichiers `.env` et `.env.bootstrap` sont toujours exclus de Git. Aucun déploiement Vercel n’a été réalisé à cette étape.
+
+## Préparation du retrait des comptes fictifs et configuration Vercel — 9 novembre 2026
+
+Ajout de `db:retire-demo`, avec simulation par défaut, reconnaissance stricte des sept comptes de seed de BARKA-DEMO et vérification préalable des deux comptes réels. La simulation sur Neon reconnaît sept comptes actifs et zéro session à révoquer. Le mode d’application suspend uniquement ces comptes, révoque leurs sessions et audite les changements dans une transaction protégée par le verrou partagé des identités ; il reste soumis à confirmation explicite. L’exécution a été refusée par le contrôle automatique faute d’accord explicite de l’utilisateur : aucune désactivation n’a eu lieu à cette étape. Lint et TypeScript réussis.
+
+Le fichier `.env.vercel` privé a été préparé localement, avec les connexions Neon et un secret de session distinct, sans afficher ses valeurs. Il est ignoré par Git. Les informations du projet Vercel et du stockage S3 restent à fournir ; aucune publication ni connexion au bucket n’a été tentée.
+
+## Choix Neon Object Storage et conservation des comptes fictifs — 9 novembre 2026
+
+L’utilisateur a explicitement demandé de conserver les sept comptes de démonstration : la commande de retrait n’a pas été exécutée, aucune session de ces comptes n’a été révoquée. Le stockage retenu pour les médias est Neon Object Storage, associé au projet Barka.
+
+La documentation officielle Neon confirme la compatibilité avec le SDK S3 déjà utilisé et l’adressage par chemin configuré dans Barka. Ajout de `storage:check` : contrôle du bucket, puis avec `--probe` dépôt/relecture d’un fichier de test aléatoire, contrôle du refus de lecture anonyme et suppression de ce seul fichier. Le script réutilise le client et les fonctions de stockage de l’application.
+
+Le contrôle a constaté l’absence de S3_ENDPOINT, S3_REGION, S3_BUCKET, S3_ACCESS_KEY_ID et S3_SECRET_ACCESS_KEY dans `.env.vercel`. Aucun appel distant Object Storage ni dépôt de média n’a donc été effectué ; l’accès au bucket et sa confidentialité restent à vérifier après configuration. Les identifiants PostgreSQL existants ne sont pas des clés Storage. Aucun secret n’a été affiché et aucun déploiement Vercel n’a eu lieu.
+
+## Connexion effective à Neon Object Storage — 9 novembre 2026
+
+Accès Storage fournis par l’utilisateur, enregistrés exclusivement dans `.env` et `.env.vercel` privés (permissions 600). Liste des buckets obtenue sans afficher les clés. Les ACL lues ne déclaraient pas de droit public, mais le test réel du bucket `barka-media` a révélé une lecture anonyme en HTTP 200 ; sa politique autorise effectivement un accès public. Ce bucket n’est pas retenu, et sa politique n’a pas été modifiée.
+
+Le bucket existant `barka-uploads` a passé le contrôle complet avec le connecteur de l’application : HeadBucket réussi, dépôt d’une image d’illustration sous UUID aléatoire, relecture identique octet par octet, lecture anonyme refusée en HTTP 403, puis suppression du fichier de test. Aucun objet existant ni compte utilisateur n’a été modifié par ces contrôles. Les fichiers temporaires des deux essais précédents ont aussi été supprimés. La configuration des deux environnements privés utilise désormais `barka-uploads` et `MEDIA_DRIVER=s3`.
+
+La version web locale sur 3010 a été relancée pour charger cette configuration, avec son origine HTTPS temporaire existante. Les sept comptes de démonstration restent conservés conformément à la demande. Les clés communiquées dans le chat doivent être renouvelées puis reportées dans les fichiers privés et variables d’hébergement. Le projet/domaine Vercel reste à préciser ; aucune publication Vercel n’a été effectuée.
