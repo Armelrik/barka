@@ -86,8 +86,8 @@ export const loginSchema = z
   })
   .strict();
 export const consentVersions = {
-  TERMS: "2026-10-29-draft-1",
-  PRIVACY: "2026-10-29-draft-1",
+  TERMS: "2026-11-10-v1",
+  PRIVACY: "2026-11-10-v1",
 } as const;
 export const roleLabels = {
   SUPER_ADMIN: "Super administrateur",
@@ -154,3 +154,10 @@ export const statusLabels = {
   SUSPENDED: "Suspendu",
   CLOSED: "Fermé",
 } as const;
+
+export const managedPasswordSchema = z
+  .object({
+    password: registrationSchema.shape.password,
+    expectedUpdatedAt: z.iso.datetime(),
+  })
+  .strict();

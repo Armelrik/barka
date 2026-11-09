@@ -1,3 +1,8 @@
+import { Suspense } from "react";
+import {
+  WorkspaceNavigation,
+  type WorkspaceNavItem,
+} from "@/components/backoffice/workspace-navigation";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import localFont from "next/font/local";
@@ -6,7 +11,6 @@ import {
   CalendarDays,
   House,
   LayoutDashboard,
-  UsersRound,
   ArrowUpRight,
 } from "lucide-react";
 import { requirePageUser } from "@/lib/server/page-auth";
@@ -52,6 +56,7 @@ export default async function WorkspaceLayout({
                 <CalendarDays size={18} />
                 Mes visites
               </Link>
+              <Link href="/espace/compte">Mon compte et sécurité</Link>
               <LogoutButton />
             </nav>
             <main id="contenu" className="workspace-main">
@@ -84,45 +89,72 @@ export default async function WorkspaceLayout({
             <small>{roleLabels[user.role.code]}</small>
           </div>
         </div>
-        <nav aria-label="Navigation de mon espace">
-          <Link href="/espace">
-            <LayoutDashboard size={18} />
-            Vue d’ensemble
-          </Link>
-          {principalFor(user).permissions.includes("users.manage") && (
-            <Link href="/espace/equipe">
-              <UsersRound size={18} />
-              Mon équipe
-            </Link>
-          )}
-          {principalFor(user).permissions.includes("properties.manage") && (
-            <>
-              <Link href="/espace/biens">
-                <House size={18} />
-                Mes biens immobiliers
-              </Link>
-              <Link href="/espace/verification">
-                <UsersRound size={18} />
-                Vérification des profils
-              </Link>
-            </>
-          )}
-          <Link href="/espace/visites">
-            <CalendarDays size={18} />
-            Mes visites
-          </Link>
-          {principalFor(user).permissions.includes("properties.manage") && (
-            <Link href="/espace/visites?view=team">
-              <CalendarDays size={18} />
-              Demandes de visite reçues
-            </Link>
-          )}
-          <Link href="/#catalogue">
-            <House size={18} />
-            Explorer les biens
-            <ArrowUpRight size={14} />
-          </Link>
-        </nav>
+        <Suspense fallback={<nav aria-label="Navigation de mon espace" />}>
+          <WorkspaceNavigation
+            items={
+              [
+                { href: "/espace", label: "Vue d’ensemble", icon: "dashboard" },
+                ...(principalFor(user).permissions.includes("users.manage")
+                  ? [
+                      {
+                        href: "/espace/equipe",
+                        label: "Mon équipe",
+                        icon: "users",
+                      },
+                    ]
+                  : []),
+                ...(principalFor(user).permissions.includes("properties.manage")
+                  ? [
+                      {
+                        href: "/espace/biens",
+                        label: "Mes biens immobiliers",
+                        icon: "house",
+                      },
+                      {
+                        href: "/espace/verification",
+                        label: "Vérification des profils",
+                        icon: "users",
+                      },
+                    ]
+                  : []),
+                {
+                  href: "/espace/visites",
+                  label: "Mes visites",
+                  icon: "calendar",
+                },
+                ...(principalFor(user).permissions.includes("properties.manage")
+                  ? [
+                      {
+                        href: "/espace/visites?view=team",
+                        label: "Demandes de visite reçues",
+                        icon: "calendar",
+                      },
+                    ]
+                  : []),
+                {
+                  href: "/espace/compte",
+                  label: "Mon compte et sécurité",
+                  icon: "account",
+                },
+                ...(principalFor(user).permissions.includes("settings.manage")
+                  ? [
+                      {
+                        href: "/espace/activite",
+                        label: "Historique d’activité",
+                        icon: "activity",
+                      },
+                      {
+                        href: "/espace/parametres",
+                        label: "Paramètres",
+                        icon: "settings",
+                      },
+                    ]
+                  : []),
+                { href: "/biens", label: "Explorer les biens", icon: "house" },
+              ] as WorkspaceNavItem[]
+            }
+          />
+        </Suspense>
         <div className="workspace-logout">
           <LogoutButton />
         </div>

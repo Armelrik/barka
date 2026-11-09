@@ -946,3 +946,153 @@ a {
   min-height: 48px;
   margin-bottom: 12px;
 }
+
+/* Parcours de présentation : la charte Afriloc reste la référence. */
+.presentation-eyebrow {
+  display: block;
+  color: var(--primary);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+.project-paths {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
+}
+.project-paths .contact-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 18px;
+  border: 1px solid #e8edf1;
+}
+.project-paths .contact-panel h2 {
+  font-size: 22px;
+  margin: 0;
+}
+.project-paths .contact-panel p {
+  color: #526276;
+  line-height: 1.8;
+  margin: 0;
+}
+.project-paths .contact-panel .legacy-button {
+  margin-top: auto;
+  white-space: normal;
+  display: inline-flex;
+  gap: 10px;
+  align-items: center;
+}
+.project-paths small {
+  font-size: 12px;
+  line-height: 1.7;
+  color: #526276;
+}
+.project-icon {
+  color: #f97316;
+}
+#professionnels {
+  scroll-margin-top: 110px;
+}
+.project-faq {
+  display: grid;
+  grid-template-columns: 1fr 1.6fr;
+  gap: 48px;
+  margin-top: 64px;
+  padding: 40px;
+  background: #f5f8fa;
+  border-radius: 20px;
+}
+.project-faq h2 {
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 18px;
+}
+.project-faq > div > p {
+  display: flex;
+  gap: 8px;
+  color: #526276;
+  font-size: 14px;
+}
+.project-faq details {
+  padding: 18px 0;
+  border-bottom: 1px solid #dce4eb;
+}
+.project-faq details:first-child {
+  padding-top: 0;
+}
+.project-faq summary {
+  cursor: pointer;
+  font-weight: 600;
+  line-height: 1.6;
+}
+.project-faq details p {
+  color: #526276;
+  font-size: 14px;
+  line-height: 1.8;
+  margin: 12px 0 0;
+}
+.project-faq details a {
+  color: #c84b06;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.footer-help-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #fff;
+}
+.site-footer .footer-columns small {
+  display: block;
+  margin-top: 18px;
+  line-height: 1.8;
+  color: #d1d8e0;
+}
+.property-kind {
+  font-size: 12px;
+  font-weight: 600;
+  color: #526276;
+  margin: 8px 0;
+}
+.card-details-link {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px solid #e8edf1;
+  color: #c84b06;
+  font-size: 14px;
+  font-weight: 600;
+}
+.card-details-link:hover {
+  color: #8d3607;
+}
+.mobile-nav a[aria-current="page"] {
+  color: #c84b06;
+  font-weight: 700;
+}
+@media (max-width: 1000px) {
+  .project-paths {
+    grid-template-columns: 1fr;
+  }
+  .project-faq {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+}
+@media (max-width: 640px) {
+  .project-faq {
+    margin-top: 32px;
+    padding: 24px;
+  }
+  .project-paths {
+    gap: 16px;
+  }
+  .hero-stats .font-bold {
+    font-size: 22px;
+  }
+}

@@ -1,5 +1,7 @@
 # BARKA SARL
 
+Site en ligne : [barka-ten.vercel.app](https://barka-ten.vercel.app). Déploiement Vercel connecté à Neon et au bucket privé `barka-uploads`.
+
 Interface : reprise de la version Afriloc validée par le client (Inter, orange/turquoise). Sources, charte complète et correspondance des écrans : [référence Afriloc](docs/reference-afriloc/README.md).
 
 Plateforme immobilière et foncière — fondations et premier espace authentifié. Next.js App Router, React, TypeScript strict, Tailwind, composants compatibles shadcn/ui, Lucide, PostgreSQL/Prisma. Aucun Laravel.
@@ -81,3 +83,5 @@ Compatible avec une cible Next.js Node sur Vercel ou VPS Node/Docker. PostgreSQL
 Le résultat des commandes exécutées et les limites de l'environnement sont consignés dans `docs/verification.md` à la fin de la phase 1.
 
 La charte actuelle et la provenance des visuels sont documentées dans [docs/reference-afriloc/README.md](docs/reference-afriloc/README.md). L’ancienne direction reste archivée dans [docs/design.md](docs/design.md). Les assets de `public/design` sont des ressources graphiques statiques ; les médias des futurs biens publiés utiliseront le stockage objet prévu.
+
+Comptes et back-office : [guide des accès, réglages et exemples publiés](docs/backoffice.md). Dix biens fictifs sont attribués aux comptes de démonstration et visibles dans le catalogue connecté. Les inscriptions CLIENT sont ouvertes sur décision de l’exploitant.

@@ -7,6 +7,7 @@ import {
   managementCompanies,
   managedUserHistory,
 } from "@/modules/identity/management";
+import { MemberPasswordReset } from "@/components/backoffice/password-form";
 import { MemberForm } from "@/components/team/member-form";
 import { MemberHistory } from "@/components/team/member-history";
 export const metadata = { title: "Gérer un compte d’équipe | BARKA SARL" };
@@ -65,6 +66,10 @@ export default async function MemberPage({
           companyId={actor.companyId}
           companies={companies}
         />
+      </section>
+      <section className="property-panel">
+        <h2>Sécurité du compte</h2>
+        <MemberPasswordReset id={id} updatedAt={member.updatedAt} />
       </section>
       <MemberHistory userId={id} history={history} />
     </>

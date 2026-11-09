@@ -16,11 +16,28 @@ export async function DatabaseCatalog({
   const result = await publicCatalog(q, featured).catch(() => null);
   const page = (n: number) =>
     `/biens?${new URLSearchParams({ page: String(n), offer: q.offer, category: q.category, location: q.location, maxPrice: String(q.maxPrice) })}`;
+  const Heading = featured ? "h2" : "h1";
+  const types: Record<string, string> = {
+    VILLA: "Villa",
+    HOUSE: "Maison",
+    APARTMENT: "Appartement",
+    LAND: "Terrain",
+    OFFICE: "Bureau",
+    COMMERCIAL: "Commerce",
+  };
+  const examplesOnly =
+    !!result?.items.length && result.items.every((p) => p.isDemo);
   return (
     <section id="catalogue" className="catalog-section shell">
       <div className="section-heading">
-        <h2>{featured ? "Propriétés en Vedette" : "Toutes les Propriétés"}</h2>
-        <p>Les annonces publiées et disponibles dans notre catalogue.</p>
+        <Heading>
+          {featured ? "Notre sélection de propriétés" : "Toutes les propriétés"}
+        </Heading>
+        <p>
+          {examplesOnly
+            ? "Découvrez les biens de présentation : photos, quartiers et prix illustratifs."
+            : "Trouvez votre prochain bien selon votre projet, votre quartier et votre budget."}
+        </p>
       </div>
       {!featured && (
         <>
@@ -58,7 +75,7 @@ export async function DatabaseCatalog({
                 type="number"
                 min={0}
                 max={2147483647}
-                defaultValue={q.maxPrice}
+                defaultValue={q.maxPrice || ""}
                 placeholder="FCFA"
               />
             </label>
@@ -67,7 +84,11 @@ export async function DatabaseCatalog({
             </button>
           </form>
           <div className="catalog-toolbar">
-            <p>{result?.total ?? 0} annonce(s) publiée(s)</p>
+            <p>
+              {result
+                ? `${result.total} ${result.total === 1 ? "bien trouvé" : "biens trouvés"}`
+                : "Catalogue indisponible"}
+            </p>
             <Link href="/carte">
               <Map size={18} />
               Voir sur la carte
@@ -102,6 +123,9 @@ export async function DatabaseCatalog({
                 )}
               </div>
               <div className="card-body">
+                {p.isDemo && (
+                  <span className="offer-badge">EXEMPLE FICTIF</span>
+                )}
                 <h3>
                   <Link href={`/biens/${p.slug}`}>{p.title}</Link>
                 </h3>
@@ -109,16 +133,24 @@ export async function DatabaseCatalog({
                   <MapPin size={16} />
                   {p.location}, {p.city}
                 </p>
+                <p className="property-kind">
+                  {types[p.type] ?? "Bien immobilier"} ·{" "}
+                  {p.offer === "SALE" ? "Vente" : "Location mensuelle"}
+                </p>
                 <p className="property-description">{p.description}</p>
                 <div className="card-features">
-                  <span>
-                    <BedDouble size={18} />
-                    {p.bedrooms} ch.
-                  </span>
-                  <span>
-                    <Bath size={18} />
-                    {p.bathrooms} sdb.
-                  </span>
+                  {p.bedrooms > 0 && (
+                    <span>
+                      <BedDouble size={18} />
+                      {p.bedrooms} ch.
+                    </span>
+                  )}
+                  {p.bathrooms > 0 && (
+                    <span>
+                      <Bath size={18} />
+                      {p.bathrooms} sdb.
+                    </span>
+                  )}
                   <span>{p.surfaceM2} m²</span>
                 </div>
                 <div className="card-price">
@@ -127,6 +159,13 @@ export async function DatabaseCatalog({
                     {p.offer === "RENT" && <small> / mois</small>}
                   </strong>
                 </div>
+                <Link
+                  href={`/biens/${p.slug}`}
+                  className="card-details-link"
+                  aria-label={`Voir le bien : ${p.title}`}
+                >
+                  Voir le bien <span aria-hidden="true">↗</span>
+                </Link>
               </div>
             </article>
           ))}

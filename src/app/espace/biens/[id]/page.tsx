@@ -38,6 +38,12 @@ export default async function PropertyPage({
           Le bien a été enregistré.
         </p>
       )}
+      {listing.isDemo && (
+        <p className="visit-demo-note">
+          Dossier de démonstration. L’annonce publique est identifiée comme
+          fictive ; aucun dossier légal ni profil n’est présenté comme vérifié.
+        </p>
+      )}
       <p className="property-edit-note">
         Toute modification du dossier, des médias ou de la visite remet
         l’annonce en brouillon pour une nouvelle validation.

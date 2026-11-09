@@ -2,7 +2,7 @@ import "dotenv/config";
 import { unlink } from "node:fs/promises";
 import { resolve } from "node:path";
 import { test as base, expect } from "@playwright/test";
-import { randomBytes, randomInt } from "node:crypto";
+import { createHmac, randomBytes, randomInt } from "node:crypto";
 import { hash } from "bcryptjs";
 import { PrismaClient, type RoleCode } from "../../src/generated/prisma/client";
 import { PrismaPg } from "@prisma/adapter-pg";
@@ -48,6 +48,23 @@ type Fixture = {
 };
 export const test = base.extend<{ accounts: Fixture }>({
   accounts: async ({}, provide) => {
+    // Reset only the two shared ingress counters of this isolated server between tests.
+    // Per-test abuse assertions still exercise the real limiter without any reset during the test.
+    const secret = process.env.BARKA_TEST_AUTH_SECRET;
+    if (!secret) throw new Error("Secret du serveur de test isolé manquant.");
+    await db.authRateLimit.deleteMany({
+      where: {
+        keyHash: {
+          in: [
+            "login:ingress:untrusted-shared-ingress",
+            "register:ingress:untrusted-shared-ingress",
+          ].map((key) =>
+            createHmac("sha256", secret).update(key).digest("hex"),
+          ),
+        },
+      },
+    });
+
     const ids: string[] = [],
       phones: string[] = [],
       companies: string[] = [];
@@ -237,8 +254,10 @@ export const test = base.extend<{ accounts: Fixture }>({
             asset.objectKey.slice(6),
           ),
         ).catch(() => {});
-    if (companies.length)
+    if (companies.length) {
+      await db.setting.deleteMany({ where: { companyId: { in: companies } } });
       await db.company.deleteMany({ where: { id: { in: companies } } });
+    }
   },
 });
 test.afterAll(async () => db.$disconnect());

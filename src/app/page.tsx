@@ -53,7 +53,7 @@ export default function Home() {
                   href="/inscription"
                   className="inline-flex items-center justify-center px-6 sm:px-8 py-3 sm:py-4 bg-white/10 backdrop-blur-md border-2 border-white/30 text-white rounded-lg hover:bg-white/20 transition-all font-semibold text-sm sm:text-base"
                 >
-                  Devenir Promoteur
+                  Créer mon compte client
                 </Link>
               </div>
             </div>
@@ -62,7 +62,8 @@ export default function Home() {
           <div className="hero-stats absolute bottom-0 left-0 right-0 z-10 pb-4 sm:pb-6 md:pb-8">
             <div className="container mx-auto px-4 sm:px-6 lg:px-8">
               <p className="text-white/80 text-xs text-center mb-2">
-                Chiffres illustratifs de la maquette · Version de démonstration
+                Votre projet immobilier, du premier repérage au suivi des
+                visites
               </p>
               <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-3 md:gap-4 max-w-6xl mx-auto">
                 <div className="backdrop-blur-md bg-white/10 border border-white/20 rounded-lg sm:rounded-xl p-3 sm:p-4 md:p-6 text-center text-white hover:bg-white/20 transition-all hover:scale-105">
@@ -80,10 +81,10 @@ export default function Home() {
                     />
                   </svg>
                   <div className="text-xl sm:text-2xl md:text-3xl font-bold">
-                    100+
+                    Acheter
                   </div>
                   <div className="text-xs sm:text-sm opacity-90 mt-1">
-                    Maisons
+                    Maisons et villas
                   </div>
                 </div>
 
@@ -102,10 +103,10 @@ export default function Home() {
                     />
                   </svg>
                   <div className="text-xl sm:text-2xl md:text-3xl font-bold">
-                    50+
+                    Louer
                   </div>
                   <div className="text-xs sm:text-sm opacity-90 mt-1">
-                    Appartements
+                    Appartements et bureaux
                   </div>
                 </div>
 
@@ -124,10 +125,10 @@ export default function Home() {
                     />
                   </svg>
                   <div className="text-xl sm:text-2xl md:text-3xl font-bold">
-                    50+
+                    Explorer
                   </div>
                   <div className="text-xs sm:text-sm opacity-90 mt-1">
-                    Promoteurs Vérifiés
+                    Carte des biens
                   </div>
                 </div>
 
@@ -146,10 +147,10 @@ export default function Home() {
                     />
                   </svg>
                   <div className="text-xl sm:text-2xl md:text-3xl font-bold">
-                    200+
+                    360°
                   </div>
                   <div className="text-xs sm:text-sm opacity-90 mt-1">
-                    Clients Satisfaits
+                    Visites immersives
                   </div>
                 </div>
               </div>
@@ -210,7 +211,8 @@ export default function Home() {
                   Recherchez
                 </h3>
                 <p className="text-sm sm:text-base text-gray-600 px-2">
-                  Parcourez notre large sélection de propriétés vérifiées
+                  Comparez les photos, les caractéristiques et les prix des
+                  biens.
                 </p>
               </div>
 
@@ -265,10 +267,11 @@ export default function Home() {
                   </div>
                 </div>
                 <h3 className="text-lg sm:text-xl font-bold mb-2 sm:mb-3">
-                  Emménagez
+                  Suivez votre projet
                 </h3>
                 <p className="text-sm sm:text-base text-gray-600 px-2">
-                  Finalisez votre réservation et emménagez rapidement
+                  Retrouvez vos demandes et leurs confirmations dans votre
+                  espace.
                 </p>
               </div>
             </div>
@@ -309,8 +312,8 @@ export default function Home() {
                   Vérification des Propriétés
                 </h3>
                 <p className="text-sm sm:text-base text-gray-600">
-                  Un parcours de vérification prévu avant la publication des
-                  annonces
+                  Un contrôle des dossiers accompagne la publication des
+                  annonces réelles.
                 </p>
               </div>
 
@@ -358,7 +361,7 @@ export default function Home() {
                   Prix Transparents
                 </h3>
                 <p className="text-sm sm:text-base text-gray-600">
-                  Pas de frais cachés, tout est clair dès le départ
+                  Prix et caractéristiques présentés sur chaque fiche.
                 </p>
               </div>
 
@@ -379,10 +382,11 @@ export default function Home() {
                   </svg>
                 </div>
                 <h3 className="text-lg sm:text-xl font-bold mb-2">
-                  Paiement Sécurisé
+                  Compte personnel
                 </h3>
                 <p className="text-sm sm:text-base text-gray-600">
-                  Les paiements seront activés après intégration du prestataire
+                  Retrouvez vos informations et vos demandes dans un espace
+                  protégé.
                 </p>
               </div>
 
@@ -470,10 +474,11 @@ export default function Home() {
           <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div className="max-w-4xl mx-auto text-center">
               <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-4 sm:mb-6">
-                Vous êtes Promoteur Immobilier ?
+                Vous êtes un professionnel de l’immobilier ?
               </h2>
               <p className="text-base sm:text-lg md:text-xl mb-6 sm:mb-8 opacity-90">
-                Rejoignez notre plateforme et développez votre activité
+                Centralisez vos dossiers, votre équipe et les demandes de visite
+                dans un espace dédié.
               </p>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 mb-6 sm:mb-8">
@@ -492,7 +497,7 @@ export default function Home() {
                     />
                   </svg>
                   <span className="text-sm sm:text-base">
-                    Accès à des milliers de clients
+                    Des dossiers attribués à votre équipe
                   </span>
                 </div>
                 <div className="flex items-center space-x-3 backdrop-blur-sm bg-white/10 rounded-lg p-3 sm:p-4">
@@ -528,7 +533,7 @@ export default function Home() {
                     />
                   </svg>
                   <span className="text-sm sm:text-base">
-                    Support marketing gratuit
+                    Photos, carte et visites immersives
                   </span>
                 </div>
                 <div className="flex items-center space-x-3 backdrop-blur-sm bg-white/10 rounded-lg p-3 sm:p-4">
@@ -546,16 +551,16 @@ export default function Home() {
                     />
                   </svg>
                   <span className="text-sm sm:text-base">
-                    Commission attractive
+                    Suivi des demandes de visite
                   </span>
                 </div>
               </div>
 
               <Link
-                href="/inscription"
+                href="/contact#professionnels"
                 className="inline-flex items-center px-6 sm:px-8 py-3 sm:py-4 bg-white text-primary rounded-lg hover:bg-gray-100 transition-all hover:scale-105 text-base sm:text-lg font-semibold shadow-lg"
               >
-                Devenir Promoteur
+                Découvrir l’espace professionnel
                 <svg
                   className="ml-2 h-4 w-4 sm:h-5 sm:w-5"
                   fill="none"

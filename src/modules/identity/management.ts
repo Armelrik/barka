@@ -15,6 +15,7 @@ import {
   createManagedUserSchema,
   updateManagedUserSchema,
   parentQuerySchema,
+  managedPasswordSchema,
 } from "./validation";
 import { managedUserWhere } from "./access";
 
@@ -667,4 +668,34 @@ export async function managedUserHistory(
     page,
     pageSize: 20,
   };
+}
+
+export async function resetManagedPassword(
+  actorId: string,
+  id: string,
+  input: unknown,
+) {
+  const data = managedPasswordSchema.parse(input),
+    passwordHash = await hash(data.password, 12);
+  await getDb().$transaction(async (tx) => {
+    await lockIdentity(tx);
+    const actor = await freshActor(tx, actorId),
+      target = await targetFor(tx, actor, id);
+    if (
+      target.updatedAt.getTime() !== new Date(data.expectedUpdatedAt).getTime()
+    )
+      throw conflict("Le compte a changé. Rechargez sa fiche.", "STALE_UPDATE");
+    await tx.user.update({ where: { id }, data: { passwordHash } });
+    await tx.authSession.deleteMany({ where: { userId: id } });
+    await tx.auditLog.create({
+      data: {
+        actorId: actor.id,
+        companyId: target.companyId,
+        action: "PASSWORD_RESET",
+        targetType: "User",
+        targetId: id,
+        metadata: { sessionsRevoked: true },
+      },
+    });
+  });
 }

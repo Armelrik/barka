@@ -32,6 +32,12 @@ export function PublicProperty({ listing: p }: { listing: PublicListing }) {
               detail
               unoptimized
             />
+            {p.isDemo && (
+              <p className="visit-demo-note">
+                EXEMPLE FICTIF · Photographies d’illustration, prix indicatif et
+                localisation fictive. Ce bien ne peut pas être réservé.
+              </p>
+            )}
             <h1>{p.title}</h1>
             <p className="card-location">
               <MapPin size={18} />
@@ -42,14 +48,19 @@ export function PublicProperty({ listing: p }: { listing: PublicListing }) {
             <section className="detail-feature-box">
               <h2>Caractéristiques</h2>
               <div className="card-features">
-                <span>
-                  <BedDouble size={24} />
-                  {p.bedrooms} chambres
-                </span>
-                <span>
-                  <Bath size={24} />
-                  {p.bathrooms} salles d’eau
-                </span>
+                {p.bedrooms > 0 && (
+                  <span>
+                    <BedDouble size={24} />
+                    {p.bedrooms} {p.bedrooms === 1 ? "chambre" : "chambres"}
+                  </span>
+                )}
+                {p.bathrooms > 0 && (
+                  <span>
+                    <Bath size={24} />
+                    {p.bathrooms}{" "}
+                    {p.bathrooms === 1 ? "salle d’eau" : "salles d’eau"}
+                  </span>
+                )}
                 <span>
                   <Square size={24} />
                   {p.surfaceM2} m²
@@ -108,7 +119,7 @@ export function PublicProperty({ listing: p }: { listing: PublicListing }) {
                 Explorer la visite immersive
               </Link>
             )}
-            <VisitRequestForm slug={p.slug} />
+            <VisitRequestForm slug={p.slug} demo={p.isDemo} />
             <p className="detail-demo">Référence : {p.reference}</p>
           </aside>
         </div>

@@ -71,6 +71,7 @@ export function listingDto(row: Full) {
   return {
     id: row.id,
     slug: row.slug,
+    isDemo: row.isDemo,
     title: p.title,
     description: p.description,
     type: p.type,
@@ -475,14 +476,34 @@ export async function listingAction(
           "Indiquez le motif de cette décision.",
         );
       if (["APPROVE", "PUBLISH"].includes(d.action)) {
+        const company = row.isDemo
+          ? await tx.company.findUnique({
+              where: { id: row.property.companyId },
+              select: { code: true },
+            })
+          : null;
+        const demo =
+          row.isDemo &&
+          company?.code === "BARKA-DEMO" &&
+          !!row.property.details &&
+          typeof row.property.details === "object" &&
+          !Array.isArray(row.property.details) &&
+          row.property.details.fictitious === true;
+        if (row.isDemo && !demo)
+          throw new AppError(
+            409,
+            "DEMO_INVALID",
+            "Le marquage de démonstration est invalide.",
+          );
         const agent = row.property.agent;
         if (
           !agent ||
           agent.status !== "ACTIVE" ||
           !["COMMERCIAL", "DEFAULT_COMMERCIAL"].includes(agent.role.code) ||
-          agent.agentProfile?.verification !== "VERIFIED" ||
-          agent.agentProfile.identityAsset?.status !== "READY" ||
-          agent.agentProfile.identityAsset.kind !== "IDENTITY"
+          (!demo &&
+            (agent.agentProfile?.verification !== "VERIFIED" ||
+              agent.agentProfile.identityAsset?.status !== "READY" ||
+              agent.agentProfile.identityAsset.kind !== "IDENTITY"))
         )
           throw new AppError(
             409,
@@ -501,7 +522,7 @@ export async function listingAction(
               asset: { kind: "LEGAL_DOCUMENT", status: "READY" },
             },
           });
-        if (!photo || !doc)
+        if (!photo || (!demo && !doc))
           throw new AppError(
             409,
             "DOSSIER_INCOMPLETE",
@@ -733,6 +754,7 @@ function publicDto(row: Full) {
     );
   return {
     slug: row.slug,
+    isDemo: row.isDemo,
     reference: p.reference,
     title: p.title,
     description: p.description,
@@ -901,6 +923,7 @@ export async function publicMapPoints() {
     select: {
       id: true,
       slug: true,
+      isDemo: true,
       property: { select: { title: true, latitude: true, longitude: true } },
     },
     orderBy: { publishedAt: "desc" },
@@ -908,7 +931,9 @@ export async function publicMapPoints() {
   });
   return rows.map((row) => ({
     id: row.id,
-    title: row.property.title,
+    title: row.isDemo
+      ? `Exemple fictif : ${row.property.title}`
+      : row.property.title,
     latitude: Math.round(Number(row.property.latitude) * 1000) / 1000,
     longitude: Math.round(Number(row.property.longitude) * 1000) / 1000,
     href: `/biens/${row.slug}`,

@@ -14,7 +14,7 @@ const inter = localFont({
 export const metadata: Metadata = {
   title: "BARKA SARL | Votre prochain chapitre commence ici",
   description:
-    "Découvrez BARKA SARL, votre future plateforme immobilière au Burkina Faso. Aperçu de démonstration : villas, parcelles et locations à Ouagadougou.",
+    "Explorez les biens à vendre et à louer au Burkina Faso avec BARKA SARL : photos, carte, visites immersives et suivi de votre projet immobilier.",
   robots: { index: false, follow: false },
 };
 export default function RootLayout({

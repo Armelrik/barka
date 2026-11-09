@@ -83,7 +83,9 @@ export async function requestVisit(actorId: string, input: unknown) {
           "Choisissez un horaire entre 30 minutes et 90 jours à partir de maintenant.",
         );
       const listing = await tx.listing.findFirst({
-        where: { slug: data.slug, ...publicListingWhere() },
+        where: {
+          AND: [{ slug: data.slug, isDemo: false }, publicListingWhere()],
+        },
         select: {
           id: true,
           authorId: true,

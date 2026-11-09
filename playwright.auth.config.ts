@@ -9,7 +9,9 @@ if (
   throw new Error(
     "TEST_DATABASE_URL doit viser une base locale de test dédiée, migrée et seedée.",
   );
-const testSecret = randomBytes(48).toString("hex");
+const testSecret =
+  process.env.BARKA_TEST_AUTH_SECRET || randomBytes(48).toString("hex");
+process.env.BARKA_TEST_AUTH_SECRET = testSecret;
 export default defineConfig({
   testDir: "./tests/auth",
   fullyParallel: false,

@@ -60,12 +60,28 @@ export const publicListingWhere = (): Prisma.ListingWhereInput => ({
     agent: {
       status: "ACTIVE",
       role: { code: { in: ["COMMERCIAL", "DEFAULT_COMMERCIAL"] } },
-      agentProfile: {
-        verification: "VERIFIED",
-        identityAsset: { status: "READY", kind: "IDENTITY" },
-      },
     },
   },
+  OR: [
+    {
+      isDemo: false,
+      property: {
+        agent: {
+          agentProfile: {
+            verification: "VERIFIED",
+            identityAsset: { status: "READY", kind: "IDENTITY" },
+          },
+        },
+      },
+    },
+    {
+      isDemo: true,
+      property: {
+        company: { code: "BARKA-DEMO" },
+        details: { path: ["fictitious"], equals: true },
+      },
+    },
+  ],
 });
 export async function scopedListing(
   tx: Tx,

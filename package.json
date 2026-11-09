@@ -35,7 +35,8 @@
     "test:bootstrap": "node --conditions=react-server --import tsx scripts/verify-production-bootstrap.ts",
     "test:hosted-media": "node --conditions=react-server --import tsx scripts/verify-hosted-media.ts",
     "db:retire-demo": "tsx scripts/retire-demo-accounts.ts",
-    "storage:check": "node --conditions=react-server --import tsx scripts/check-storage.ts"
+    "storage:check": "node --conditions=react-server --import tsx scripts/check-storage.ts",
+    "db:showcase": "node --conditions=react-server --import tsx scripts/seed-showcase.ts"
   },
   "license": "UNLICENSED",
   "type": "module",

@@ -1,4 +1,5 @@
 import "server-only";
+import { rateLimitAddress } from "./client-address";
 import { createHmac } from "node:crypto";
 import { getDb } from "./db";
 import { getAuthConfig } from "./auth-config";
@@ -36,13 +37,6 @@ export async function consumeRateLimit(
     );
 }
 export function clientRateKey(request: Request) {
-  // Never trust spoofable proxy headers without an explicit, reviewed ingress configuration.
-  if (process.env.AUTH_TRUST_PROXY_HEADERS === "true") {
-    const forwarded = request.headers
-      .get("x-forwarded-for")
-      ?.split(",")[0]
-      .trim();
-    if (forwarded && /^[\da-fA-F:.]{3,45}$/.test(forwarded)) return forwarded;
-  }
-  return "untrusted-shared-ingress";
+  // Vercel overwrites its canonical client header. Other hosts require explicit proxy trust.
+  return rateLimitAddress(request.headers, process.env);
 }

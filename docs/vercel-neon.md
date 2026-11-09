@@ -66,7 +66,7 @@ Après contrôle de la connexion de l’administrateur réel, `npm run db:retire
 
 ## 4. Configurer Vercel
 
-Importer le dépôt GitHub `Armelrik/barka` après avoir poussé les modifications à déployer. Framework **Next.js**, Node.js **24.x**, racine du dépôt. `vercel.json` définit `npm run build:vercel` comme commande de build ; `postinstall` et `build` génèrent le client Prisma.
+Importer le dépôt GitHub `Armelrik/barka` après avoir poussé les modifications à déployer. Framework **Next.js**, racine du dépôt. Le déploiement vérifié utilise Node.js **26.x**, conformément au réglage actuel du projet Vercel. `vercel.json` définit `npm run build:vercel` comme commande de build ; `postinstall` et `build` génèrent le client Prisma.
 
 Le modèle [.env.vercel.example](../.env.vercel.example) énumère les variables. Le fichier local privé `.env.vercel` a été préparé avec les connexions Neon et un secret de session distinct ; il est exclu de Git et des envois CLI Vercel. Le stockage Neon est maintenant renseigné et vérifié ; il reste à y renseigner l’origine du projet Vercel. Ajouter les vraies valeurs dans **Settings → Environment Variables**, dans le bon environnement :
 
@@ -131,3 +131,13 @@ Sans annonce approuvée/publiée, le catalogue database est vide : c’est atten
 - [Vercel : limites des fonctions](https://vercel.com/docs/functions/limitations)
 - [Vercel : versions Node.js](https://vercel.com/docs/functions/runtimes/node-js/node-js-versions)
 - [Vercel : variables système](https://vercel.com/docs/environment-variables/system-environment-variables)
+
+## Déploiement vérifié — 9–10 novembre 2026
+
+Site canonique : https://barka-ten.vercel.app. Projet : https://vercel.com/armelriks-projects/barka. Déploiement `dpl_FYrsHy1MAzvqTNfEvf3nGHzeyRh7`, état API **READY**. Le domaine canonique est associé et `AUTH_URL` lui correspond. Les secrets et configurations de `.env.vercel` ont été ajoutés au seul environnement Production du projet existant ; aucun nouveau projet ni compte n’a été créé sur Vercel.
+
+Pages accueil, catalogue, connexion, carte et visite immersive : HTTP 200 avec contenu Barka. Catalogue API connecté à Neon : HTTP 200, zéro annonce publiée. Route de gestion anonyme : 401. Requête de connexion vide sur la bonne origine : 400 ; origine étrangère : 403. Ces tests n’ont transmis aucun mot de passe administrateur et n’ont pas validé un téléversement authentifié depuis une fonction Vercel. Le stockage a été validé séparément avec le connecteur Barka depuis ce Mac.
+
+Le catalogue Production est en mode `database`, donc les annonces en brouillon ne sont pas visibles. Les sept comptes de démonstration sont conservés selon la demande. Les inscriptions étaient fermées lors de ce premier déploiement. Elles ont été autorisées le 10 novembre 2026 : REGISTRATION_ENABLED et LEGAL_DOCUMENTS_APPROVED sont désormais activés en Production. Voir [backoffice.md](backoffice.md). Aucun seed ni retrait de comptes n’a été exécuté au déploiement.
+
+Guide d’installation suivi : https://vercel.com/get-started.md. CLI 65.14.0 installé au niveau utilisateur dans `~/.local/bin` (le préfixe système refusait l’écriture), connexion `armelrik` vérifiée avec `whoami`, plugin `vercel@openai-curated` installé au niveau utilisateur et commande de statut présente dans son cache. MCP global `https://mcp.vercel.com` ajouté sans remplacement des autres entrées ; flux OAuth terminé avec succès. Les outils MCP et commandes du plugin ne sont pas chargés dans cette session active : `list_teams` n’a pas pu être vérifié via MCP, et le statut d’authentification de la liste CLI reste `unknown`. Une nouvelle session/recharge Codex sera nécessaire pour les charger et terminer ce contrôle. Les opérations du projet et le déploiement ont été réalisés avec le CLI authentifié.

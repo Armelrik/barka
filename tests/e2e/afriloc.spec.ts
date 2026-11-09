@@ -19,7 +19,7 @@ test("charte Afriloc et connexion en fenêtre modale", async ({
   const cta = await page
     .locator("main > section")
     .first()
-    .getByRole("link", { name: "Devenir Promoteur" })
+    .getByRole("link", { name: "Créer mon compte client" })
     .boundingBox();
   const stats = await page.locator(".hero-stats").boundingBox();
   expect(cta && stats && cta.y + cta.height <= stats.y).toBe(true);

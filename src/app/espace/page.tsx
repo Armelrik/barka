@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { BackofficeDashboard } from "@/components/backoffice/dashboard";
 import {
   ArrowUpRight,
   CalendarDays,
@@ -15,6 +16,8 @@ import { roleLabels } from "@/modules/identity/validation";
 import { Button } from "@/components/ui/button";
 export default async function WorkspacePage() {
   const user = await requirePageUser();
+  if (principalFor(user).permissions.includes("properties.manage"))
+    return <BackofficeDashboard user={user} />;
   const db = getDb();
   const staff = principalFor(user).permissions.includes("users.manage");
   const [bookings, subscriptions, payments] = await Promise.all([
