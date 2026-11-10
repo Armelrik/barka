@@ -17,7 +17,7 @@ export const authUserSelect = {
   status: true,
   phoneVerifiedAt: true,
   companyId: true,
-  company: { select: { name: true, countryId: true } },
+  company: { select: { name: true, code: true, countryId: true } },
   role: {
     select: {
       code: true,

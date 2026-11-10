@@ -1,5 +1,12 @@
+import { catalogQueryFields } from "@/modules/catalog/query";
 import { z } from "zod";
 export const propertyTypes = [
+  "APARTMENT",
+  "TOWNHOUSE",
+  "SHOP",
+  "WAREHOUSE",
+  "RETAIL_SPACE",
+  "GUEST_HOUSE",
   "BARE_PARCEL",
   "DEMARCATED_PARCEL",
   "WALLED_PARCEL",
@@ -16,6 +23,12 @@ export const propertyTypeLabels: Record<
   (typeof propertyTypes)[number],
   string
 > = {
+  APARTMENT: "Appartement",
+  TOWNHOUSE: "Maison mitoyenne",
+  SHOP: "Boutique",
+  WAREHOUSE: "Entrepôt",
+  RETAIL_SPACE: "Espace de vente",
+  GUEST_HOUSE: "Maison d’hôtes",
   BARE_PARCEL: "Parcelle nue",
   DEMARCATED_PARCEL: "Parcelle bornée",
   WALLED_PARCEL: "Parcelle clôturée",
@@ -35,6 +48,9 @@ export const propertySchema = z
     description: z.string().trim().min(20).max(8000),
     type: z.enum(propertyTypes),
     offer: z.enum(["SALE", "RENT"]),
+    furnishing: z.enum(["FURNISHED", "UNFURNISHED"]).nullable().default(null),
+    rentalDuration: z.enum(["SHORT", "LONG"]).nullable().default(null),
+    rentPricePeriod: z.enum(["NIGHT", "WEEK", "MONTH"]).default("MONTH"),
     priceXof: z.coerce.number().int().min(1).max(2147483647),
     surfaceM2: z.coerce.number().positive().max(99999999),
     bedrooms: count.default(0),
@@ -95,12 +111,6 @@ export const listingQuerySchema = z.object({
     ])
     .default(""),
 });
-export const publicQuerySchema = z.object({
+export const publicQuerySchema = catalogQueryFields.extend({
   page: z.coerce.number().int().min(1).max(1000).default(1),
-  offer: z.enum(["ALL", "SALE", "RENT"]).default("ALL"),
-  category: z.enum(["all", "villa", "parcelle", "bureau"]).default("all"),
-  location: z.string().trim().max(100).default(""),
-  maxPrice: z
-    .union([z.literal(""), z.coerce.number().int().min(0).max(2147483647)])
-    .default(""),
 });

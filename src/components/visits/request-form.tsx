@@ -7,9 +7,14 @@ import { formatVisitDate, validVisitDate } from "@/modules/visits/validation";
 export function VisitRequestForm({
   slug,
   demo = false,
+  availability,
 }: {
   slug: string;
   demo?: boolean;
+  availability?: {
+    mode: "request" | "scheduled" | "unavailable";
+    slots: string[];
+  };
 }) {
   const mutation = usePropertyMutation();
   const [sent, setSent] = useState("");
@@ -81,12 +86,39 @@ export function VisitRequestForm({
         <form onSubmit={submit}>
           <label className="property-field">
             Jour et heure souhaités
-            <input
-              name="desiredAt"
-              type="datetime-local"
-              required
-              aria-describedby={`visit-time-${slug}`}
-            />
+            {availability?.mode === "scheduled" ? (
+              <select name="desiredAt" required defaultValue="">
+                <option value="" disabled>
+                  Choisir un créneau disponible
+                </option>
+                {availability.slots.map((slot) => (
+                  <option value={slot.slice(0, 16)} key={slot}>
+                    {formatVisitDate(slot)}
+                  </option>
+                ))}
+              </select>
+            ) : (
+              <input
+                name="desiredAt"
+                type="datetime-local"
+                required
+                aria-describedby={`visit-time-${slug}`}
+                disabled={availability?.mode === "unavailable"}
+              />
+            )}
+            {availability?.mode === "scheduled" &&
+              !availability.slots.length && (
+                <p role="status">
+                  Aucun créneau n’est ouvert actuellement. Consultez cette fiche
+                  plus tard.
+                </p>
+              )}
+            {availability?.mode === "unavailable" && (
+              <p role="status">
+                Les disponibilités sont momentanément indisponibles. Rechargez
+                cette fiche avant de proposer une visite.
+              </p>
+            )}
           </label>
           <p id={`visit-time-${slug}`} className="visit-time-note">
             Heure du Burkina Faso (UTC). Entre 30 minutes et 90 jours à
@@ -111,7 +143,11 @@ export function VisitRequestForm({
           )}
           <button
             className="legacy-button gradient w-full"
-            disabled={mutation.busy}
+            disabled={
+              mutation.busy ||
+              availability?.mode === "unavailable" ||
+              (availability?.mode === "scheduled" && !availability.slots.length)
+            }
             type="submit"
           >
             {mutation.busy

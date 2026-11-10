@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { requirePageUser } from "@/lib/server/page-auth";
 import { PasswordForm } from "@/components/backoffice/password-form";
 import { roleLabels } from "@/modules/identity/validation";
@@ -36,6 +37,16 @@ export default async function AccountPage() {
             <dd>{user.company.name}</dd>
           </div>
         </dl>
+      </section>
+      <section className="property-panel">
+        <h2>Mes notifications</h2>
+        <p>
+          Consultez les réponses de l’équipe et choisissez si vous souhaitez
+          aussi les recevoir par email.
+        </p>
+        <Link href="/espace/notifications" className="text-link">
+          Gérer mes notifications
+        </Link>
       </section>
       <section className="property-panel">
         <h2>Changer mon mot de passe</h2>

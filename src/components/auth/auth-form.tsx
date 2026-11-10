@@ -140,6 +140,9 @@ export function LoginForm() {
         input={register("password")}
         error={errors.password?.message}
       />
+      <Link href="/mot-de-passe-oublie" className="text-link">
+        Mot de passe oublié ?
+      </Link>
       {message && (
         <p className="auth-message" role="alert">
           {message}

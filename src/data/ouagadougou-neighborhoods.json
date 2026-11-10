@@ -1,0 +1,673 @@
+{
+  "source": {
+    "url": "https://www.ceh.ac.uk/sites/default/files/2023-01/AMMA-2050-technical-support-6-Flood-Vulnerability-Index.pdf",
+    "sha256": "80f5464451efa386690356e5371f7a086bf9b3bb2e27287fd60ef6e93efce478",
+    "downloadedAt": "2026-11-10",
+    "bytes": 1173837,
+    "title": "AMMA-2050, Technical Report VI, tableau 7, p. 28",
+    "publishedAt": "2019-03",
+    "originalSource": "Commune de Ouagadougou, 2012",
+    "scope": "Quartiers traditionnels du tableau ; liste de recherche, pas référentiel administratif actuel exhaustif."
+  },
+  "neighborhoods": [
+    {
+      "name": "Balkuy",
+      "city": "Ouagadougou",
+      "arrondissements": [
+        11
+      ],
+      "aliases": [
+        "Balkui"
+      ]
+    },
+    {
+      "name": "Bangporé",
+      "city": "Ouagadougou",
+      "arrondissements": [
+        9
+      ],
+      "aliases": [
+        "Bangpooré"
+      ]
+    },
+    {
+      "name": "Baoghin",
+      "city": "Ouagadougou",
+      "arrondissements": [
+        2
+      ],
+      "aliases": []
+    },
+    {
+      "name": "Bassinko",
+      "city": "Ouagadougou",
+      "arrondissements": [
+        8
+      ],
+      "aliases": []
+    },
+    {
+      "name": "Bendogo",
+      "city": "Ouagadougou",
+      "arrondissements": [
+        10
+      ],
+      "aliases": []
+    },
+    {
+      "name": "Bilbalogho",
+      "city": "Ouagadougou",
+      "arrondissements": [
+        1
+      ],
+      "aliases": [
+        "Bilbalogo"
+      ]
+    },
+    {
+      "name": "Bissighin",
+      "city": "Ouagadougou",
+      "arrondissements": [
+        8
+      ],
+      "aliases": []
+    },
+    {
+      "name": "Boassa",
+      "city": "Ouagadougou",
+      "arrondissements": [
+        7
+      ],
+      "aliases": []
+    },
+    {
+      "name": "Camp Lamizana",
+      "city": "Ouagadougou",
+      "arrondissements": [
+        3
+      ],
+      "aliases": []
+    },
+    {
+      "name": "Cissin",
+      "city": "Ouagadougou",
+      "arrondissements": [
+        6
+      ],
+      "aliases": []
+    },
+    {
+      "name": "Dagnoen",
+      "city": "Ouagadougou",
+      "arrondissements": [
+        5
+      ],
+      "aliases": [
+        "Dagnoën"
+      ]
+    },
+    {
+      "name": "Dapoya 2",
+      "city": "Ouagadougou",
+      "arrondissements": [
+        2
+      ],
+      "aliases": []
+    },
+    {
+      "name": "Darsalam",
+      "city": "Ouagadougou",
+      "arrondissements": [
+        8
+      ],
+      "aliases": [
+        "Dar-es-Salam"
+      ]
+    },
+    {
+      "name": "Dassasgho",
+      "city": "Ouagadougou",
+      "arrondissements": [
+        10
+      ],
+      "aliases": [
+        "Dassasgo"
+      ]
+    },
+    {
+      "name": "Gandin",
+      "city": "Ouagadougou",
+      "arrondissements": [
+        1,
+        8
+      ],
+      "aliases": []
+    },
+    {
+      "name": "Goudri",
+      "city": "Ouagadougou",
+      "arrondissements": [
+        10
+      ],
+      "aliases": []
+    },
+    {
+      "name": "Gounghin Nord",
+      "city": "Ouagadougou",
+      "arrondissements": [
+        2
+      ],
+      "aliases": []
+    },
+    {
+      "name": "Gounghin Sud",
+      "city": "Ouagadougou",
+      "arrondissements": [
+        1
+      ],
+      "aliases": []
+    },
+    {
+      "name": "Hamdalaye",
+      "city": "Ouagadougou",
+      "arrondissements": [
+        2
+      ],
+      "aliases": []
+    },
+    {
+      "name": "Kalghondin",
+      "city": "Ouagadougou",
+      "arrondissements": [
+        5
+      ],
+      "aliases": [
+        "Kalgondin"
+      ]
+    },
+    {
+      "name": "Kamsonghin",
+      "city": "Ouagadougou",
+      "arrondissements": [
+        1
+      ],
+      "aliases": []
+    },
+    {
+      "name": "Kankamsin",
+      "city": "Ouagadougou",
+      "arrondissements": [
+        7
+      ],
+      "aliases": [
+        "Kankasin"
+      ]
+    },
+    {
+      "name": "Karpala",
+      "city": "Ouagadougou",
+      "arrondissements": [
+        11
+      ],
+      "aliases": []
+    },
+    {
+      "name": "Kienbaoghin",
+      "city": "Ouagadougou",
+      "arrondissements": [
+        3
+      ],
+      "aliases": []
+    },
+    {
+      "name": "Kilwin",
+      "city": "Ouagadougou",
+      "arrondissements": [
+        3
+      ],
+      "aliases": []
+    },
+    {
+      "name": "Kologh-Naba",
+      "city": "Ouagadougou",
+      "arrondissements": [
+        2
+      ],
+      "aliases": []
+    },
+    {
+      "name": "Kossodo",
+      "city": "Ouagadougou",
+      "arrondissements": [
+        10
+      ],
+      "aliases": []
+    },
+    {
+      "name": "Koulouba",
+      "city": "Ouagadougou",
+      "arrondissements": [
+        1
+      ],
+      "aliases": []
+    },
+    {
+      "name": "Koumda yonré",
+      "city": "Ouagadougou",
+      "arrondissements": [
+        8
+      ],
+      "aliases": []
+    },
+    {
+      "name": "Kouritenga",
+      "city": "Ouagadougou",
+      "arrondissements": [
+        1,
+        6
+      ],
+      "aliases": []
+    },
+    {
+      "name": "Lanoayiri",
+      "city": "Ouagadougou",
+      "arrondissements": [
+        11
+      ],
+      "aliases": []
+    },
+    {
+      "name": "Larlé",
+      "city": "Ouagadougou",
+      "arrondissements": [
+        2
+      ],
+      "aliases": []
+    },
+    {
+      "name": "Larlé Weogo",
+      "city": "Ouagadougou",
+      "arrondissements": [
+        9
+      ],
+      "aliases": []
+    },
+    {
+      "name": "Mankougdougou",
+      "city": "Ouagadougou",
+      "arrondissements": [
+        1
+      ],
+      "aliases": [
+        "Mankougoudou"
+      ]
+    },
+    {
+      "name": "Marcoussis",
+      "city": "Ouagadougou",
+      "arrondissements": [
+        9
+      ],
+      "aliases": []
+    },
+    {
+      "name": "Nagrin",
+      "city": "Ouagadougou",
+      "arrondissements": [
+        7
+      ],
+      "aliases": [
+        "Nangrin"
+      ]
+    },
+    {
+      "name": "Napougo",
+      "city": "Ouagadougou",
+      "arrondissements": [
+        3
+      ],
+      "aliases": [
+        "Naababpougo"
+      ]
+    },
+    {
+      "name": "Nemnin",
+      "city": "Ouagadougou",
+      "arrondissements": [
+        2
+      ],
+      "aliases": []
+    },
+    {
+      "name": "Niogsin",
+      "city": "Ouagadougou",
+      "arrondissements": [
+        2
+      ],
+      "aliases": []
+    },
+    {
+      "name": "Nioko 1",
+      "city": "Ouagadougou",
+      "arrondissements": [
+        10
+      ],
+      "aliases": []
+    },
+    {
+      "name": "Nioko 2",
+      "city": "Ouagadougou",
+      "arrondissements": [
+        4
+      ],
+      "aliases": []
+    },
+    {
+      "name": "Nonsin",
+      "city": "Ouagadougou",
+      "arrondissements": [
+        3
+      ],
+      "aliases": []
+    },
+    {
+      "name": "Ouaga 2000",
+      "city": "Ouagadougou",
+      "arrondissements": [
+        12
+      ],
+      "aliases": [
+        "Ouaga2000"
+      ]
+    },
+    {
+      "name": "Ouidi",
+      "city": "Ouagadougou",
+      "arrondissements": [
+        2
+      ],
+      "aliases": []
+    },
+    {
+      "name": "Paspanga",
+      "city": "Ouagadougou",
+      "arrondissements": [
+        2
+      ],
+      "aliases": []
+    },
+    {
+      "name": "Patte d’Oie",
+      "city": "Ouagadougou",
+      "arrondissements": [
+        12
+      ],
+      "aliases": []
+    },
+    {
+      "name": "Pissy",
+      "city": "Ouagadougou",
+      "arrondissements": [
+        6
+      ],
+      "aliases": []
+    },
+    {
+      "name": "Rayongo",
+      "city": "Ouagadougou",
+      "arrondissements": [
+        11
+      ],
+      "aliases": [
+        "Dayongo"
+      ]
+    },
+    {
+      "name": "Rimkèta",
+      "city": "Ouagadougou",
+      "arrondissements": [
+        3
+      ],
+      "aliases": [
+        "Rimkiéta",
+        "Rimkieta"
+      ]
+    },
+    {
+      "name": "Ronsin",
+      "city": "Ouagadougou",
+      "arrondissements": [
+        5
+      ],
+      "aliases": []
+    },
+    {
+      "name": "Sabin barrage",
+      "city": "Ouagadougou",
+      "arrondissements": [
+        4
+      ],
+      "aliases": [
+        "Sambin barrage"
+      ]
+    },
+    {
+      "name": "Saint Léon",
+      "city": "Ouagadougou",
+      "arrondissements": [
+        1
+      ],
+      "aliases": []
+    },
+    {
+      "name": "Samandin",
+      "city": "Ouagadougou",
+      "arrondissements": [
+        1
+      ],
+      "aliases": []
+    },
+    {
+      "name": "Sandogo",
+      "city": "Ouagadougou",
+      "arrondissements": [
+        7
+      ],
+      "aliases": []
+    },
+    {
+      "name": "Silmiougou",
+      "city": "Ouagadougou",
+      "arrondissements": [
+        8
+      ],
+      "aliases": []
+    },
+    {
+      "name": "Silmiyiri",
+      "city": "Ouagadougou",
+      "arrondissements": [
+        9
+      ],
+      "aliases": []
+    },
+    {
+      "name": "Sogpelcé",
+      "city": "Ouagadougou",
+      "arrondissements": [
+        3
+      ],
+      "aliases": []
+    },
+    {
+      "name": "Somgandé",
+      "city": "Ouagadougou",
+      "arrondissements": [
+        4
+      ],
+      "aliases": []
+    },
+    {
+      "name": "Taabtenga",
+      "city": "Ouagadougou",
+      "arrondissements": [
+        10
+      ],
+      "aliases": []
+    },
+    {
+      "name": "Tampouy",
+      "city": "Ouagadougou",
+      "arrondissements": [
+        3
+      ],
+      "aliases": []
+    },
+    {
+      "name": "Tanghin",
+      "city": "Ouagadougou",
+      "arrondissements": [
+        4
+      ],
+      "aliases": []
+    },
+    {
+      "name": "Tiédpalogo",
+      "city": "Ouagadougou",
+      "arrondissements": [
+        1
+      ],
+      "aliases": []
+    },
+    {
+      "name": "Toukin",
+      "city": "Ouagadougou",
+      "arrondissements": [
+        4
+      ],
+      "aliases": []
+    },
+    {
+      "name": "Trame d’accueil de Ouaga 2000",
+      "city": "Ouagadougou",
+      "arrondissements": [
+        12
+      ],
+      "aliases": []
+    },
+    {
+      "name": "Wapassi",
+      "city": "Ouagadougou",
+      "arrondissements": [
+        9
+      ],
+      "aliases": [
+        "Ouapassi"
+      ]
+    },
+    {
+      "name": "Wayalghin",
+      "city": "Ouagadougou",
+      "arrondissements": [
+        10
+      ],
+      "aliases": []
+    },
+    {
+      "name": "Wemtenga",
+      "city": "Ouagadougou",
+      "arrondissements": [
+        5
+      ],
+      "aliases": []
+    },
+    {
+      "name": "Wiitenga",
+      "city": "Ouagadougou",
+      "arrondissements": [
+        11
+      ],
+      "aliases": [
+        "Ouidtenga"
+      ]
+    },
+    {
+      "name": "Wobrigré",
+      "city": "Ouagadougou",
+      "arrondissements": [
+        9
+      ],
+      "aliases": [
+        "Wob Riguéré"
+      ]
+    },
+    {
+      "name": "Yamtenga",
+      "city": "Ouagadougou",
+      "arrondissements": [
+        11
+      ],
+      "aliases": []
+    },
+    {
+      "name": "Yaoghin",
+      "city": "Ouagadougou",
+      "arrondissements": [
+        7
+      ],
+      "aliases": []
+    },
+    {
+      "name": "Zagtouli",
+      "city": "Ouagadougou",
+      "arrondissements": [
+        8
+      ],
+      "aliases": [
+        "Zaghtouli"
+      ]
+    },
+    {
+      "name": "Zangouétin",
+      "city": "Ouagadougou",
+      "arrondissements": [
+        1
+      ],
+      "aliases": [
+        "Zangouettin"
+      ]
+    },
+    {
+      "name": "Zogona",
+      "city": "Ouagadougou",
+      "arrondissements": [
+        5
+      ],
+      "aliases": []
+    },
+    {
+      "name": "Zone industrielle",
+      "city": "Ouagadougou",
+      "arrondissements": [
+        4
+      ],
+      "aliases": []
+    },
+    {
+      "name": "Zongo",
+      "city": "Ouagadougou",
+      "arrondissements": [
+        3
+      ],
+      "aliases": []
+    },
+    {
+      "name": "Zongo Nabitenga",
+      "city": "Ouagadougou",
+      "arrondissements": [
+        8
+      ],
+      "aliases": []
+    }
+  ]
+}

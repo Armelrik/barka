@@ -82,7 +82,7 @@ export default function ContactPage() {
             <details>
               <summary>Les biens présentés sont-ils disponibles ?</summary>
               <p>
-                Les annonces portant la mention « Exemple fictif » illustrent le
+                Les annonces portant la mention « Bien de présentation » illustrent le
                 fonctionnement du site. Leurs photos, prix et localisations ne
                 constituent pas des offres réelles.
               </p>
@@ -91,7 +91,7 @@ export default function ContactPage() {
               <summary>Comment fonctionne une demande de visite ?</summary>
               <p>
                 Une demande sur un bien réel est transmise à l’équipe, qui doit
-                la confirmer. Sur les exemples fictifs, le formulaire simule
+                la confirmer. Sur les biens de présentation, le formulaire simule
                 uniquement cette étape.
               </p>
             </details>

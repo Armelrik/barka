@@ -91,8 +91,8 @@ export default async function PropertyPage({
               </div>
             </section>
             <p className="detail-demo">
-              EXEMPLE FICTIF · {p.reference} · Illustration reprise du projet
-              Afriloc.
+              BIEN DE PRÉSENTATION · {p.reference} · Illustration reprise du
+              projet Afriloc.
             </p>
           </section>
           <aside className="detail-panel">

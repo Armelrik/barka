@@ -87,7 +87,7 @@ export const loginSchema = z
   .strict();
 export const consentVersions = {
   TERMS: "2026-11-10-v1",
-  PRIVACY: "2026-11-10-v1",
+  PRIVACY: "2026-11-10-v2",
 } as const;
 export const roleLabels = {
   SUPER_ADMIN: "Super administrateur",

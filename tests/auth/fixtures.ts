@@ -137,6 +137,12 @@ export const test = base.extend<{ accounts: Fixture }>({
           select: { id: true, objectKey: true },
         })
       : [];
+    const creatives = testIds.length
+      ? await db.adCreative.findMany({
+          where: { ownerId: { in: testIds } },
+          select: { objectKey: true },
+        })
+      : [];
     if (testIds.length)
       await db.$transaction(async (tx) => {
         await tx.auditLog.deleteMany({
@@ -243,9 +249,16 @@ export const test = base.extend<{ accounts: Fixture }>({
         await tx.mediaAsset.deleteMany({
           where: { id: { in: ownedAssets.map((a) => a.id) } },
         });
+        await tx.notification.deleteMany({
+          where: { userId: { in: testIds } },
+        });
+        await tx.advertisement.deleteMany({
+          where: { ownerId: { in: testIds } },
+        });
+        await tx.adCreative.deleteMany({ where: { ownerId: { in: testIds } } });
         await tx.user.deleteMany({ where: { id: { in: testIds } } });
       });
-    for (const asset of ownedAssets)
+    for (const asset of [...ownedAssets, ...creatives])
       if (/^local\/[a-f0-9-]+\.(jpg|glb)$/.test(asset.objectKey))
         await unlink(
           resolve(

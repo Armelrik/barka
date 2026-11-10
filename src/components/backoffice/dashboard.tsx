@@ -94,7 +94,7 @@ export async function BackofficeDashboard({
                     <strong>{l.property.title}</strong>
                     <small>
                       {l.property.reference}
-                      {l.isDemo ? " · Exemple fictif" : ""} ·{" "}
+                      {l.isDemo ? " · Bien de présentation" : ""} ·{" "}
                       {l.property.agent
                         ? `${l.property.agent.firstName} ${l.property.agent.lastName}`
                         : "À attribuer"}
@@ -160,6 +160,16 @@ export async function BackofficeDashboard({
           </p>
         )}
       </section>
+      {user.role.code === "SUPER_ADMIN" && (
+        <div className="backoffice-actions">
+          <Link className="team-secondary-button" href="/espace/publicites">
+            Gérer les publicités
+          </Link>
+          <Link className="team-secondary-button" href="/espace/statistiques">
+            Audience et exports
+          </Link>
+        </div>
+      )}
       {admin && (
         <div className="backoffice-actions mt-6">
           <Link className="team-secondary-button" href="/espace/activite">

@@ -3,6 +3,7 @@ import { databaseCatalogEnabled } from "@/modules/listings/service";
 export const dynamic = "force-dynamic";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
+import { catalogQueryFields } from "@/modules/catalog/query";
 import { Catalog } from "@/components/catalog";
 export const metadata = { title: "Toutes les Propriétés | BARKA SARL" };
 export default async function PropertiesPage({
@@ -17,7 +18,10 @@ export default async function PropertiesPage({
         {databaseCatalogEnabled() ? (
           <DatabaseCatalog query={await searchParams} />
         ) : (
-          <Catalog listingPage />
+          <Catalog
+            listingPage
+            initialQuery={catalogQueryFields.parse(await searchParams)}
+          />
         )}
       </main>
       <SiteFooter />

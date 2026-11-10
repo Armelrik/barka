@@ -49,6 +49,12 @@ enum LocationKind {
 }
 
 enum PropertyType {
+  APARTMENT
+  TOWNHOUSE
+  SHOP
+  WAREHOUSE
+  RETAIL_SPACE
+  GUEST_HOUSE
   BARE_PARCEL
   DEMARCATED_PARCEL
   WALLED_PARCEL
@@ -141,6 +147,7 @@ enum LegalAction {
 }
 
 enum Channel {
+  IN_APP
   EMAIL
   SMS
   WHATSAPP
@@ -246,6 +253,14 @@ model User {
   media                MediaAsset[]
   listings             Listing[]
   validations          ListingValidation[]
+  passwordResets       PasswordReset[]
+  availabilitySlots    AvailabilitySlot[]
+  mailDeliveries       MailDelivery[]
+  availabilityEnabled  Boolean              @default(false)
+  emailNotifications   Boolean              @default(true)
+  adCampaigns          Advertisement[]
+  adCreatives          AdCreative[]
+  savedSearches        SavedSearch[]
   favorites            Favorite[]
   bookings             Booking[]
   visits               VisitRequest[]
@@ -328,7 +343,26 @@ model Location {
   @@index([countryId, kind, parentId])
 }
 
+enum FurnishingStatus {
+  FURNISHED
+  UNFURNISHED
+}
+
+enum RentalDuration {
+  SHORT
+  LONG
+}
+
+enum RentPricePeriod {
+  NIGHT
+  WEEK
+  MONTH
+}
+
 model Property {
+  furnishing           FurnishingStatus?
+  rentalDuration       RentalDuration?
+  rentPricePeriod      RentPricePeriod     @default(MONTH)
   id                   String              @id @default(cuid())
   reference            String              @unique
   title                String
@@ -385,6 +419,7 @@ model Property {
   @@index([companyId, type, locationId])
   @@index([agentId])
   @@index([locationId, surfaceM2, bedrooms])
+  @@index([furnishing, rentalDuration])
 }
 
 model PropertyOwnership {
@@ -770,6 +805,11 @@ model Commission {
 }
 
 model Notification {
+  title     String    @default("")
+  body      String    @default("")
+  href      String    @default("/espace/visites")
+  readAt    DateTime?
+  dedupeKey String?   @unique
   id        String    @id @default(cuid())
   userId    String
   user      User      @relation(fields: [userId], references: [id])
@@ -785,18 +825,58 @@ model Notification {
   @@index([userId, createdAt])
 }
 
+model AdCreative {
+  id        String          @id @default(cuid())
+  ownerId   String
+  owner     User            @relation(fields: [ownerId], references: [id])
+  objectKey String          @unique
+  sizeBytes Int
+  width     Int
+  height    Int
+  ads       Advertisement[]
+  createdAt DateTime        @default(now())
+}
+
+model AudienceEvent {
+  id          String         @id @default(cuid())
+  dedupeKey   String         @unique @db.Char(64)
+  sessionHash String         @db.Char(64)
+  viewId      String
+  kind        String
+  path        String
+  device      String
+  campaignId  String?
+  campaign    Advertisement? @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  placement   String?
+  createdAt   DateTime       @default(now())
+
+  @@index([createdAt, kind])
+  @@index([campaignId, kind, createdAt])
+}
+
 model Advertisement {
-  id        String   @id @default(cuid())
-  companyId String
-  company   Company  @relation(fields: [companyId], references: [id])
-  title     String
-  placement String
-  targetUrl String?
-  startsAt  DateTime
-  endsAt    DateTime
-  active    Boolean  @default(false)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  ownerId      String?
+  owner        User?           @relation(fields: [ownerId], references: [id])
+  description  String          @default("")
+  sponsorName  String          @default("BARKA")
+  campaignKind String          @default("HOUSE")
+  imagePath    String          @default("/afriloc/ad-banner.jpg")
+  creativeId   String?
+  creative     AdCreative?     @relation(fields: [creativeId], references: [id])
+  cta          String          @default("Découvrir")
+  priority     Int             @default(0)
+  events       AudienceEvent[]
+  id           String          @id @default(cuid())
+  companyId    String
+  company      Company         @relation(fields: [companyId], references: [id])
+  title        String
+  placement    String
+  targetUrl    String?
+  startsAt     DateTime
+  endsAt       DateTime
+  active       Boolean         @default(false)
+  createdAt    DateTime        @default(now())
+  updatedAt    DateTime        @updatedAt
 
   @@index([companyId, active, startsAt, endsAt])
 }
@@ -860,4 +940,58 @@ model AuthRateLimit {
   windowStart DateTime @default(now())
 
   @@index([windowStart])
+}
+
+model PasswordReset {
+  id              String    @id @default(cuid())
+  userId          String
+  user            User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tokenHash       String    @unique @db.Char(64)
+  email           String
+  passwordVersion String    @db.Char(64)
+  expiresAt       DateTime
+  consumedAt      DateTime?
+  createdAt       DateTime  @default(now())
+
+  @@index([userId, expiresAt])
+}
+
+model AvailabilitySlot {
+  id        String   @id @default(cuid())
+  agentId   String
+  agent     User     @relation(fields: [agentId], references: [id], onDelete: Cascade)
+  startsAt  DateTime
+  endsAt    DateTime
+  createdAt DateTime @default(now())
+
+  @@index([agentId, startsAt, endsAt])
+}
+
+model MailDelivery {
+  id         String    @id @default(cuid())
+  key        String    @unique
+  userId     String
+  user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  payload    String
+  status     JobStatus @default(PENDING)
+  attempts   Int       @default(0)
+  nextRunAt  DateTime  @default(now())
+  lockedAt   DateTime?
+  providerId String?
+  expiresAt  DateTime
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+
+  @@index([status, nextRunAt])
+}
+
+model SavedSearch {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name      String
+  filters   Json
+  createdAt DateTime @default(now())
+
+  @@unique([userId, name])
 }

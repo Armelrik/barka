@@ -4,7 +4,7 @@
 
 `/inscription` crée uniquement un compte CLIENT : nom/prénom, téléphone normalisé, email facultatif, mot de passe d’au moins 12 caractères et acceptation des versions des conditions/confidentialité. Le client est rattaché au commercial d’accueil de BARKA. Aucun rôle, société ou parent fourni par le navigateur ne peut changer ce rattachement. L’ouverture des inscriptions et le réglage de validation des textes ont été autorisés par l’utilisateur le 10 novembre 2026.
 
-`/connexion` accepte téléphone ou email, crée une session révocable de huit heures et ouvre `/espace`. `/admin` redirige les professionnels autorisés vers ce back-office ; un client ne peut pas y accéder. Pas d’authentification SMS/email ni de récupération autonome de mot de passe revendiquée : ces prestataires restent à intégrer.
+`/connexion` accepte téléphone ou email, crée une session révocable de huit heures et ouvre `/espace`. `/admin` redirige les professionnels autorisés vers ce back-office ; un client ne peut pas y accéder. La récupération de mot de passe par email est préparée pour Resend et attend sa configuration. La vérification SMS/email reste à intégrer.
 
 `/espace/compte` affiche le profil et permet de changer son mot de passe après vérification du mot de passe actuel. Toutes les sessions sont révoquées, cookie compris ; une nouvelle connexion est demandée. Depuis une fiche d’équipe, un responsable peut réinitialiser le mot de passe d’un membre inférieur de son périmètre, avec contrôle de version, audit et révocation des sessions. Les réinitialisations ne permettent ni auto-modification via la route d’équipe, ni modification d’un pair/supérieur ou d’un utilisateur d’une autre société. Aucun mot de passe n’est renvoyé ni journalisé ; sa transmission au membre est manuelle et privée.
 
@@ -34,6 +34,8 @@ L’import `npm run db:showcase` est une opération explicite réservée à l’
 
 ## Limites actuelles
 
-Pas de réservation/encaissement, de SMS/email automatique, de récupération autonome de mot de passe ni d’export financier. Les exemples du catalogue ne sont pas des offres réelles. Les validations juridiques et d’identité restent des actes humains ; les comptes fictifs sont conservés selon la demande de l’utilisateur.
+Pas de réservation/encaissement, de SMS ni d’export financier. L’envoi email et la récupération par email nécessitent encore la configuration Resend ; les notifications internes sont actives. Les exemples du catalogue ne sont pas des offres réelles. Les validations juridiques et d’identité restent des actes humains ; les comptes fictifs sont conservés selon la demande de l’utilisateur.
 
 Référence du proxy : [en-têtes de requête Vercel](https://vercel.com/docs/headers/request-headers#x-vercel-forwarded-for).
+
+Nouveaux parcours personnels : [récupération, notifications, favoris, recherches et agenda](account-services.md). L’expédition Resend nécessite encore ses identifiants et un domaine validé.

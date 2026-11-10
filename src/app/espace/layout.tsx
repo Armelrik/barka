@@ -13,6 +13,7 @@ import {
   LayoutDashboard,
   ArrowUpRight,
 } from "lucide-react";
+import { getDb } from "@/lib/server/db";
 import { requirePageUser } from "@/lib/server/page-auth";
 import { principalFor } from "@/lib/server/session";
 import { roleLabels } from "@/modules/identity/validation";
@@ -34,6 +35,12 @@ export default async function WorkspaceLayout({
   children: React.ReactNode;
 }) {
   const user = await requirePageUser();
+  const unread = await getDb().notification.count({
+    where: { userId: user.id, channel: "IN_APP", readAt: null },
+  });
+  const notificationLabel = unread
+    ? `Notifications (${unread})`
+    : "Notifications";
   if (user.role.code === "CLIENT")
     return (
       <>
@@ -56,6 +63,9 @@ export default async function WorkspaceLayout({
                 <CalendarDays size={18} />
                 Mes visites
               </Link>
+              <Link href="/espace/favoris">Mes favoris</Link>
+              <Link href="/espace/recherches">Mes recherches</Link>
+              <Link href="/espace/notifications">{notificationLabel}</Link>
               <Link href="/espace/compte">Mon compte et sécurité</Link>
               <LogoutButton />
             </nav>
@@ -132,10 +142,48 @@ export default async function WorkspaceLayout({
                     ]
                   : []),
                 {
+                  href: "/espace/favoris",
+                  label: "Mes favoris",
+                  icon: "house",
+                },
+                {
+                  href: "/espace/recherches",
+                  label: "Mes recherches",
+                  icon: "house",
+                },
+                {
+                  href: "/espace/notifications",
+                  label: notificationLabel,
+                  icon: "activity",
+                },
+                ...(principalFor(user).permissions.includes("properties.manage")
+                  ? [
+                      {
+                        href: "/espace/disponibilites",
+                        label: "Agenda des disponibilités",
+                        icon: "calendar",
+                      },
+                    ]
+                  : []),
+                {
                   href: "/espace/compte",
                   label: "Mon compte et sécurité",
                   icon: "account",
                 },
+                ...(user.role.code === "SUPER_ADMIN"
+                  ? [
+                      {
+                        href: "/espace/publicites",
+                        label: "Publicités",
+                        icon: "house",
+                      },
+                      {
+                        href: "/espace/statistiques",
+                        label: "Audience et statistiques",
+                        icon: "activity",
+                      },
+                    ]
+                  : []),
                 ...(principalFor(user).permissions.includes("settings.manage")
                   ? [
                       {

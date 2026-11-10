@@ -1461,3 +1461,257 @@
     justify-content: center;
   }
 }
+
+.account-favorite {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 9px 12px;
+  border: 1px solid #dce4eb;
+  border-radius: 9px;
+  margin: 10px 0;
+  font-size: 13px;
+  font-weight: 600;
+  color: #526276;
+  background: white;
+}
+.account-favorite[aria-pressed="true"] {
+  color: #c84b06;
+  border-color: #fdba74;
+  background: #fff7ed;
+}
+.account-favorite:focus-visible {
+  outline: 3px solid #14b8a6;
+  outline-offset: 3px;
+}
+.notification-list {
+  display: grid;
+  gap: 16px;
+}
+.notification-list article {
+  margin: 0;
+}
+.notification-list time {
+  font-size: 12px;
+  color: #526276;
+}
+.notification-list .text-link {
+  display: inline-block;
+  margin: 12px 20px 0 0;
+}
+.notification-unread {
+  border-left: 4px solid #f97316;
+}
+.notification-preference {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 16px 0;
+}
+.notification-preference input {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+.availability-list {
+  padding: 0;
+  list-style: none;
+}
+.availability-list li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 14px;
+  padding: 16px 0;
+  border-bottom: 1px solid #dce4eb;
+  font-size: 14px;
+}
+.account-notice {
+  background: #f4f7fa;
+  padding: 20px;
+  border-radius: 12px;
+  line-height: 1.8;
+}
+
+.ad-admin-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+  gap: 24px;
+  align-items: start;
+}
+.ad-admin-grid > * {
+  min-width: 0;
+}
+.ad-admin-preview {
+  width: 100%;
+  height: auto;
+  max-height: 300px;
+  object-fit: cover;
+  border-radius: 12px;
+  margin: 16px 0;
+}
+.ad-campaign-list {
+  display: grid;
+  gap: 0;
+}
+.ad-campaign-list article {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  padding: 18px 0;
+  border-top: 1px solid #e2e8f0;
+}
+.ad-campaign-list h3 {
+  font-weight: 700;
+  font-size: 17px;
+}
+.ad-campaign-list p,
+.ad-campaign-list small {
+  color: #526276;
+  font-size: 13px;
+}
+.audience-range {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+.audience-range label {
+  min-width: 160px;
+}
+.audience-metrics {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  margin: 24px 0;
+}
+.audience-metrics .property-panel {
+  margin: 0;
+  padding: 22px;
+}
+.audience-metrics span {
+  display: block;
+  font-size: 13px;
+  color: #526276;
+}
+.audience-metrics strong {
+  display: block;
+  font-size: 34px;
+  margin-top: 12px;
+  color: #0f172a;
+}
+.audience-table {
+  max-width: 100%;
+  overflow-x: auto;
+}
+.audience-table table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+.audience-table th,
+.audience-table td {
+  padding: 13px;
+  text-align: left;
+  border-bottom: 1px solid #dce4eb;
+}
+.audience-table th {
+  white-space: nowrap;
+  background: #f8fafc;
+}
+.audience-table td small {
+  display: block;
+  color: #64748b;
+  font-size: 11px;
+}
+.audience-definitions p {
+  font-size: 14px;
+  line-height: 1.8;
+  color: #526276;
+}
+.audience-chart {
+  display: flex;
+  gap: 5px;
+  height: 200px;
+  margin-top: 20px;
+}
+.audience-chart > div {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+}
+.audience-chart > div > div {
+  width: 100%;
+  height: 170px;
+  display: flex;
+  gap: 3px;
+  align-items: flex-end;
+  border-bottom: 1px solid #dce4eb;
+}
+.audience-chart span {
+  width: 50%;
+  background: #f97316;
+  border-radius: 4px 4px 0 0;
+}
+.audience-chart span + span {
+  background: #14b8a6;
+}
+.audience-chart small {
+  font-size: 10px;
+  padding-top: 7px;
+  color: #64748b;
+}
+@media (max-width: 1100px) {
+  .ad-admin-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .audience-metrics {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 640px) {
+  .audience-metrics {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .audience-range label {
+    width: 100%;
+  }
+  .ad-campaign-list button {
+    text-align: left;
+  }
+}
+@media print {
+  .workspace-sidebar,
+  .workspace-header,
+  .skip-link,
+  .scroll-to-top,
+  .report-controls {
+    display: none !important;
+  }
+  .workspace {
+    display: block !important;
+  }
+  .workspace-main {
+    padding: 0 !important;
+  }
+  .audience-report {
+    color: #000;
+  }
+  .audience-report .property-panel {
+    box-shadow: none;
+    break-inside: avoid;
+  }
+  .audience-table {
+    overflow: visible;
+  }
+  .audience-table table {
+    font-size: 10px;
+  }
+}

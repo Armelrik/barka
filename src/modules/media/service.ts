@@ -84,7 +84,10 @@ export async function readUpload(request: Request) {
     .parse(form.get("alt") ?? "");
   return { file, kind, alt };
 }
-async function processFile(file: File, kind: z.infer<typeof uploadKind>) {
+export async function processFile(
+  file: File,
+  kind: z.infer<typeof uploadKind>,
+) {
   const input = Buffer.from(await file.arrayBuffer());
   if (!input.length || input.length > 32 * 1024 * 1024)
     throw new AppError(

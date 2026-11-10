@@ -1,3 +1,4 @@
+import { PrivacyPreference } from "@/components/audience/privacy-preference";
 import Link from "next/link";
 import { SiteHeader } from "@/components/site-header";
 import { consentVersions } from "@/modules/identity/validation";
@@ -36,6 +37,21 @@ export default function PrivacyPage() {
           ; sur un autre hébergement, la confiance au proxy doit être
           configurée. Les compteurs n’enregistrent pas le mot de passe.
         </p>
+        <h2>Audience et publicités</h2>
+        <p>
+          Vercel Web Analytics et les compteurs Barka mesurent les pages
+          publiques, les sessions de navigation estimées et les interactions
+          publicitaires. Les pages du compte, les paramètres d’URL et les jetons
+          de récupération sont exclus de ces mesures. Barka utilise un
+          identifiant aléatoire dans le stockage de session du navigateur,
+          renouvelé après trente minutes d’inactivité et pseudonymisé
+          quotidiennement côté serveur. Aucun email, téléphone, mot de passe ou
+          adresse IP brute n’est inclus dans les rapports publicitaires. Les
+          connexions réussies sont comptées séparément à partir du journal de
+          sécurité. Les exports destinés aux annonceurs contiennent des totaux,
+          pas la liste des utilisateurs.
+        </p>
+        <PrivacyPreference />
         <h2>Documents et conservation</h2>
         <p>
           La création d’un compte client ne demande pas de pièce d’identité. Les

@@ -36,7 +36,10 @@
     "test:hosted-media": "node --conditions=react-server --import tsx scripts/verify-hosted-media.ts",
     "db:retire-demo": "tsx scripts/retire-demo-accounts.ts",
     "storage:check": "node --conditions=react-server --import tsx scripts/check-storage.ts",
-    "db:showcase": "node --conditions=react-server --import tsx scripts/seed-showcase.ts"
+    "db:showcase": "node --conditions=react-server --import tsx scripts/seed-showcase.ts",
+    "mail:process": "node --conditions=react-server --import tsx scripts/process-mail.mjs",
+    "db:neighborhoods": "node --conditions=react-server --import tsx scripts/import-neighborhoods.ts",
+    "db:house-ads": "node --conditions=react-server --import tsx scripts/seed-house-ads.ts"
   },
   "license": "UNLICENSED",
   "type": "module",
@@ -46,6 +49,7 @@
     "@prisma/adapter-pg": "7.10.1",
     "@prisma/client": "7.10.1",
     "@radix-ui/react-slot": "^1.5.0",
+    "@vercel/analytics": "2.0.1",
     "bcryptjs": "^3.0.3",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",

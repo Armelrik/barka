@@ -4,7 +4,7 @@ test("accueil français, recherche et fiche, sans débordement mobile", async ({
 }, testInfo) => {
   await page.goto("/");
   await expect(page.getByRole("heading", { level: 1 })).toContainText(
-    "Trouvez la Maison de Vos Rêves à Ouagadougou",
+    "Trouvez la Maison de Vos Rêves.",
   );
   await page.evaluate(() => document.fonts.ready);
   const fonts = await page.evaluate(() => ({
@@ -36,7 +36,7 @@ test("accueil français, recherche et fiche, sans débordement mobile", async ({
   });
   await page.goto("/biens");
   await page.getByLabel("Votre projet").selectOption("RENT");
-  await page.getByLabel("Localisation").fill("Zone du Bois");
+  await page.getByLabel("Quartier", { exact: true }).fill("Zone du Bois");
   await page.getByRole("button", { name: "Rechercher" }).click();
   await expect(page.locator("article")).toHaveCount(1);
   await page

@@ -1,3 +1,5 @@
+import { AdSlot } from "@/components/advertising/ad-slot";
+import { publicAds } from "@/modules/advertising/service";
 import { DatabaseCatalog } from "@/components/database-catalog";
 import { databaseCatalogEnabled } from "@/modules/listings/service";
 export const dynamic = "force-dynamic";
@@ -5,12 +7,21 @@ import Link from "next/link";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { Catalog } from "@/components/catalog";
-export default function Home() {
+export default async function Home() {
+  const campaigns = databaseCatalogEnabled()
+    ? await publicAds().catch(() => [])
+    : [];
+  const slot = (placement: "HERO" | "AFTER_HERO" | "BEFORE_FOOTER") => (
+    <AdSlot
+      ads={campaigns.filter((a) => a.placement === placement)}
+      placement={placement}
+    />
+  );
   return (
     <div>
       <SiteHeader />
       <main id="contenu">
-        <section className="relative min-h-screen sm:h-screen flex items-center justify-center overflow-hidden pt-20 sm:pt-0">
+        <section className="home-hero relative min-h-screen flex items-center justify-center overflow-hidden">
           <div
             className="absolute inset-0 bg-cover bg-center"
             style={{ backgroundImage: "url(/afriloc/ouaga-hero.jpg)" }}
@@ -18,10 +29,10 @@ export default function Home() {
             <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/60 to-black/40 sm:from-black/70 sm:via-black/50 sm:to-transparent"></div>
           </div>
 
-          <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 md:py-20 pb-72 sm:pb-48 md:pb-52">
-            <div className="max-w-4xl">
+          <div className="hero-main relative z-10 container mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="hero-intro">
               <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-white mb-4 sm:mb-6 animate-fade-in leading-tight">
-                Trouvez la Maison de Vos Rêves à Ouagadougou
+                Trouvez la Maison de Vos Rêves.
               </h1>
 
               <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-white/90 mb-6 sm:mb-8 animate-fade-in max-w-2xl">
@@ -57,6 +68,7 @@ export default function Home() {
                 </Link>
               </div>
             </div>
+            <div className="hero-advertising">{slot("HERO")}</div>
           </div>
 
           <div className="hero-stats absolute bottom-0 left-0 right-0 z-10 pb-4 sm:pb-6 md:pb-8">
@@ -156,23 +168,9 @@ export default function Home() {
               </div>
             </div>
           </div>
-
-          <div className="hidden md:block absolute bottom-24 left-1/2 transform -translate-x-1/2 z-10 animate-bounce">
-            <svg
-              className="w-6 h-6 text-white/50"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M19 14l-7 7m0 0l-7-7m7 7V3"
-              />
-            </svg>
-          </div>
         </section>
+
+        <div className="home-ad-section shell">{slot("AFTER_HERO")}</div>
 
         <section id="approche" className="py-12 sm:py-16 md:py-20 bg-white">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -609,6 +607,7 @@ export default function Home() {
             </Link>
           </div>
         </section>
+        <div className="home-ad-section shell">{slot("BEFORE_FOOTER")}</div>
       </main>
       <SiteFooter />
     </div>

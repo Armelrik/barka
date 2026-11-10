@@ -70,7 +70,7 @@ Tests unitaires : limites RBAC (société, pays, hiérarchie, pairs, auto-modifi
 
 Gestion immobilière et visites : [guide complet](docs/property-management.md). Dossiers dans `/espace/biens`, vérification dans `/espace/verification`, visite autonome dans `/visites/demo` et carte dans `/carte`. Le mode `CATALOG_MODE=database` affiche uniquement les annonces publiées et non expirées ; le mode `demo` reste disponible sans base. Médias réels hors de `public/`, S3 privé en hébergement, stockage local privé pour le développement. Appliquer les migrations avant utilisation.
 
-À implémenter : vérification téléphone/email et récupération de mot de passe, favoris associés au compte, réservations du bien, abonnements, mock puis paiements réels, notifications et textes légaux définitifs. Les modèles correspondants ne constituent pas une implémentation de ces modules. L’aperçu reste `noindex` jusqu’au lancement.
+À implémenter : vérification téléphone/email, activation de Resend pour la récupération et l’expédition, réservations du bien, abonnements, mock puis paiements réels, notifications et textes légaux définitifs. Les modèles correspondants ne constituent pas une implémentation de ces modules. L’aperçu reste `noindex` jusqu’au lancement.
 
 ## Hébergement
 
@@ -85,3 +85,7 @@ Le résultat des commandes exécutées et les limites de l'environnement sont co
 La charte actuelle et la provenance des visuels sont documentées dans [docs/reference-afriloc/README.md](docs/reference-afriloc/README.md). L’ancienne direction reste archivée dans [docs/design.md](docs/design.md). Les assets de `public/design` sont des ressources graphiques statiques ; les médias des futurs biens publiés utiliseront le stockage objet prévu.
 
 Comptes et back-office : [guide des accès, réglages et exemples publiés](docs/backoffice.md). Dix biens fictifs sont attribués aux comptes de démonstration et visibles dans le catalogue connecté. Les inscriptions CLIENT sont ouvertes sur décision de l’exploitant.
+
+Nouveaux parcours personnels : [récupération, notifications, favoris, recherches et agenda](docs/account-services.md). L’expédition Resend nécessite encore ses identifiants et un domaine validé.
+
+Catalogue avancé, quartiers sourcés et comportement de navigation : [guide des filtres](docs/catalog-filters.md).

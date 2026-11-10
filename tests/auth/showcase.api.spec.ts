@@ -27,7 +27,7 @@ test("exemple public explicite sans identité vérifiée et sans rendez-vous ré
   expect(dto).not.toHaveProperty("legalStatus");
   expect(dto).not.toHaveProperty("agent");
   const page = await visits.anonymous.get(`/biens/${visits.slug}`);
-  expect(await page.text()).toContain("EXEMPLE FICTIF");
+  expect(await page.text()).toContain("BIEN DE PRÉSENTATION");
   expect((await proposal(visits.customer, visits.slug)).status()).toBe(404);
   expect(
     await db.visitRequest.count({ where: { listingId: visits.listingId } }),

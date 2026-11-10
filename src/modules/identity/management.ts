@@ -687,6 +687,10 @@ export async function resetManagedPassword(
       throw conflict("Le compte a changé. Rechargez sa fiche.", "STALE_UPDATE");
     await tx.user.update({ where: { id }, data: { passwordHash } });
     await tx.authSession.deleteMany({ where: { userId: id } });
+    await tx.passwordReset.updateMany({
+      where: { userId: id, consumedAt: null },
+      data: { consumedAt: new Date() },
+    });
     await tx.auditLog.create({
       data: {
         actorId: actor.id,

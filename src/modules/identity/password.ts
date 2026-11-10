@@ -53,6 +53,10 @@ export async function changeOwnPassword(id: string, input: unknown) {
       );
     await tx.user.update({ where: { id }, data: { passwordHash: next } });
     await tx.authSession.deleteMany({ where: { userId: id } });
+    await tx.passwordReset.updateMany({
+      where: { userId: id, consumedAt: null },
+      data: { consumedAt: new Date() },
+    });
     await tx.auditLog.create({
       data: {
         actorId: id,

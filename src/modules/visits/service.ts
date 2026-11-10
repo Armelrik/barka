@@ -1,4 +1,6 @@
 import "server-only";
+import { notifyVisit } from "@/modules/messaging/service";
+import { assertVisitAvailability } from "@/modules/availability/service";
 import { Prisma } from "@/generated/prisma/client";
 import { getDb } from "@/lib/server/db";
 import { AppError } from "@/lib/server/errors";
@@ -114,6 +116,7 @@ export async function requestVisit(actorId: string, input: unknown) {
           "OWN_LISTING",
           "Vous gérez déjà ce bien depuis votre espace professionnel.",
         );
+      await assertVisitAvailability(tx, listing.property.agentId, desiredAt);
       const existing = await tx.visitRequest.findFirst({
         where: {
           userId: actor.id,
@@ -155,6 +158,18 @@ export async function requestVisit(actorId: string, input: unknown) {
           metadata: { listingId: listing.id },
         },
       });
+      await notifyVisit(
+        tx,
+        [
+          actor.id,
+          listing.authorId,
+          ...(listing.property.agentId ? [listing.property.agentId] : []),
+        ],
+        "VISIT_REQUESTED",
+        `visit:${row.id}:requested`,
+        "Une demande de visite a été enregistrée. Consultez le rendez-vous dans votre espace.",
+        actor.id,
+      );
       return dto(row, actor.id, false);
     },
     { timeout: 15000 },
@@ -250,6 +265,11 @@ export async function changeVisit(actorId: string, id: string, input: unknown) {
             "UNAVAILABLE",
             "L’annonce ou le compte demandeur n’est plus disponible.",
           );
+        await assertVisitAvailability(
+          tx,
+          row.listing.property.agentId,
+          row.desiredAt,
+        );
         // Visits last one hour. Adjacent appointments do not overlap. All confirmations share the identity lock.
         const conflict = await tx.visitRequest.findFirst({
           where: {
@@ -305,6 +325,25 @@ export async function changeVisit(actorId: string, id: string, input: unknown) {
           metadata: { previousStatus: row.status, status },
         },
       });
+      const labels = {
+        CONFIRMED: "confirmée",
+        REJECTED: "refusée",
+        CANCELLED: "annulée",
+        COMPLETED: "marquée comme effectuée",
+      };
+      await notifyVisit(
+        tx,
+        [
+          row.userId,
+          ...(row.listing.property.agentId
+            ? [row.listing.property.agentId]
+            : []),
+        ],
+        `VISIT_${status}`,
+        `visit:${id}:${status}:${updated.updatedAt.toISOString()}`,
+        `La visite a été ${labels[status]}. Retrouvez les détails et la réponse de l’équipe dans votre espace.`,
+        row.userId,
+      );
       return dto(updated, actor.id, !own);
     },
     { timeout: 15000 },

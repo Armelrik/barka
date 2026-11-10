@@ -3,9 +3,13 @@ import { BrandLogo } from "@/components/brand-logo";
 export function AuthShell({
   children,
   registration = false,
+  title,
+  intro,
 }: {
   children: React.ReactNode;
   registration?: boolean;
+  title?: string;
+  intro?: string;
 }) {
   return (
     <main id="contenu" className="auth-page">
@@ -13,11 +17,12 @@ export function AuthShell({
         <BrandLogo />
       </Link>
       <section className="auth-content">
-        <h1>{registration ? "Inscription" : "Connexion"}</h1>
+        <h1>{title ?? (registration ? "Inscription" : "Connexion")}</h1>
         <p className="auth-intro">
-          {registration
-            ? "Créez votre compte client gratuitement. Le téléphone suffit, l’email reste facultatif."
-            : "Connectez-vous à votre compte BARKA."}
+          {intro ??
+            (registration
+              ? "Créez votre compte client gratuitement. Le téléphone suffit, l’email reste facultatif."
+              : "Connectez-vous à votre compte BARKA.")}
         </p>
         {children}
       </section>

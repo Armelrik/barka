@@ -29,6 +29,9 @@ export function PropertyForm({
     description: listing?.description ?? "",
     type: listing?.type ?? "VILLA",
     offer: listing?.offer ?? "SALE",
+    furnishing: listing?.furnishing ?? "",
+    rentalDuration: listing?.rentalDuration ?? "",
+    rentPricePeriod: listing?.rentPricePeriod ?? "MONTH",
     priceXof: String(listing?.priceXof ?? ""),
     surfaceM2: String(listing?.surfaceM2 ?? ""),
     bedrooms: String(listing?.bedrooms ?? 0),
@@ -72,6 +75,9 @@ export function PropertyForm({
     const { companyId: company, ...fields } = data;
     const payload = {
       ...fields,
+      furnishing: data.furnishing || null,
+      rentalDuration:
+        data.offer === "RENT" ? data.rentalDuration || null : null,
       latitude: data.latitude === "" ? null : Number(data.latitude),
       longitude: data.longitude === "" ? null : Number(data.longitude),
     };
@@ -179,9 +185,46 @@ export function PropertyForm({
               onChange={(e) => field("offer", e.target.value)}
             >
               <option value="SALE">Vente</option>
-              <option value="RENT">Location mensuelle</option>
+              <option value="RENT">Location</option>
             </select>
           </label>
+          <label className="property-field">
+            Ameublement
+            <select
+              value={data.furnishing}
+              onChange={(e) => field("furnishing", e.target.value)}
+            >
+              <option value="">Non renseigné</option>
+              <option value="FURNISHED">Meublé</option>
+              <option value="UNFURNISHED">Non meublé</option>
+            </select>
+          </label>
+          {data.offer === "RENT" && (
+            <>
+              <label className="property-field">
+                Durée de location
+                <select
+                  value={data.rentalDuration}
+                  onChange={(e) => field("rentalDuration", e.target.value)}
+                >
+                  <option value="">Non renseignée</option>
+                  <option value="SHORT">Courte durée</option>
+                  <option value="LONG">Longue durée</option>
+                </select>
+              </label>
+              <label className="property-field">
+                Période du tarif
+                <select
+                  value={data.rentPricePeriod}
+                  onChange={(e) => field("rentPricePeriod", e.target.value)}
+                >
+                  <option value="NIGHT">Par nuit</option>
+                  <option value="WEEK">Par semaine</option>
+                  <option value="MONTH">Par mois</option>
+                </select>
+              </label>
+            </>
+          )}
           {input("priceXof", "Prix en FCFA", "number")}
           {input("surfaceM2", "Surface en m²", "number")}
           {input("bedrooms", "Chambres", "number")}

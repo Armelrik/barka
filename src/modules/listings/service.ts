@@ -1,3 +1,8 @@
+import { categoryTypes, validPriceRange } from "@/modules/catalog/query";
+import {
+  mergeNeighborhoods,
+  neighborhoodVariants,
+} from "@/modules/catalog/locations";
 import "server-only";
 import { randomUUID } from "node:crypto";
 import { Prisma, type PropertyType } from "@/generated/prisma/client";
@@ -73,8 +78,13 @@ export function listingDto(row: Full) {
     slug: row.slug,
     isDemo: row.isDemo,
     title: p.title,
-    description: p.description,
+    description: row.isDemo
+      ? p.description.replace(/exemple fictif/gi, "Bien de présentation")
+      : p.description,
     type: p.type,
+    furnishing: p.furnishing,
+    rentalDuration: row.offer === "RENT" ? p.rentalDuration : null,
+    rentPricePeriod: p.rentPricePeriod,
     offer: row.offer,
     priceXof: row.priceXof,
     status: row.status,
@@ -309,6 +319,9 @@ export async function createProperty(actorId: string, input: unknown) {
           title: d.title,
           description: d.description,
           type: d.type,
+          furnishing: d.furnishing,
+          rentalDuration: d.offer === "RENT" ? d.rentalDuration : null,
+          rentPricePeriod: d.rentPricePeriod,
           surfaceM2: d.surfaceM2,
           bedrooms: d.bedrooms,
           bathrooms: d.bathrooms,
@@ -392,6 +405,9 @@ export async function updateProperty(
           title: d.title,
           description: d.description,
           type: d.type,
+          furnishing: d.furnishing,
+          rentalDuration: d.offer === "RENT" ? d.rentalDuration : null,
+          rentPricePeriod: d.rentPricePeriod,
           surfaceM2: d.surfaceM2,
           bedrooms: d.bedrooms,
           bathrooms: d.bathrooms,
@@ -757,8 +773,13 @@ function publicDto(row: Full) {
     isDemo: row.isDemo,
     reference: p.reference,
     title: p.title,
-    description: p.description,
+    description: row.isDemo
+      ? p.description.replace(/exemple fictif/gi, "Bien de présentation")
+      : p.description,
     type: p.type,
+    furnishing: p.furnishing,
+    rentalDuration: row.offer === "RENT" ? p.rentalDuration : null,
+    rentPricePeriod: p.rentPricePeriod,
     offer: row.offer,
     priceXof: row.priceXof,
     surfaceM2: Number(p.surfaceM2),
@@ -798,38 +819,78 @@ function publicDto(row: Full) {
   };
 }
 export type PublicListing = ReturnType<typeof publicDto>;
-export async function publicCatalog(input: unknown, featured = false) {
+export async function publicCatalog(
+  input: unknown,
+  featured = false,
+  favoriteUserId?: string,
+) {
   const q = publicQuerySchema.parse(input);
-  const categories: Record<"villa" | "parcelle" | "bureau", PropertyType[]> = {
-    villa: ["VILLA", "HOUSE", "RENTAL_VILLA", "DUPLEX", "BUILDING"],
-    parcelle: ["BARE_PARCEL", "DEMARCATED_PARCEL", "WALLED_PARCEL", "LAND"],
-    bureau: ["OFFICE", "COMMERCIAL_SPACE"],
-  };
+  if (!validPriceRange(q))
+    throw new AppError(
+      400,
+      "PRICE_RANGE",
+      "Le prix minimum doit être inférieur ou égal au prix maximum.",
+    );
+  const names = q.location ? neighborhoodVariants(q.location) : [];
   const where: Prisma.ListingWhereInput = {
     AND: [
+      ...(favoriteUserId
+        ? [{ favorites: { some: { userId: favoriteUserId } } }]
+        : []),
       publicListingWhere(),
+      ...(q.offer !== "ALL" ? [{ offer: q.offer }] : []),
+      ...(q.rentalDuration !== "all" || q.pricePeriod !== "all"
+        ? [{ offer: "RENT" as const }]
+        : []),
       {
-        ...(q.offer !== "ALL" ? { offer: q.offer } : {}),
-        ...(q.maxPrice !== "" ? { priceXof: { lte: q.maxPrice } } : {}),
+        ...(q.minPrice !== "" || q.maxPrice !== ""
+          ? {
+              priceXof: {
+                ...(q.minPrice !== "" ? { gte: q.minPrice } : {}),
+                ...(q.maxPrice !== "" ? { lte: q.maxPrice } : {}),
+              },
+            }
+          : {}),
         property: {
           ...(q.category !== "all"
-            ? { type: { in: categories[q.category] } }
+            ? { type: { in: [...categoryTypes[q.category]] as PropertyType[] } }
             : {}),
-          ...(q.location
+          ...(q.furnishing !== "all" ? { furnishing: q.furnishing } : {}),
+          ...(q.rentalDuration !== "all"
+            ? { rentalDuration: q.rentalDuration }
+            : {}),
+          ...(q.pricePeriod !== "all"
+            ? { rentPricePeriod: q.pricePeriod }
+            : {}),
+          ...(q.city
+            ? {
+                location: {
+                  parent: {
+                    name: { equals: q.city, mode: "insensitive" as const },
+                  },
+                },
+              }
+            : {}),
+          ...(names.length
             ? {
                 OR: [
-                  {
+                  ...names.map((name) => ({
                     location: {
-                      name: { contains: q.location, mode: "insensitive" },
+                      name: { contains: name, mode: "insensitive" as const },
                     },
-                  },
-                  {
-                    location: {
-                      parent: {
-                        name: { contains: q.location, mode: "insensitive" },
-                      },
-                    },
-                  },
+                  })),
+                  ...(!q.city
+                    ? names.map((name) => ({
+                        location: {
+                          parent: {
+                            name: {
+                              contains: name,
+                              mode: "insensitive" as const,
+                            },
+                          },
+                        },
+                      }))
+                    : []),
                 ],
               }
             : {}),
@@ -837,18 +898,53 @@ export async function publicCatalog(input: unknown, featured = false) {
       },
     ],
   };
+  const direction = q.sort === "oldest" ? "asc" : "desc";
+  const orderBy: Prisma.ListingOrderByWithRelationInput[] = [
+    ...(q.sort === "price_asc" || q.sort === "price_desc"
+      ? [
+          {
+            priceXof:
+              q.sort === "price_asc" ? ("asc" as const) : ("desc" as const),
+          },
+        ]
+      : []),
+    { publishedAt: { sort: direction, nulls: "last" } },
+    { createdAt: direction },
+    { id: direction },
+  ];
   const take = featured ? 3 : 12;
   const [items, total] = await Promise.all([
     getDb().listing.findMany({
       where,
       include,
-      orderBy: [{ publishedAt: "desc" }, { id: "desc" }],
+      orderBy,
       skip: featured ? 0 : (q.page - 1) * take,
       take,
     }),
     getDb().listing.count({ where }),
   ]);
   return { items: items.map(publicDto), total, page: q.page, pageSize: take };
+}
+export async function publicCatalogLocations() {
+  const rows = await getDb().location.findMany({
+    where: { country: { code: "BF" }, kind: { in: ["CITY", "DISTRICT"] } },
+    select: { name: true, kind: true, parent: { select: { name: true } } },
+    orderBy: { name: "asc" },
+    take: 1500,
+  });
+  const neighborhoods = mergeNeighborhoods(
+    rows
+      .filter((r) => r.kind === "DISTRICT" && r.parent)
+      .map((r) => ({ name: r.name, city: r.parent!.name })),
+  );
+  const cities = [
+    ...new Set([
+      "Ouagadougou",
+      ...rows.filter((r) => r.kind === "CITY").map((r) => r.name),
+      ...neighborhoods.map((n) => n.city),
+    ]),
+  ].sort((a, b) => a.localeCompare(b, "fr"));
+  return { cities, neighborhoods };
 }
 export async function publicListing(slug: string) {
   const row = await getDb().listing.findFirst({
@@ -932,7 +1028,7 @@ export async function publicMapPoints() {
   return rows.map((row) => ({
     id: row.id,
     title: row.isDemo
-      ? `Exemple fictif : ${row.property.title}`
+      ? `Bien de présentation : ${row.property.title}`
       : row.property.title,
     latitude: Math.round(Number(row.property.latitude) * 1000) / 1000,
     longitude: Math.round(Number(row.property.longitude) * 1000) / 1000,

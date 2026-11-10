@@ -4,9 +4,9 @@
 
 Authentification, sessions révocables, espace protégé et gestion d’équipe : liste filtrée/paginée, création de comptes subordonnés, modification du profil/rôle/statut, rattachements, révocation des sessions et historique. Les droits sont relus au serveur dans la transaction d’écriture ; les cycles, transferts hors périmètre et modifications obsolètes sont refusés. Voir [gestion des équipes](team-management.md).
 
-Gestion immobilière intégrée : dossiers et offres, médias privés local/S3, vérification des démarcheurs, modération, catalogue connecté en mode database, visites 360°/GLB et carte. Voir [property-management.md](property-management.md). Demandes de visite intégrées : proposition d’horaire, suivi privé, confirmation/refus par l’équipe et conflits de créneaux. Voir [visits.md](visits.md). Prochaine étape fonctionnelle : favoris associés au compte, agenda de disponibilités, notifications et réservations, puis abonnements avant les paiements. La vérification SMS/email, la récupération de mot de passe, les notifications et les paiements restent à intégrer. Les vérifications effectivement exécutées sont consignées dans [verification.md](verification.md).
+Gestion immobilière intégrée : dossiers et offres, médias privés local/S3, vérification des démarcheurs, modération, catalogue connecté en mode database, visites 360°/GLB et carte. Voir [property-management.md](property-management.md). Demandes de visite intégrées : proposition d’horaire, suivi privé, confirmation/refus par l’équipe et conflits de créneaux. Voir [visits.md](visits.md). Favoris associés au compte, recherches enregistrées, notifications internes et agenda de disponibilités sont intégrés. La récupération et l’expédition email sont préparées pour Resend et attendent la configuration du prestataire. Prochaines étapes : réservations, abonnements puis paiements ; la vérification SMS/email reste à intégrer. Les vérifications effectivement exécutées sont consignées dans [verification.md](verification.md).
 
-Préparation Vercel/Neon : migration de références RBAC et initialisation séparée des deux comptes de production, sans seed de démonstration. Connexion du projet Neon existant et configuration privée nécessaires avant migration distante. Voir [vercel-neon.md](vercel-neon.md).
+Préparation Vercel/Neon : migration de références RBAC et initialisation séparée des deux comptes de production, sans seed de démonstration. Projet Neon connecté, neuf migrations appliquées et site Vercel publié. Voir [vercel-neon.md](vercel-neon.md).
 
 ## Phase 1 — fondations (présente livraison)
 
@@ -30,3 +30,7 @@ Multi-pays, modèles GLB/GLTF, Matterport autorisé, API `/api/v1` pour apps mob
 ## Porte de mise en production
 
 Aucun compte seed, secrets gérés hors dépôt, revue d'autorisation/IDOR et upload, contrats de paiement, textes légaux, sauvegarde/restauration, alertes et vérification accessibilité. Les simples modèles Prisma ne valident pas les fonctionnalités. Conserver une liste de contrôles réellement exécutés dans README.
+
+## Mise à jour du 10 novembre 2026 — parcours personnel
+
+Favoris associés au compte, recherches enregistrées, notifications internes et agenda par plages intégrés. Récupération du mot de passe par email et file Resend préparées ; activation externe et contrôle de réception attendent un domaine validé et les accès du prestataire. Voir [account-services.md](account-services.md). Prochaines étapes : réservations, abonnements et paiements, vérification des coordonnées et rappels. Les paragraphes de phase 1 ci-dessus décrivent la livraison initiale.

@@ -1,4 +1,7 @@
 export type DemoProperty = {
+  furnishing?: "FURNISHED" | "UNFURNISHED";
+  rentalDuration?: "SHORT" | "LONG";
+  rentPricePeriod?: "NIGHT" | "WEEK" | "MONTH";
   reference: string;
   slug: string;
   title: string;
@@ -38,7 +41,7 @@ export const demoProperties: DemoProperty[] = [
     ],
     coordinates: [12.318, -1.515],
     description:
-      "Une adresse familiale à Ouaga 2000, avec une cour arborée, une terrasse ombragée et un garage. Quatre chambres permettent à chacun de trouver son espace. Exemple fictif pour la présentation du catalogue.",
+      "Une adresse familiale à Ouaga 2000, avec une cour arborée, une terrasse ombragée et un garage. Quatre chambres permettent à chacun de trouver son espace. Bien de présentation pour la présentation du catalogue.",
   },
   {
     reference: "DEMO-002",
@@ -57,7 +60,7 @@ export const demoProperties: DemoProperty[] = [
     photos: ["/afriloc/land1.jpg", "/afriloc/land2.jpg"],
     coordinates: [12.375, -1.44],
     description:
-      "Imaginez votre future maison sur cette parcelle de 300 m² à Saaba. Une sélection pensée pour un projet résidentiel à taille humaine. Exemple fictif : aucun titre foncier ni statut juridique vérifié.",
+      "Imaginez votre future maison sur cette parcelle de 300 m² à Saaba. Une sélection pensée pour un projet résidentiel à taille humaine. Bien de présentation : aucun titre foncier ni statut juridique vérifié.",
   },
   {
     reference: "DEMO-003",
@@ -80,7 +83,7 @@ export const demoProperties: DemoProperty[] = [
     ],
     coordinates: [12.385, -1.499],
     description:
-      "Des espaces lumineux répartis sur deux niveaux, trois chambres et une terrasse pour profiter des soirées. Ce duplex de la Zone du Bois illustre notre sélection locative. Exemple fictif, sans disponibilité réelle.",
+      "Des espaces lumineux répartis sur deux niveaux, trois chambres et une terrasse pour profiter des soirées. Ce duplex de la Zone du Bois illustre notre sélection locative. Bien de présentation, sans disponibilité réelle.",
   },
   {
     reference: "DEMO-004",
@@ -103,7 +106,7 @@ export const demoProperties: DemoProperty[] = [
     ],
     coordinates: [12.365, -1.553],
     description:
-      "Un bureau de 85 m² à Gounghin pour installer une petite équipe : espace de travail, accueil et salle de réunion à aménager selon vos besoins. Exemple fictif, sans disponibilité réelle.",
+      "Un bureau de 85 m² à Gounghin pour installer une petite équipe : espace de travail, accueil et salle de réunion à aménager selon vos besoins. Bien de présentation, sans disponibilité réelle.",
   },
   {
     reference: "DEMO-005",
@@ -126,7 +129,7 @@ export const demoProperties: DemoProperty[] = [
     ],
     coordinates: [12.342, -1.574],
     description:
-      "Une maison conviviale à Pissy, avec trois chambres, une cour et une terrasse pour recevoir. Une proposition de location destinée aux familles. Exemple fictif, sans disponibilité réelle.",
+      "Une maison conviviale à Pissy, avec trois chambres, une cour et une terrasse pour recevoir. Une proposition de location destinée aux familles. Bien de présentation, sans disponibilité réelle.",
   },
   {
     reference: "DEMO-006",
@@ -149,7 +152,7 @@ export const demoProperties: DemoProperty[] = [
     ],
     coordinates: [11.156, -4.306],
     description:
-      "À Belleville, ce duplex imaginé autour d’un patio associe espaces de réception et chambres à l’étage. Une ambiance chaleureuse pour un projet familial à Bobo-Dioulasso. Exemple fictif, sans offre réelle.",
+      "À Belleville, ce duplex imaginé autour d’un patio associe espaces de réception et chambres à l’étage. Une ambiance chaleureuse pour un projet familial à Bobo-Dioulasso. Bien de présentation, sans offre réelle.",
   },
   {
     reference: "DEMO-007",
@@ -168,7 +171,7 @@ export const demoProperties: DemoProperty[] = [
     photos: ["/afriloc/land2.jpg", "/afriloc/land1.jpg"],
     coordinates: [12.462, -1.559],
     description:
-      "450 m² pour dessiner une résidence avec jardin à Kamboinsin. Ce scénario illustre la recherche de terrains par quartier et par budget. Exemple fictif : aucun titre foncier ni statut juridique vérifié.",
+      "450 m² pour dessiner une résidence avec jardin à Kamboinsin. Ce scénario illustre la recherche de terrains par quartier et par budget. Bien de présentation : aucun titre foncier ni statut juridique vérifié.",
   },
   {
     reference: "DEMO-008",
@@ -191,6 +194,6 @@ export const demoProperties: DemoProperty[] = [
     ],
     coordinates: [12.378, -1.483],
     description:
-      "Un espace de 120 m² à Zogona, imaginé pour une agence, un cabinet ou une jeune entreprise. Des volumes ouverts à personnaliser et un accueil distinct. Exemple fictif, sans disponibilité réelle.",
+      "Un espace de 120 m² à Zogona, imaginé pour une agence, un cabinet ou une jeune entreprise. Des volumes ouverts à personnaliser et un accueil distinct. Bien de présentation, sans disponibilité réelle.",
   },
 ];

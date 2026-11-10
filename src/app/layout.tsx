@@ -1,4 +1,7 @@
+import { SiteAnalytics } from "@/components/audience/site-analytics";
 import type { Metadata } from "next";
+import { NavigationScrollReset } from "@/components/navigation-scroll-reset";
+import { ScrollToTop } from "@/components/scroll-to-top";
 import localFont from "next/font/local";
 import "leaflet/dist/leaflet.css";
 import "./globals.css";
@@ -16,6 +19,7 @@ export const metadata: Metadata = {
   description:
     "Explorez les biens à vendre et à louer au Burkina Faso avec BARKA SARL : photos, carte, visites immersives et suivi de votre projet immobilier.",
   robots: { index: false, follow: false },
+  referrer: "origin",
 };
 export default function RootLayout({
   children,
@@ -27,6 +31,9 @@ export default function RootLayout({
           Aller au contenu
         </a>
         {children}
+        <ScrollToTop />
+        <NavigationScrollReset />
+        <SiteAnalytics />
       </body>
     </html>
   );

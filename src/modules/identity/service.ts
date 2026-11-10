@@ -123,7 +123,13 @@ export async function authenticate(input: unknown) {
     // Recheck after password verification, inside the transaction creating the session.
     const active = await tx.user.findUnique({
       where: { id: user.id },
-      select: { status: true, passwordHash: true },
+      select: {
+        status: true,
+        passwordHash: true,
+        companyId: true,
+        role: { select: { code: true } },
+        company: { select: { code: true } },
+      },
     });
     if (
       !active ||
@@ -139,8 +145,12 @@ export async function authenticate(input: unknown) {
     await tx.auditLog.create({
       data: {
         actorId: user.id,
-        companyId: user.companyId,
+        companyId: active.companyId,
         action: "AUTH_LOGIN",
+        metadata: {
+          role:
+            active.company.code === "BARKA-DEMO" ? "DEMO" : active.role.code,
+        },
         targetType: "User",
         targetId: user.id,
       },

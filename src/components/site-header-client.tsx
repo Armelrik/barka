@@ -3,6 +3,7 @@ import { useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Menu, X } from "lucide-react";
+import { useScrollPast } from "@/lib/client/use-scroll-past";
 import { BrandLogo } from "@/components/brand-logo";
 import { LoginForm, RegistrationForm } from "@/components/auth/auth-form";
 export function SiteHeaderClient({ userName }: { userName?: string }) {
@@ -10,6 +11,8 @@ export function SiteHeaderClient({ userName }: { userName?: string }) {
   const [registration, setRegistration] = useState(false);
   const dialog = useRef<HTMLDialogElement>(null);
   const pathname = usePathname();
+  const scrolled = useScrollPast(48);
+  const transparent = pathname === "/" && !scrolled && !open;
   function showAuth(register: boolean) {
     setRegistration(register);
     setOpen(false);
@@ -24,7 +27,9 @@ export function SiteHeaderClient({ userName }: { userName?: string }) {
   ];
   return (
     <>
-      <header className="site-header">
+      <header
+        className={`site-header${transparent ? " site-header-transparent" : ""}`}
+      >
         <div className="container mx-auto px-4 py-4">
           <div className="header-row">
             <Link href="/" aria-label="BARKA SARL, accueil">

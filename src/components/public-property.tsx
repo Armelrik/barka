@@ -1,3 +1,6 @@
+import { currentUser } from "@/lib/server/session";
+import { publicAvailability } from "@/modules/availability/service";
+import { FavoriteControl } from "./account/favorite-control";
 import Link from "next/link";
 import { VisitRequestForm } from "./visits/request-form";
 import Image from "next/image";
@@ -15,7 +18,17 @@ import { SiteFooter } from "./site-footer";
 import { PropertyMap } from "./map/property-map";
 import type { PublicListing } from "@/modules/listings/service";
 import { formatXof } from "@/lib/utils";
-export function PublicProperty({ listing: p }: { listing: PublicListing }) {
+export async function PublicProperty({
+  listing: p,
+}: {
+  listing: PublicListing;
+}) {
+  const availability = p.isDemo
+    ? undefined
+    : await publicAvailability(p.slug, (await currentUser())?.id).catch(() => ({
+        mode: "unavailable" as const,
+        slots: [],
+      }));
   return (
     <>
       <SiteHeader />
@@ -34,14 +47,26 @@ export function PublicProperty({ listing: p }: { listing: PublicListing }) {
             />
             {p.isDemo && (
               <p className="visit-demo-note">
-                EXEMPLE FICTIF · Photographies d’illustration, prix indicatif et
-                localisation fictive. Ce bien ne peut pas être réservé.
+                BIEN DE PRÉSENTATION · Photographies d’illustration, prix
+                indicatif et localisation fictive. Ce bien ne peut pas être
+                réservé.
               </p>
             )}
             <h1>{p.title}</h1>
+            <FavoriteControl slug={p.slug} title={p.title} />
             <p className="card-location">
               <MapPin size={18} />
               {p.location}, {p.city}
+            </p>
+            <p className="property-kind">
+              {p.furnishing
+                ? p.furnishing === "FURNISHED"
+                  ? "Meublé"
+                  : "Non meublé"
+                : ""}
+              {p.rentalDuration
+                ? ` · Location ${p.rentalDuration === "SHORT" ? "courte" : "longue"} durée`
+                : ""}
             </p>
             <h2>Description</h2>
             <p className="whitespace-pre-line">{p.description}</p>
@@ -109,7 +134,11 @@ export function PublicProperty({ listing: p }: { listing: PublicListing }) {
           </section>
           <aside className="detail-panel">
             <strong>{formatXof(p.priceXof)}</strong>
-            <small>{p.offer === "RENT" ? "par mois" : "Prix de vente"}</small>
+            <small>
+              {p.offer === "RENT"
+                ? `par ${p.rentPricePeriod === "NIGHT" ? "nuit" : p.rentPricePeriod === "WEEK" ? "semaine" : "mois"}`
+                : "Prix de vente"}
+            </small>
             {p.hasTour && (
               <Link
                 className="legacy-button gradient w-full"
@@ -119,7 +148,11 @@ export function PublicProperty({ listing: p }: { listing: PublicListing }) {
                 Explorer la visite immersive
               </Link>
             )}
-            <VisitRequestForm slug={p.slug} demo={p.isDemo} />
+            <VisitRequestForm
+              slug={p.slug}
+              demo={p.isDemo}
+              availability={availability}
+            />
             <p className="detail-demo">Référence : {p.reference}</p>
           </aside>
         </div>

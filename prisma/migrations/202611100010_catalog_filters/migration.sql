@@ -1,0 +1,11 @@
+ALTER TYPE "PropertyType" ADD VALUE 'APARTMENT';
+ALTER TYPE "PropertyType" ADD VALUE 'TOWNHOUSE';
+ALTER TYPE "PropertyType" ADD VALUE 'SHOP';
+ALTER TYPE "PropertyType" ADD VALUE 'WAREHOUSE';
+ALTER TYPE "PropertyType" ADD VALUE 'RETAIL_SPACE';
+ALTER TYPE "PropertyType" ADD VALUE 'GUEST_HOUSE';
+CREATE TYPE "FurnishingStatus" AS ENUM ('FURNISHED', 'UNFURNISHED');
+CREATE TYPE "RentalDuration" AS ENUM ('SHORT', 'LONG');
+CREATE TYPE "RentPricePeriod" AS ENUM ('NIGHT', 'WEEK', 'MONTH');
+ALTER TABLE "Property" ADD COLUMN "furnishing" "FurnishingStatus", ADD COLUMN "rentalDuration" "RentalDuration", ADD COLUMN "rentPricePeriod" "RentPricePeriod" NOT NULL DEFAULT 'MONTH';
+CREATE INDEX "Property_furnishing_rentalDuration_idx" ON "Property"("furnishing", "rentalDuration");

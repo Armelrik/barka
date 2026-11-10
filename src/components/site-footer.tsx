@@ -38,7 +38,7 @@ export function SiteFooter() {
               Consulter le guide <ArrowUpRight size={16} />
             </Link>
             <small>
-              Les biens signalés « Exemple fictif » servent à la présentation.
+              Les biens signalés « Bien de présentation » servent à la présentation.
               Leurs visites sont simulées.
             </small>
           </div>

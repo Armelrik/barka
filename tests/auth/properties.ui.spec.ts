@@ -29,6 +29,12 @@ test("dossier immobilier : formulaire, médias, carte privée et éditeur immers
       "Description fictive du bien destinée à tester le formulaire immobilier.",
     );
   await page.getByLabel("Commercial responsable").selectOption(commercial.id);
+  await page
+    .getByLabel("Rechercher une localité", { exact: true })
+    .fill(location.name);
+  await page
+    .getByRole("button", { name: "Chercher les localités", exact: true })
+    .click();
   await page.getByLabel("Localité", { exact: true }).selectOption(location.id);
   await page.getByLabel("Latitude (facultative)").fill("12.3456");
   await page.getByLabel("Longitude (facultative)").fill("-1.5123");
